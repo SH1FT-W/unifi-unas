@@ -1,0 +1,116 @@
+# Integration Quality Scale, selbst geprüft (keine Core-Integration, die Stufe ist nicht offiziell).
+# Regeln: https://developers.home-assistant.io/docs/core/integration-quality-scale/rules
+rules:
+  # Bronze
+  action-setup:
+    status: exempt
+    comment: Keine eigenen Aktionen; Befehle laufen über Buttons, Auswahl und Updates.
+  appropriate-polling:
+    status: done
+    comment: Alle 30 s die Live-Werte; Firmware-Stand und Dienste nur alle 5 Minuten.
+  brands: done
+  common-modules:
+    status: done
+    comment: DataUpdateCoordinator in coordinator.py, gemeinsame Basis in entity.py.
+  config-flow-test-coverage: done
+  config-flow: done
+  dependency-transparency:
+    status: exempt
+    comment: Keine externen Abhängigkeiten; eigener Client in api.py auf aiohttp.
+  docs-actions:
+    status: exempt
+    comment: Keine eigenen Aktionen.
+  docs-high-level-description: done
+  docs-installation-instructions: done
+  docs-removal-instructions: done
+  entity-event-setup:
+    status: exempt
+    comment: Keine Ereignis-Abos, nur der Coordinator.
+  entity-unique-id: done
+  has-entity-name: done
+  runtime-data: done
+  test-before-configure:
+    status: done
+    comment: Der Flow meldet sich an und fragt einmal alle Werte ab.
+  test-before-setup:
+    status: done
+    comment: >-
+      async_config_entry_first_refresh. Nur eine abgelehnte Anmeldung startet Reauth; 403 (fehlende Rechte),
+      401 trotz frischer Anmeldung und Weiterleitungen beim Hochfahren gelten als „nicht verfügbar“.
+  unique-config-entry:
+    status: done
+    comment: Eindeutig über die MAC-Adresse der UNAS.
+
+  # Silver
+  action-exceptions:
+    status: done
+    comment: >-
+      Befehle melden übersetzte HomeAssistantError (command_failed, auth_failed, no_permission für Konten ohne
+      Admin-Rechte, cert_changed).
+  config-entry-unloading: done
+  docs-configuration-parameters:
+    status: done
+    comment: >-
+      Option „Zertifikat prüfen“ (Standard aus = gemerktes Zertifikat, trust on first use) in der README beschrieben.
+  docs-installation-parameters: done
+  entity-unavailable: done
+  integration-owner: done
+  log-when-unavailable:
+    status: done
+    comment: Der Coordinator loggt Ausfall und Rückkehr je einmal.
+  parallel-updates: done
+  reauthentication-flow: done
+  test-coverage: done
+
+  # Gold
+  devices:
+    status: done
+    comment: Ein Gerät für die UNAS, je Festplatte ein Untergerät (via_device).
+  diagnostics: done
+  discovery-update-info:
+    status: done
+    comment: Eine bekannte UNAS unter neuer IP aktualisiert die Adresse des Eintrags.
+  discovery:
+    status: done
+    comment: >-
+      Zeroconf `_smb._tcp` mit Namen „unas*“ (Standardname der UNAS); /api/system (ohne Anmeldung) bestätigt
+      Modell und MAC. Umbenannte Geräte richtet man von Hand ein.
+  docs-data-update: done
+  docs-examples: done
+  docs-known-limitations: done
+  docs-supported-devices: done
+  docs-supported-functions: done
+  docs-troubleshooting: done
+  docs-use-cases: done
+  dynamic-devices:
+    status: done
+    comment: Neue Festplatten und Drive-Laufwerke bekommen zur Laufzeit Entitäten.
+  entity-category: done
+  entity-device-class: done
+  entity-disabled-by-default:
+    status: done
+    comment: Ausschalten, Lese-/Schreibrate je Platte, nicht korrigierbare Sektoren und Drive-Version.
+  entity-translations: done
+  exception-translations: done
+  icon-translations: done
+  reconfiguration-flow: done
+  repair-issues:
+    status: done
+    comment: >-
+      Zeigt die UNAS ein anderes Zertifikat als das gemerkte, erscheint eine Reparatur mit altem und neuem
+      Fingerabdruck; nach Bestätigung gilt das neue (repairs.py).
+  stale-devices:
+    status: done
+    comment: Ausgebaute Festplatten lassen sich entfernen (async_remove_config_entry_device).
+
+  # Platinum
+  async-dependency:
+    status: done
+    comment: Eigener asynchroner Client (api.py) auf aiohttp.
+  inject-websession:
+    status: done
+    comment: >-
+      Nutzt HAs Session (async_get_clientsession); wegen des selbstsignierten Zertifikats standardmäßig ohne
+      CA-Prüfung, dafür je Anfrage nur mit dem gemerkten Fingerabdruck (aiohttp.Fingerprint); mit der Option
+      „Zertifikat prüfen“ die prüfende Session.
+  strict-typing: done

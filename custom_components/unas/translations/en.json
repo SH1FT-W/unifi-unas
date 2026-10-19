@@ -1,0 +1,286 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "UniFi UNAS",
+        "description": "Connects a UniFi NAS (UNAS 2, UNAS Pro …) through UniFi OS. Use a local UniFi OS account (not a UI account with two-factor login). For restart, shutdown and updates the account also needs UniFi OS admin rights.",
+        "data": {
+          "host": "Host",
+          "username": "Username",
+          "password": "Password",
+          "verify_ssl": "Verify certificate"
+        },
+        "data_description": {
+          "host": "IP address or hostname of the UNAS.",
+          "username": "Local UniFi OS account with access to UniFi Drive.",
+          "verify_ssl": "Off by default: UniFi OS uses a self-signed certificate, so the integration remembers the certificate the UNAS shows at setup and accepts only that one afterwards. Turn on only if the UNAS has a certificate from a trusted authority."
+        }
+      },
+      "reauth_confirm": {
+        "title": "UniFi UNAS: new login",
+        "description": "The UNAS rejected the login for {name}. Enter the username and password again.",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      },
+      "reconfigure": {
+        "title": "UniFi UNAS",
+        "data": {
+          "host": "Host",
+          "username": "Username",
+          "password": "Password"
+        }
+      },
+      "zeroconf_confirm": {
+        "title": "UniFi UNAS",
+        "description": "Found {name} at {host}. Enter a local UniFi OS account.",
+        "data": {
+          "username": "Username",
+          "password": "Password",
+          "verify_ssl": "Verify certificate"
+        },
+        "data_description": {
+          "verify_ssl": "Off by default: UniFi OS uses a self-signed certificate, so the integration remembers the certificate the UNAS shows at setup and accepts only that one afterwards. Turn on only if the UNAS has a certificate from a trusted authority."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "The UNAS does not answer or the certificate was rejected. Check the address and the certificate option.",
+      "invalid_auth": "Username or password is wrong.",
+      "not_unas": "This device does not look like a UniFi NAS.",
+      "unknown": "Unexpected error.",
+      "wrong_device": "This address belongs to a different UNAS.",
+      "no_permission": "Login works, but the account has no access to UniFi Drive.",
+      "cert_changed": "The UNAS shows a different certificate than at setup. Check the repair notice under Settings → Repairs."
+    },
+    "abort": {
+      "already_configured": "This UNAS is already set up.",
+      "reauth_successful": "Login updated.",
+      "reconfigure_successful": "Settings saved.",
+      "wrong_device": "This address belongs to a different UNAS.",
+      "not_unas": "This device is not a UniFi NAS."
+    },
+    "flow_title": "{name}"
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "UniFi UNAS options",
+        "data": {
+          "verify_ssl": "Verify certificate"
+        },
+        "data_description": {
+          "verify_ssl": "Off by default: UniFi OS uses a self-signed certificate, so the integration remembers the certificate the UNAS shows at setup and accepts only that one afterwards. Turn on only if the UNAS has a certificate from a trusted authority."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "The UNAS does not answer or the certificate was rejected. Check the address and the certificate option.",
+      "invalid_auth": "Username or password is wrong.",
+      "not_unas": "This device does not look like a UniFi NAS.",
+      "no_permission": "Login works, but the account has no access to UniFi Drive.",
+      "cert_changed": "The UNAS shows a different certificate than at setup. Check the repair notice under Settings → Repairs."
+    }
+  },
+  "device": {
+    "disk": {
+      "name": "{name} disk {slot}"
+    },
+    "ssd": {
+      "name": "{name} SSD {slot}"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "storage_problem": {
+        "name": "Storage problem"
+      },
+      "disk_problem": {
+        "name": "Problem"
+      },
+      "smb": {
+        "name": "SMB"
+      },
+      "time_machine": {
+        "name": "Time Machine"
+      },
+      "nfs": {
+        "name": "NFS"
+      }
+    },
+    "button": {
+      "restart": {
+        "name": "Restart"
+      },
+      "shutdown": {
+        "name": "Shut down"
+      },
+      "start_scrub": {
+        "name": "Start data scrubbing"
+      },
+      "smart_test": {
+        "name": "Run quick SMART test"
+      }
+    },
+    "select": {
+      "fan_profile": {
+        "name": "Fan profile",
+        "state": {
+          "quiet": "Quiet",
+          "default": "Default",
+          "cooling": "Cooling"
+        }
+      }
+    },
+    "sensor": {
+      "storage_used": {
+        "name": "Storage used"
+      },
+      "storage_free": {
+        "name": "Storage free"
+      },
+      "storage_capacity": {
+        "name": "Storage capacity"
+      },
+      "storage_used_percent": {
+        "name": "Storage usage"
+      },
+      "disks_at_risk": {
+        "name": "Disks at risk"
+      },
+      "hottest_disk": {
+        "name": "Hottest disk"
+      },
+      "storage_read": {
+        "name": "Storage read"
+      },
+      "storage_write": {
+        "name": "Storage write"
+      },
+      "storage_status": {
+        "name": "Storage status",
+        "state": {
+          "ok": "OK",
+          "degraded": "Degraded",
+          "rebuilding": "Rebuilding",
+          "initializing": "Initializing",
+          "error": "Error",
+          "other": "Other"
+        }
+      },
+      "scrub_status": {
+        "name": "Data scrubbing",
+        "state": {
+          "idle": "Idle",
+          "in_progress": "In progress",
+          "paused": "Paused",
+          "other": "Other"
+        }
+      },
+      "scrub_last_run": {
+        "name": "Last data scrubbing"
+      },
+      "cpu_load": {
+        "name": "CPU load"
+      },
+      "cpu_temperature": {
+        "name": "CPU temperature"
+      },
+      "memory_used": {
+        "name": "Memory usage"
+      },
+      "started": {
+        "name": "Started"
+      },
+      "network_receive": {
+        "name": "Network receive"
+      },
+      "network_transmit": {
+        "name": "Network transmit"
+      },
+      "link_speed": {
+        "name": "Link speed"
+      },
+      "drive_version": {
+        "name": "UniFi Drive version"
+      },
+      "drive_usage": {
+        "name": "{drive} used"
+      },
+      "temperature": {
+        "name": "Temperature"
+      },
+      "power_on_hours": {
+        "name": "Power-on hours"
+      },
+      "bad_sectors": {
+        "name": "Bad sectors"
+      },
+      "uncorrectable_sectors": {
+        "name": "Uncorrectable sectors"
+      },
+      "health_score": {
+        "name": "Health",
+        "state": {
+          "good": "Good",
+          "check": "Check"
+        }
+      },
+      "disk_read": {
+        "name": "Read rate"
+      },
+      "disk_write": {
+        "name": "Write rate"
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "UniFi OS"
+      },
+      "drive_app": {
+        "name": "UniFi Drive"
+      }
+    }
+  },
+  "exceptions": {
+    "unreachable": {
+      "message": "UNAS not reachable: {error}"
+    },
+    "auth_failed": {
+      "message": "The UNAS rejected the login."
+    },
+    "command_failed": {
+      "message": "The UNAS did not accept the command: {error}"
+    },
+    "no_pool": {
+      "message": "The UNAS has no storage pool."
+    },
+    "disk_missing": {
+      "message": "This disk is no longer installed."
+    },
+    "no_permission": {
+      "message": "The account lacks the rights for this. Restart, shutdown and updates need UniFi OS admin rights."
+    },
+    "cert_changed": {
+      "message": "The UNAS shows a different certificate than at setup. Check the repair notice."
+    }
+  },
+  "issues": {
+    "cert_changed": {
+      "title": "{name}: certificate changed",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Accept new certificate of {name}?",
+            "description": "The UNAS now shows a different certificate than the one remembered at setup, so the integration stopped sending the login.\n\nRemembered: `{old}`\nNow: `{new}`\n\nThis is expected after a factory reset, a reinstall of UniFi OS or a new certificate. If you changed nothing, do not accept: another device may be answering at this address. You can compare the fingerprint with the certificate your browser shows for the UNAS."
+          }
+        },
+        "abort": {
+          "entry_removed": "The UNAS is no longer set up.",
+          "cannot_connect": "The UNAS does not answer. Try again once it is reachable."
+        }
+      }
+    }
+  }
+}

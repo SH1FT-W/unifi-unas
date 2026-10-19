@@ -1,0 +1,56 @@
+name: Bug report
+description: Something in UniFi UNAS does not work as described.
+labels: ["bug"]
+body:
+  - type: input
+    id: ha_version
+    attributes:
+      label: Home Assistant version
+      placeholder: "2026.10.1"
+    validations:
+      required: true
+  - type: input
+    id: unas_version
+    attributes:
+      label: UniFi UNAS version
+      description: Settings > Devices & services > UniFi UNAS, or HACS.
+      placeholder: "26.10.2"
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: NAS model, UniFi OS and UniFi Drive version
+      description: For example UNAS 2, UniFi OS 6.0.11, Drive 4.4.17. Both versions are shown on the device page in Home Assistant and in UniFi OS.
+      placeholder: "UNAS 2, UniFi OS 6.0.11, Drive 4.4.17"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. ...\n2. ...\n3. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happens instead
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: Settings > Devices & services > UniFi UNAS > three dots > Download diagnostics. The file contains no address, login, MAC address or serial number. Drag it here.
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else
+      description: Debug log lines (logger custom_components.unas set to debug), number of pools and disks, whether the account has UniFi OS admin rights.

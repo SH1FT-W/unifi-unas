@@ -1,0 +1,13 @@
+{
+  "err": null,
+  "type": "single",
+  "data": {
+    "series": {
+      "readKBPS": [12.5, 31.15],
+      "writeKBPS": [480.0, 547.86],
+      "readIOPS": [null, null],
+      "writeIOPS": [null, null]
+    },
+    "window": { "samples": 2, "start": 1791193200, "end": 1791193800, "interval": 300 }
+  }
+}

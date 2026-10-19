@@ -1,0 +1,107 @@
+{
+  "pools": [
+    {
+      "number": 1,
+      "id": "f92106bf-5fa4-4daa-aa69-ce16c5404e39",
+      "preferLevel": "raid1",
+      "type": "lvm",
+      "status": "fullyOperational",
+      "capacity": 2991859957760,
+      "usage": 539591639040,
+      "activeRaidGroupId": "05829971:a6862e27:4a17a6e4:ca18a6de",
+      "raidGroups": [
+        {
+          "number": 1,
+          "id": "05829971:a6862e27:4a17a6e4:ca18a6de",
+          "remnantReason": "",
+          "isSSDCache": false,
+          "currentLevel": "raid1",
+          "configLevel": "raid1",
+          "currentProtection": 1,
+          "expectedProtection": 1,
+          "recommendedDiskSize": 3000592982016,
+          "progress": 0,
+          "estimate": 0
+        }
+      ],
+      "initializingStatus": "successful",
+      "dataScrubbing": {
+        "status": "idle",
+        "estimate": null,
+        "schedule": {
+          "enabled": false
+        },
+        "lastTaskRun": null,
+        "nextRun": null
+      }
+    }
+  ],
+  "disks": [
+    {
+      "slotId": "1",
+      "location": "",
+      "poolId": "f92106bf-5fa4-4daa-aa69-ce16c5404e39",
+      "raidGroupId": "05829971:a6862e27:4a17a6e4:ca18a6de",
+      "metadataGroupId": "",
+      "isGlobalHotSpare": false,
+      "isLocalHotSpare": false,
+      "type": "HDD",
+      "state": "optimal",
+      "rpm": 5900,
+      "model": "ST3000VN007-2E4166",
+      "size": 3000592982016,
+      "sata": "SATA 3.1",
+      "ata": "ACS-2,",
+      "nvmeVersion": "",
+      "firmware": "DA11",
+      "sectorFormat": "512E",
+      "serial": "SERIAL1",
+      "temperature": 47,
+      "powerOnHours": 402,
+      "badSectorCount": 0,
+      "uncorrectableSectorCount": 0,
+      "readErrorRate": 7282976,
+      "smartReadErrorCount": 0,
+      "riskReasons": [],
+      "incompatibleReasons": [],
+      "readKBPS": 264.5,
+      "writeKBPS": 7059.5,
+      "smartTestSupported": true,
+      "healthScore": 5
+    },
+    {
+      "slotId": "2",
+      "location": "",
+      "poolId": "f92106bf-5fa4-4daa-aa69-ce16c5404e39",
+      "raidGroupId": "05829971:a6862e27:4a17a6e4:ca18a6de",
+      "metadataGroupId": "",
+      "isGlobalHotSpare": false,
+      "isLocalHotSpare": false,
+      "type": "HDD",
+      "state": "optimal",
+      "rpm": 5900,
+      "model": "ST3000VN007-2E4166",
+      "size": 3000592982016,
+      "sata": "SATA 3.1",
+      "ata": "ACS-2,",
+      "nvmeVersion": "",
+      "firmware": "DA11",
+      "sectorFormat": "512E",
+      "serial": "SERIAL2",
+      "temperature": 50,
+      "powerOnHours": 402,
+      "badSectorCount": 0,
+      "uncorrectableSectorCount": 0,
+      "readErrorRate": 31974096,
+      "smartReadErrorCount": 0,
+      "riskReasons": [],
+      "incompatibleReasons": [],
+      "readKBPS": 0,
+      "writeKBPS": 7571.5,
+      "smartTestSupported": true,
+      "healthScore": 5
+    }
+  ],
+  "cacheSlots": [],
+  "expansions": null
+}

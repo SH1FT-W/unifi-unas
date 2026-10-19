@@ -1,0 +1,20 @@
+{
+  "domain": "unas",
+  "name": "UniFi UNAS",
+  "codeowners": [
+    "@SH1FT-W"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/SH1FT-W/unifi-unas",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/SH1FT-W/unifi-unas/issues",
+  "requirements": [],
+  "version": "26.10.2",
+  "zeroconf": [
+    {
+      "type": "_smb._tcp.local.",
+      "name": "unas*"
+    }
+  ]
+}

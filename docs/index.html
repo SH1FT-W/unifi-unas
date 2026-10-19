@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title data-de="UniFi UNAS für Home Assistant">UniFi UNAS for Home Assistant</title>
+<script src="https://sh1ft-w.github.io/bar.js" data-project="unas" defer></script>
+<meta name="description" content="UniFi UNAS brings a UniFi NAS into Home Assistant, locally through UniFi OS and UniFi Drive: storage, every disk with its health, drives, system values, fan profile, data scrubbing and updates. No cloud.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F4F7FC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#060B14" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="UniFi UNAS for Home Assistant">
+<meta property="og:description" content="Your UniFi NAS in Home Assistant. Storage, disks and health, local, no cloud.">
+<meta property="og:image" content="https://sh1ft-w.github.io/unifi-unas/images/readme-title-light.png">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Shared SH1FT-W design (tokens, glass navigation, light/dark, DE/EN, reveal) -->
+<link rel="stylesheet" href="https://sh1ft-w.github.io/theme/v1/theme.css">
+<script src="https://sh1ft-w.github.io/theme/v1/theme.js"></script>
+<style>
+/* UNAS-Palette: kühles Weiß bei Tag, tiefes Nachtblau bei Nacht, ein Akzent in UniFi-Blau */
+:root {
+  --accent: #006FFF; --accent-ink: #0058D6; --on-accent: #ffffff;
+  --orange: #006FFF; --orange-ink: #0058D6; --orange-tint: rgba(0,111,255,0.10); --orange-glow: rgba(0,111,255,0.34);
+  --font: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --display: "Archivo", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --bg: #F4F7FC; --bg-2: #E9EFF8; --card: #FFFFFF; --card-2: #F1F5FB;
+  --ink: #0B1526; --ink-2: #475569; --ink-3: rgba(11,21,38,0.54);
+  --line: rgba(5,25,60,0.11); --chip: rgba(5,25,60,0.06);
+  --glass: rgba(250,252,255,0.72); --glass-line: rgba(255,255,255,0.75);
+  --shadow: 0 1px 2px rgba(5,20,50,0.05), 0 12px 32px -14px rgba(5,20,50,0.22);
+  --shadow-lg: 0 2px 6px rgba(5,20,50,0.05), 0 48px 100px -36px rgba(5,20,50,0.40);
+  --radius: 26px; --radius-lg: 36px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --accent: #2F8BFF; --accent-ink: #6AAEFF; --on-accent: #ffffff;
+  --orange: #2F8BFF; --orange-ink: #6AAEFF; --orange-tint: rgba(47,139,255,0.16); --orange-glow: rgba(47,139,255,0.32);
+  --bg: #060B14; --bg-2: #0B1422; --card: #111C2D; --card-2: #172438;
+  --ink: #EAF1FB; --ink-2: rgba(220,230,245,0.84); --ink-3: rgba(220,230,245,0.54);
+  --line: rgba(234,241,251,0.1); --chip: rgba(234,241,251,0.07);
+  --glass: rgba(12,22,38,0.62); --glass-line: rgba(255,255,255,0.08);
+  --shadow: 0 14px 34px -16px rgba(0,0,0,0.6); --shadow-lg: 0 48px 100px -36px rgba(0,0,0,0.85);
+} }
+:root[data-theme="dark"] {
+  --accent: #2F8BFF; --accent-ink: #6AAEFF; --on-accent: #ffffff;
+  --orange: #2F8BFF; --orange-ink: #6AAEFF; --orange-tint: rgba(47,139,255,0.16); --orange-glow: rgba(47,139,255,0.32);
+  --bg: #060B14; --bg-2: #0B1422; --card: #111C2D; --card-2: #172438;
+  --ink: #EAF1FB; --ink-2: rgba(220,230,245,0.84); --ink-3: rgba(220,230,245,0.54);
+  --line: rgba(234,241,251,0.1); --chip: rgba(234,241,251,0.07);
+  --glass: rgba(12,22,38,0.62); --glass-line: rgba(255,255,255,0.08);
+  --shadow: 0 14px 34px -16px rgba(0,0,0,0.6); --shadow-lg: 0 48px 100px -36px rgba(0,0,0,0.85);
+}
+
+a { color: var(--accent-ink); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+.narrow { max-width: 780px; }
+p { margin: 0; }
+.muted { color: var(--ink-2); }
+.center { text-align: center; }
+.center .lead { margin-left: auto; margin-right: auto; max-width: 680px; }
+code, .k { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.brand { font-family: var(--display); font-weight: 800; }
+
+/* Knöpfe */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 24px; border-radius: 999px;
+  font-family: inherit; font-size: 15px; font-weight: 600; line-height: 1; background: var(--orange); color: var(--on-accent); border: 0; cursor: pointer;
+  box-shadow: 0 12px 28px -12px var(--orange-glow); transition: transform .2s ease, filter .2s ease;
+}
+.btn:hover { text-decoration: none; filter: brightness(1.06); transform: translateY(-1px); }
+.btn.ghost { background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
+.btn.small { height: 36px; padding: 0 16px; font-size: 14px; }
+
+/* Schrift */
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-ink); margin: 0 0 18px; }
+.eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px var(--orange-tint); }
+h1, h2, h3 { margin: 0; color: var(--ink); font-family: var(--display); font-weight: 800; text-wrap: balance; }
+h1 { font-size: clamp(44px, 8vw, 100px); line-height: 0.96; letter-spacing: -0.04em; font-weight: 900; }
+h1 em, h2 em { font-style: normal; color: var(--orange); }
+h2 { font-size: clamp(34px, 5vw, 60px); line-height: 1.03; letter-spacing: -0.035em; }
+h3 { font-size: 20px; line-height: 1.2; letter-spacing: -0.015em; font-weight: 700; }
+.lead { font-size: clamp(18px, 2vw, 22px); line-height: 1.5; color: var(--ink-2); margin: 22px 0 0; }
+.lead strong { color: var(--ink); font-weight: 600; }
+
+section { padding: clamp(72px, 9vw, 120px) 0; position: relative; }
+section.tint { background: var(--bg-2); }
+.head { margin-bottom: clamp(36px, 5vw, 60px); }
+.cap { margin-top: 20px; font-size: 15px; color: var(--ink-3); text-align: center; }
+
+/* Hero */
+.hero { padding: clamp(56px, 9vw, 112px) 0 clamp(64px, 8vw, 104px); text-align: center; overflow: hidden; }
+.hero .glow { position: absolute; inset: -20% -10% auto; height: 90%; pointer-events: none;
+  background: radial-gradient(40% 36% at 30% 30%, rgba(0,111,255,0.18), transparent 70%), radial-gradient(36% 34% at 72% 24%, rgba(92,163,255,0.16), transparent 70%);
+  filter: blur(50px); }
+.hero .wrap { position: relative; }
+.hero .lead { max-width: 640px; margin-left: auto; margin-right: auto; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 34px; }
+.meta { margin-top: 22px; font-size: 14px; color: var(--ink-3); display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; align-items: center; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: var(--card); box-shadow: var(--shadow); font-weight: 600; color: var(--ink-2); font-size: 13px; }
+.pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); display: inline-block; }
+
+/* Bühne: Szene (KI-Bild) mit Karten darunter (bleibt in beiden Themes dunkel) */
+.scene { display: block; width: calc(100% + 2 * clamp(16px, 4vw, 48px)); max-width: none; margin: 0 calc(-1 * clamp(16px, 4vw, 48px)); aspect-ratio: 1219 / 620; object-fit: cover; border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent); mask-image: linear-gradient(180deg, #000 72%, transparent); }
+.stage { position: relative; margin: clamp(48px, 7vw, 84px) auto 0; max-width: 1000px; border-radius: var(--radius-lg); padding: 0 clamp(16px, 4vw, 48px) clamp(28px, 5vw, 56px);
+  background: radial-gradient(ellipse at 50% 0%, #0f2240, #060d1a 70%); box-shadow: var(--shadow-lg), inset 0 0 0 1px rgba(255,255,255,0.06); color: #eaf1fb; }
+.btns { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.07); }
+.btns small { display: block; font-size: 12px; color: #93a3ba; margin-bottom: 8px; }
+.cards { display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; margin-top: clamp(40px, 5vw, 56px); text-align: left; }
+.hc { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; padding: 20px 22px; min-width: 0; }
+.hc .top { display: flex; align-items: center; gap: 12px; }
+.hc .ico { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: rgba(0,111,255,0.20); color: #6aaeff; }
+.hc .ico svg { width: 20px; height: 20px; }
+.hc .name { font-weight: 600; font-size: 15px; }
+.hc .state { font-size: 13px; color: #93a3ba; }
+.hc .ok { margin-left: auto; font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 999px; background: rgba(46,204,113,0.16); color: #5fe39a; flex: none; }
+.vol { display: flex; align-items: center; gap: 12px; margin-top: 18px; font: 500 13px/1 var(--mono); color: #93a3ba; }
+.vol .track { flex: 1; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.1); position: relative; }
+.vol .track i { position: absolute; inset: 0 auto 0 0; width: 18%; border-radius: 4px; background: #2f8bff; }
+.srcs { display: flex; gap: 6px; margin-top: 16px; flex-wrap: wrap; }
+.srcs > span { font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,0.06); color: #c3cfe0; }
+.srcs > span.on { background: #eaf1fb; color: #060b14; }
+.srcs > span.on span { color: inherit; }
+.rows { display: grid; gap: 0; margin-top: 4px; }
+.rows div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 14px; }
+.rows div:first-child { border-top: 0; }
+.rows span { color: #93a3ba; min-width: 0; }
+.rows b { font-weight: 500; text-align: right; color: #eaf1fb; overflow-wrap: anywhere; }
+.rows b.hot { color: #6aaeff; } .rows b.good { color: #5fe39a; }
+.fict { margin-top: 16px; font-size: 12px; color: #7c8ba0; text-align: center; }
+
+/* Bento: Gerade neu */
+.bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+.b { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px 28px 28px; min-width: 0; }
+.b .tag { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-ink); background: var(--orange-tint); padding: 4px 10px; border-radius: 999px; margin-bottom: 14px; }
+.b h3 { margin-bottom: 8px; }
+.b p { color: var(--ink-2); font-size: 16px; }
+.b code { font-size: 14px; background: var(--chip); padding: 2px 6px; border-radius: 6px; color: var(--ink); }
+.b.s4 { grid-column: span 4; } .b.s6 { grid-column: span 6; } .b.s8 { grid-column: span 8; }
+
+/* Funktionen */
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.tile { background: var(--card); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); min-width: 0; }
+.tile h3 { margin-bottom: 8px; }
+.tile p { color: var(--ink-2); font-size: 16px; }
+.tile .ico { width: 46px; height: 46px; border-radius: 15px; background: var(--orange-tint); color: var(--accent-ink); display: grid; place-items: center; margin-bottom: 18px; }
+.tile .ico svg { width: 23px; height: 23px; }
+
+/* EQ-Illustration */
+.split { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(36px, 6vw, 80px); align-items: center; }
+.points { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 16px; }
+.points li { display: grid; gap: 2px; }
+.points b { font-family: var(--display); font-size: 17px; font-weight: 700; color: var(--ink); }
+.points span { color: var(--ink-2); font-size: 16px; }
+.panel-ill { background: var(--card); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: clamp(22px, 4vw, 36px); min-width: 0; }
+.ill-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ill-head b { font-family: var(--display); font-size: 18px; }
+.disk { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 16px 0; border-top: 1px solid var(--line); }
+.disk:first-of-type { border-top: 0; margin-top: 10px; }
+.disk .di { width: 40px; height: 40px; border-radius: 12px; background: var(--orange-tint); color: var(--accent-ink); display: grid; place-items: center; }
+.disk .di svg { width: 20px; height: 20px; }
+.disk b { display: block; font-weight: 600; font-size: 15px; }
+.disk > div > span { font-size: 13px; color: var(--ink-3); font-family: var(--mono); }
+.st { font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 999px; }
+.st.good { background: rgba(46,160,90,0.14); color: #1f8a4c; }
+.st.check { background: rgba(230,140,0,0.16); color: #b26a00; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .st.good { color: #5fe39a; } :root:not([data-theme="light"]) .st.check { color: #ffb84d; } }
+:root[data-theme="dark"] .st.good { color: #5fe39a; } :root[data-theme="dark"] .st.check { color: #ffb84d; }
+.ill-foot { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
+.ill-foot div { background: var(--card-2); border-radius: 16px; padding: 12px 14px; min-width: 0; }
+.ill-foot > div > span { display: block; font-size: 12px; color: var(--ink-3); }
+.ill-foot b { font-weight: 600; font-size: 15px; }
+
+/* Entitäten-Tabelle */
+.tbl { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; font-size: 15px; }
+.tbl th, .tbl td { text-align: left; padding: 14px 18px; border-top: 1px solid var(--line); vertical-align: top; }
+.tbl thead th { border-top: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-ink); background: var(--card-2); }
+.tbl td:first-child { font-weight: 600; white-space: nowrap; }
+.tbl code { font-size: 13px; background: var(--chip); padding: 2px 6px; border-radius: 6px; overflow-wrap: anywhere; }
+.tbl td:last-child { color: var(--ink-2); }
+
+/* Wie es funktioniert */
+.flow { display: grid; gap: 12px; max-width: 900px; margin: 0 auto; }
+.lane { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; background: var(--card); border-radius: 22px; box-shadow: var(--shadow); padding: 18px 22px; }
+.lane .end b { display: block; font-family: var(--display); font-size: 16px; }
+.lane .end span { font-size: 14px; color: var(--ink-2); }
+.lane .end.r { text-align: right; }
+.arrow { display: grid; justify-items: center; gap: 4px; font: 500 12px/1.2 var(--mono); color: var(--accent-ink); text-align: center; }
+.arrow svg { width: 120px; height: 14px; }
+
+/* Installation */
+.install { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+.panel { background: var(--card); border-radius: var(--radius); padding: clamp(26px, 4vw, 42px); box-shadow: var(--shadow); min-width: 0; }
+.panel h3 { margin-bottom: 6px; }
+.panel code { font-size: 14px; background: var(--chip); padding: 2px 6px; border-radius: 6px; overflow-wrap: anywhere; }
+.repo { margin-top: 10px; display: flex; align-items: center; gap: 8px; background: var(--chip); border-radius: 18px; padding: 8px 8px 8px 18px; }
+.repo code { flex: 1; min-width: 0; font-size: 15px; background: none; padding: 0; color: var(--ink); overflow-wrap: anywhere; }
+.copy { flex: none; height: 34px; padding: 0 14px; border-radius: 999px; border: 0; background: var(--card); color: var(--ink); font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.12); }
+.steps { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 20px; counter-reset: s; }
+.steps li { position: relative; padding-left: 50px; color: var(--ink-2); }
+.steps li::before { counter-increment: s; content: counter(s); position: absolute; left: 0; top: -3px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--orange-tint); color: var(--accent-ink); font-weight: 700; font-size: 15px; }
+.steps li b { color: var(--ink); font-weight: 600; }
+.req { list-style: none; padding: 0; margin: 20px 0 0; }
+.req li { display: flex; gap: 14px; align-items: baseline; padding: 14px 0; border-top: 1px solid var(--line); font-size: 16px; }
+.req li:first-child { border-top: 0; padding-top: 6px; }
+.req .name { color: var(--ink); font-weight: 600; flex: 1; min-width: 0; }
+.tg { flex: none; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--orange-tint); color: var(--accent-ink); }
+.tg.opt { background: var(--chip); color: var(--ink-3); }
+.note { margin-top: 20px; font-size: 14px; color: var(--ink-3); }
+.full { grid-column: 1 / -1; }
+
+/* FAQ */
+.faq { display: grid; gap: 10px; }
+.faq details { background: var(--card); border-radius: 20px; box-shadow: var(--shadow); padding: 0 22px; }
+.faq summary { cursor: pointer; list-style: none; padding: 18px 0; font-family: var(--display); font-weight: 700; font-size: 17px; display: flex; gap: 12px; align-items: center; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; margin-left: auto; font-size: 22px; color: var(--accent-ink); font-weight: 600; }
+.faq details[open] summary::after { content: "\2212"; }
+.faq details p { padding: 0 0 18px; color: var(--ink-2); font-size: 16px; }
+.faq code { font-size: 13px; background: var(--chip); padding: 2px 6px; border-radius: 6px; }
+
+/* Schluss, Fuß */
+.finale { text-align: center; }
+.finale h2 { font-size: clamp(40px, 6.5vw, 84px); }
+footer { border-top: 1px solid var(--line); padding: 44px 0 56px; font-size: 14px; color: var(--ink-3); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 20px 32px; align-items: center; }
+footer nav { display: flex; flex-wrap: wrap; gap: 8px 26px; }
+footer nav a { color: var(--ink-2); font-weight: 500; }
+footer .fine { flex-basis: 100%; line-height: 1.6; }
+
+@media (max-width: 960px) {
+  .split, .install, .cards { grid-template-columns: 1fr; }
+  .grid3 { grid-template-columns: 1fr 1fr; }
+  .b.s4, .b.s8 { grid-column: span 6; }
+}
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  :root { --radius: 22px; --radius-lg: 28px; }
+  .nav { padding: 0 8px 0 14px; }
+  .nav .btn { margin-left: auto; }
+  .grid3 { grid-template-columns: 1fr; }
+  .b.s4, .b.s6, .b.s8 { grid-column: span 12; }
+  .tile, .b { padding: 24px; }
+  .panel { padding: 24px 20px; }
+  .repo { flex-wrap: wrap; padding: 12px 14px; gap: 10px; }
+  .repo code { flex-basis: 100%; font-size: clamp(12px, 3.4vw, 14px); }
+  .copy { margin-left: auto; }
+  .ill-foot { grid-template-columns: 1fr 1fr; }
+  .lane { grid-template-columns: 1fr; gap: 8px; text-align: left; }
+  .lane .end.r { text-align: left; }
+  .arrow { justify-items: start; text-align: left; }
+  .arrow svg { width: 80px; }
+  .tbl, .tbl tbody, .tbl tr, .tbl td { display: block; }
+  .tbl thead { display: none; }
+  .tbl tr { border-top: 1px solid var(--line); padding: 12px 16px; }
+  .tbl tr:first-child { border-top: 0; }
+  .tbl td { border: 0; padding: 2px 0; }
+}
+</style></head>
+<body>
+
+<div class="navwrap">
+  <nav class="nav" aria-label="Site">
+    <a class="brand" href="#top"><img src="logo.png" alt="">UniFi UNAS</a>
+    <div class="nav-links">
+      <a href="#new"><span class="en">New</span><span class="de">Neu</span></a>
+      <a href="#features"><span class="en">Features</span><span class="de">Funktionen</span></a>
+      <a href="#entities"><span class="en">Entities</span><span class="de">Entitäten</span></a>
+      <a href="#security" class="opt"><span class="en">Security</span><span class="de">Sicherheit</span></a>
+      <a href="#faq" class="opt"><span class="en">Good to know</span><span class="de">Gut zu wissen</span></a>
+      <a href="https://github.com/SH1FT-W/unifi-unas">GitHub</a>
+    </div>
+    <button class="iconbtn" id="theme" type="button" aria-label="Light or dark">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-l="de">DE</button><button type="button" data-l="en">EN</button></div>
+    <a class="btn small" href="#install"><span class="en">Install</span><span class="de">Installieren</span></a>
+  </nav>
+</div>
+
+<section class="hero" id="top">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="en">UniFi NAS in Home Assistant</span><span class="de">UniFi-NAS in Home Assistant</span></p>
+    <h1 class="reveal d1"><span class="en">Your NAS,<br><em>in plain sight.</em></span><span class="de">Dein NAS,<br><em>immer im Blick.</em></span></h1>
+    <p class="lead reveal d2"><span class="en">UniFi UNAS talks to UniFi OS and UniFi Drive the way their web interface does: <strong>storage, every disk with its health, drives, system values, the fan profile, data scrubbing and updates</strong>. Local, no cloud, nothing installed on the NAS.</span><span class="de">UniFi UNAS spricht mit UniFi OS und UniFi Drive wie deren Weboberfläche: <strong>Speicher, jede Festplatte mit ihrem Zustand, Laufwerke, Systemwerte, Lüfterprofil, Datenprüfung und Updates</strong>. Lokal, ohne Cloud, nichts auf dem NAS installiert.</span></p>
+    <div class="cta reveal d3">
+      <a class="btn" href="#install"><span class="en">Install with HACS</span><span class="de">Mit HACS installieren</span></a>
+      <a class="btn ghost" href="https://github.com/SH1FT-W/unifi-unas#readme"><span class="en">Read the README</span><span class="de">Zur Anleitung</span></a>
+    </div>
+    <p class="meta reveal d3">
+      <span class="pill"><i></i><span id="unas-version">Version 26.10.2</span></span>
+      <span class="en">Home Assistant 2026.9 or newer &middot; English and German &middot; Apache 2.0</span><span class="de">Home Assistant 2026.9 oder neuer &middot; Deutsch und Englisch &middot; Apache 2.0</span>
+    </p>
+
+    <div class="stage reveal d3" role="img" aria-label="Illustration: a UniFi NAS in a home setting, below it a storage card and a list of values. AI-generated scene, made-up values.">
+      <img class="scene" src="images/hero-photo.webp" width="1106" height="563" fetchpriority="high" alt="">
+      <div class="cards" style="margin-top: clamp(-28px, -2vw, -12px); position: relative;">
+        <div class="hc">
+          <div class="top">
+            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 7h6M9 11h6M12 18h.01"/></svg></span>
+            <div><div class="name">UNAS 2</div><div class="state"><span class="en">Storage OK &middot; RAID 1</span><span class="de">Speicher OK &middot; RAID 1</span></div></div>
+            <span class="ok"><span class="en">Healthy</span><span class="de">Gesund</span></span>
+          </div>
+          <div class="vol"><span><span class="en">USED</span><span class="de">BELEGT</span></span><span class="track"><i></i></span><span>18 %</span></div>
+          <div class="srcs"><span class="on"><span class="en">Default</span><span class="de">Standard</span></span><span><span class="en">Quiet</span><span class="de">Leise</span></span><span><span class="en">Cooling</span><span class="de">Kühlen</span></span></div>
+          <div class="btns"><small><span class="en">Buttons</span><span class="de">Knöpfe</span></small><div class="srcs" style="margin-top:0"><span><span class="en">Restart</span><span class="de">Neu starten</span></span><span><span class="en">Data scrub</span><span class="de">Datenprüfung</span></span><span><span class="en">SMART test</span><span class="de">SMART-Test</span></span></div></div>
+        </div>
+        <div class="hc">
+          <div class="rows">
+            <div><span><span class="en">Disk 1</span><span class="de">Festplatte 1</span></span><b class="good"><span class="en">Good &middot; 41 &deg;C</span><span class="de">Gut &middot; 41 &deg;C</span></b></div>
+            <div><span><span class="en">Disk 2</span><span class="de">Festplatte 2</span></span><b class="good"><span class="en">Good &middot; 43 &deg;C</span><span class="de">Gut &middot; 43 &deg;C</span></b></div>
+            <div><span><span class="en">Storage read / write</span><span class="de">Speicher Lesen / Schreiben</span></span><b class="hot">0.4 / 2.1 MB/s</b></div>
+            <div><span><span class="en">Link speed</span><span class="de">Verbindung</span></span><b>2.5 GbE</b></div>
+            <div><span>UniFi OS</span><b><span class="en">Up to date</span><span class="de">Aktuell</span></b></div>
+          </div>
+        </div>
+      </div>
+      <p class="fict"><span class="en">Illustration: AI-generated scene and made-up values, not a screenshot.</span><span class="de">Illustration: KI-generierte Szene und erfundene Werte, kein Screenshot.</span></p>
+    </div>
+  </div>
+</section>
+
+<section id="new" class="tint">
+  <div class="wrap">
+    <div class="head center reveal">
+      <p class="eyebrow"><span class="en">Just arrived</span><span class="de">Gerade neu</span></p>
+      <h2><span class="en">Safer login,<br>clearer health.</span><span class="de">Sicherer angemeldet,<br>klarer Zustand.</span></h2>
+      <p class="lead"><span class="en">26.10.2 pins the certificate of your UNAS, tells missing rights apart from a wrong password and puts disk health into words.</span><span class="de">26.10.2 merkt sich das Zertifikat deiner UNAS, unterscheidet fehlende Rechte von einem falschen Passwort und sagt den Zustand der Platten in Worten.</span></p>
+    </div>
+    <div class="bento">
+      <div class="b s6 reveal"><span class="tag">26.10.2</span><h3><span class="en">Remembers its certificate</span><span class="de">Merkt sich das Zertifikat</span></h3><p><span class="en">At setup the integration remembers the certificate the UNAS shows and only sends the password to that one. If it ever changes, a repair shows the old and the new fingerprint.</span><span class="de">Bei der Einrichtung merkt sich die Integration das Zertifikat der UNAS und schickt das Passwort nur noch dorthin. Ändert es sich, zeigt eine Reparatur alten und neuen Fingerabdruck.</span></p></div>
+      <div class="b s6 reveal d1"><span class="tag">26.10.2</span><h3><span class="en">Clear about missing rights</span><span class="de">Klar bei fehlenden Rechten</span></h3><p><span class="en">An account without UniFi OS admin rights gets a plain message for restart, shutdown and updates instead of a request for a new password.</span><span class="de">Fehlen dem Konto Admin-Rechte in UniFi OS, gibt es bei Neustart, Ausschalten und Updates eine klare Meldung statt einer Frage nach dem Passwort.</span></p></div>
+      <div class="b s4 reveal"><span class="tag">26.10.2</span><h3><span class="en">Storage throughput</span><span class="de">Speicher-Durchsatz</span></h3><p><span class="en">Read and write rate of all disks together, the five minute average of the Drive graph.</span><span class="de">Lese- und Schreibrate aller Platten zusammen, das Fünf-Minuten-Mittel der Drive-Grafik.</span></p></div>
+      <div class="b s4 reveal d1"><span class="tag">26.10.2</span><h3><span class="en">Health in words</span><span class="de">Zustand in Worten</span></h3><p><span class="en">Each disk shows <code>Good</code> or <code>Check</code> instead of a bare 5.</span><span class="de">Jede Platte zeigt <code>Gut</code> oder <code>Prüfen</code> statt einer nackten 5.</span></p></div>
+      <div class="b s4 reveal d2"><span class="tag">26.10.2</span><h3><span class="en">Disks at risk</span><span class="de">Platten mit Risiko</span></h3><p><span class="en">How many disks report a risk, the hottest disk, and lost redundancy in the storage problem.</span><span class="de">Wie viele Platten ein Risiko melden, die heißeste Platte und verlorene Redundanz im Speicherproblem.</span></p></div>
+    </div>
+    <p class="cap reveal"><span class="en">Everything that changed, release by release: the <a href="https://github.com/SH1FT-W/unifi-unas/blob/main/CHANGELOG.md">changelog</a>.</span><span class="de">Alles, was sich geändert hat, Release für Release: das <a href="https://github.com/SH1FT-W/unifi-unas/blob/main/CHANGELOG.md">Changelog</a>.</span></p>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="head center reveal">
+      <p class="eyebrow"><span class="en">What it does</span><span class="de">Was sie kann</span></p>
+      <h2><span class="en">What UniFi Drive knows.<br>Right in Home Assistant.</span><span class="de">Was UniFi Drive weiß.<br>Direkt in Home Assistant.</span></h2>
+      <p class="lead"><span class="en">Every value comes from the same interfaces the UniFi Drive web interface uses, tried out on a UNAS 2.</span><span class="de">Jeder Wert kommt aus denselben Schnittstellen, die die Weboberfläche von UniFi Drive nutzt, ausprobiert an einer UNAS 2.</span></p>
+    </div>
+    <div class="grid3">
+      <div class="tile reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></div><h3><span class="en">Storage at a glance</span><span class="de">Speicher auf einen Blick</span></h3><p><span class="en">Used, free, capacity and usage over all pools, the storage status and a problem sensor for degraded pools or lost redundancy.</span><span class="de">Belegt, frei, Kapazität und Auslastung über alle Pools, der Speicherstatus und ein Problem-Melder für eingeschränkte Pools oder verlorene Redundanz.</span></p></div>
+      <div class="tile reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="12" cy="12" r="4"/><path d="M12 12l2.5 2.5"/></svg></div><h3><span class="en">Every disk its own device</span><span class="de">Jede Platte ein Gerät</span></h3><p><span class="en">Temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick SMART test.</span><span class="de">Temperatur, Betriebsstunden, defekte Sektoren, Zustand und ein Problem-Melder mit den Risiko-Gründen, dazu ein SMART-Schnelltest.</span></p></div>
+      <div class="tile reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><h3><span class="en">Drives and shares</span><span class="de">Laufwerke und Freigaben</span></h3><p><span class="en">Usage of every shared and personal drive, with quota, members, snapshots and remote backup as attributes.</span><span class="de">Belegung jedes geteilten und persönlichen Laufwerks, mit Kontingent, Mitgliedern, Snapshots und Remote-Backup als Attribute.</span></p></div>
+      <div class="tile reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div><h3><span class="en">System and network</span><span class="de">System und Netzwerk</span></h3><p><span class="en">CPU load and temperature, memory, uptime, throughput and the link speed, so a port stuck at 1 GbE stands out.</span><span class="de">CPU-Last und -Temperatur, Arbeitsspeicher, Laufzeit, Durchsatz und die Verbindungsgeschwindigkeit, damit ein Port auf 1 GbE auffällt.</span></p></div>
+      <div class="tile reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M12 10c0-4 1-7 4-7 2 0 3 2 1 4l-3 3M14 12c4 0 7 1 7 4 0 2-2 3-4 1l-3-3M12 14c0 4-1 7-4 7-2 0-3-2-1-4l3-3M10 12c-4 0-7-1-7-4 0-2 2-3 4-1l3 3"/></svg></div><h3><span class="en">Fan profile and scrubbing</span><span class="de">Lüfter und Datenprüfung</span></h3><p><span class="en">Quiet, default or cooling, switchable from Home Assistant. State and last run of the data scrub, and a button to start one.</span><span class="de">Leise, Standard oder Kühlen, umschaltbar aus Home Assistant. Zustand und letzter Lauf der Datenprüfung und ein Knopf zum Starten.</span></p></div>
+      <div class="tile reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></div><h3><span class="en">UniFi OS and Drive updates</span><span class="de">Updates für UniFi OS und Drive</span></h3><p><span class="en">Both appear under Settings, Updates, with an install button, just like in the UniFi interface.</span><span class="de">Beide erscheinen unter Einstellungen, Updates, mit Installieren-Knopf, wie in der UniFi-Oberfläche.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="health" class="tint">
+  <div class="wrap split">
+    <div class="reveal">
+      <p class="eyebrow"><span class="en">Health</span><span class="de">Zustand</span></p>
+      <h2><span class="en">Good or Check.<br>Not a bare 5.</span><span class="de">Gut oder Prüfen.<br>Keine nackte 5.</span></h2>
+      <ul class="points">
+        <li><b><span class="en">Health per disk</span><span class="de">Zustand je Platte</span></b><span><span class="en">Good is the highest Drive score 5, Check is anything below. The number stays in the attribute <code>score</code>.</span><span class="de">Gut ist der höchste Drive-Wert 5, Prüfen alles darunter. Die Zahl bleibt im Attribut <code>score</code>.</span></span></li>
+        <li><b><span class="en">Problem with reasons</span><span class="de">Problem mit Gründen</span></b><span><span class="en">On as soon as Drive no longer lists a disk as optimal, with the risk reasons as an attribute.</span><span class="de">An, sobald Drive eine Platte nicht mehr als optimal führt, mit den Risiko-Gründen als Attribut.</span></span></li>
+        <li><b><span class="en">Redundancy</span><span class="de">Redundanz</span></b><span><span class="en">Storage problem also turns on when a pool still runs but has lost its redundancy.</span><span class="de">Speicherproblem geht auch an, wenn ein Pool noch läuft, aber seine Redundanz verloren hat.</span></span></li>
+        <li><b><span class="en">New disks, no restart</span><span class="de">Neue Platten ohne Neustart</span></b><span><span class="en">Swapped or added disks get their entities right away, removed ones can be deleted.</span><span class="de">Getauschte oder neue Platten bekommen sofort ihre Entitäten, ausgebaute lassen sich löschen.</span></span></li>
+      </ul>
+    </div>
+    <div class="panel-ill reveal d1" role="img" aria-label="Illustration of two disks with their health, made-up values.">
+      <div class="ill-head"><b><span class="en">Disks</span><span class="de">Festplatten</span></b><span class="pill"><i></i><span class="en">1 at risk</span><span class="de">1 mit Risiko</span></span></div>
+      <div class="disk"><span class="di"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="12" cy="12" r="4"/></svg></span><div><b><span class="en">Disk 1</span><span class="de">Festplatte 1</span></b><span>41 &deg;C &middot; 9 120 h &middot; 0 <span class="en">bad sectors</span><span class="de">defekte Sektoren</span></span></div><span class="st good"><span class="en">Good</span><span class="de">Gut</span></span></div>
+      <div class="disk"><span class="di"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="12" cy="12" r="4"/></svg></span><div><b><span class="en">Disk 2</span><span class="de">Festplatte 2</span></b><span>52 &deg;C &middot; 31 400 h &middot; 8 <span class="en">bad sectors</span><span class="de">defekte Sektoren</span></span></div><span class="st check"><span class="en">Check</span><span class="de">Prüfen</span></span></div>
+      <div class="ill-foot">
+        <div><span><span class="en">Hottest disk</span><span class="de">Heißeste Platte</span></span><b>52 &deg;C</b></div>
+        <div><span><span class="en">Redundancy</span><span class="de">Redundanz</span></span><b>1 / 1</b></div>
+        <div><span><span class="en">Last scrub</span><span class="de">Letzte Prüfung</span></span><b><span class="en">3 days ago</span><span class="de">vor 3 Tagen</span></b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="entities">
+  <div class="wrap">
+    <div class="head center reveal">
+      <p class="eyebrow"><span class="en">Entities</span><span class="de">Entitäten</span></p>
+      <h2><span class="en">One device for the NAS.<br>One for every disk.</span><span class="de">Ein Gerät für das NAS.<br>Eins für jede Platte.</span></h2>
+      <p class="lead"><span class="en">All IDs start with the device name, for example <code>sensor.unas_2_storage_used</code>. Names in English and German.</span><span class="de">Alle IDs beginnen mit dem Gerätenamen, zum Beispiel <code>sensor.unas_2_storage_used</code>. Namen auf Deutsch und Englisch.</span></p>
+    </div>
+    <div class="reveal">
+      <table class="tbl">
+        <thead><tr><th><span class="en">Platform</span><span class="de">Plattform</span></th><th><span class="en">Entity</span><span class="de">Entität</span></th><th><span class="en">Note</span><span class="de">Hinweis</span></th></tr></thead>
+        <tbody>
+          <tr><td>Sensor</td><td><code>storage_used</code> <code>storage_free</code> <code>storage_capacity</code> <code>storage_usage</code> <code>storage_status</code></td><td><span class="en">Over all pools</span><span class="de">Über alle Pools</span></td></tr>
+          <tr><td>Sensor</td><td><code>storage_read</code> <code>storage_write</code> <code>disks_at_risk</code> <code>hottest_disk</code></td><td><span class="en">Throughput as five minute average</span><span class="de">Durchsatz als Fünf-Minuten-Mittel</span></td></tr>
+          <tr><td>Sensor</td><td><code>cpu_load</code> <code>cpu_temperature</code> <code>memory_usage</code> <code>started</code> <code>network_receive</code> <code>network_transmit</code> <code>link_speed</code></td><td></td></tr>
+          <tr><td>Sensor</td><td><code>&lt;drive&gt;_used</code></td><td><span class="en">One per drive, quota and members as attributes</span><span class="de">Je Laufwerk, Kontingent und Mitglieder als Attribute</span></td></tr>
+          <tr><td><span class="en">Per disk</span><span class="de">Je Platte</span></td><td><code>temperature</code> <code>power_on_hours</code> <code>bad_sectors</code> <code>health</code> <code>problem</code> <code>run_quick_smart_test</code></td><td><span class="en">Device <code>UNAS 2 disk 1</code> …</span><span class="de">Gerät <code>UNAS 2 Festplatte 1</code> …</span></td></tr>
+          <tr><td><span class="en">Binary sensor</span><span class="de">Binärsensor</span></td><td><code>storage_problem</code> <code>smb</code> <code>time_machine</code> <code>nfs</code></td><td></td></tr>
+          <tr><td><span class="en">Select</span><span class="de">Auswahl</span></td><td><code>fan_profile</code></td><td><span class="en">Quiet, default, cooling</span><span class="de">Leise, Standard, Kühlen</span></td></tr>
+          <tr><td><span class="en">Button</span><span class="de">Taste</span></td><td><code>restart</code> <code>shut_down</code> <code>start_data_scrubbing</code></td><td><span class="en">Shut down is disabled by default</span><span class="de">Ausschalten ist standardmäßig deaktiviert</span></td></tr>
+          <tr><td>Update</td><td><code>unifi_os</code> <code>unifi_drive</code></td><td><span class="en">With install button</span><span class="de">Mit Installieren-Knopf</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="security" class="tint">
+  <div class="wrap">
+    <div class="head center reveal">
+      <p class="eyebrow"><span class="en">Security</span><span class="de">Sicherheit</span></p>
+      <h2><span class="en">Your password goes<br>to your NAS only.</span><span class="de">Dein Passwort geht<br>nur an dein NAS.</span></h2>
+      <p class="lead"><span class="en">UniFi OS uses a self-signed certificate. The integration remembers the one your UNAS shows at setup and from then on talks to nothing else.</span><span class="de">UniFi OS nutzt ein selbstsigniertes Zertifikat. Die Integration merkt sich das, das deine UNAS bei der Einrichtung zeigt, und spricht danach mit nichts anderem.</span></p>
+    </div>
+    <div class="flow">
+      <div class="lane reveal"><div class="end"><b>Home Assistant</b><span><span class="en">at setup</span><span class="de">bei der Einrichtung</span></span></div><div class="arrow"><svg viewBox="0 0 120 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h112M108 2l6 5-6 5"/></svg>SHA-256</div><div class="end r"><b><span class="en">Certificate remembered</span><span class="de">Zertifikat gemerkt</span></b><span><span class="en">before the password is sent</span><span class="de">bevor das Passwort rausgeht</span></span></div></div>
+      <div class="lane reveal d1"><div class="end"><b>Home Assistant</b><span><span class="en">every request</span><span class="de">jede Anfrage</span></span></div><div class="arrow"><svg viewBox="0 0 120 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h112M108 2l6 5-6 5"/></svg>HTTPS :443</div><div class="end r"><b>UniFi OS + UniFi Drive</b><span><span class="en">only with that certificate</span><span class="de">nur mit diesem Zertifikat</span></span></div></div>
+      <div class="lane reveal d2"><div class="end"><b><span class="en">Settings, Repairs</span><span class="de">Einstellungen, Reparaturen</span></b><span><span class="en">if it changes</span><span class="de">wenn es sich ändert</span></span></div><div class="arrow"><svg viewBox="0 0 120 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M118 7H6M12 2L6 7l6 5"/></svg><span class="en">you decide</span><span class="de">du entscheidest</span></div><div class="end r"><b><span class="en">Old and new fingerprint</span><span class="de">Alter und neuer Fingerabdruck</span></b><span><span class="en">accept after a reset, refuse otherwise</span><span class="de">nach Zurücksetzen annehmen, sonst ablehnen</span></span></div></div>
+    </div>
+    <p class="cap reveal"><span class="en">For monitoring a local account with access to UniFi Drive is enough. Admin rights in UniFi OS are only needed for restart, shutdown and updates.</span><span class="de">Für die Anzeige reicht ein lokales Konto mit Zugriff auf UniFi Drive. Admin-Rechte in UniFi OS braucht es nur für Neustart, Ausschalten und Updates.</span></p>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="head center reveal">
+      <p class="eyebrow"><span class="en">Install</span><span class="de">Installation</span></p>
+      <h2><span class="en">Three steps.<br>The NAS finds itself.</span><span class="de">Drei Schritte.<br>Das NAS findet sich selbst.</span></h2>
+    </div>
+    <div class="install">
+      <div class="panel reveal">
+        <h3><span class="en">With HACS</span><span class="de">Mit HACS</span></h3>
+        <p class="muted"><span class="en">As a custom repository.</span><span class="de">Als benutzerdefiniertes Repository.</span></p>
+        <ol class="steps">
+          <li class="en">In HACS, add a custom repository of type <b>Integration</b>:</li>
+          <li class="de">Füge in HACS ein benutzerdefiniertes Repository vom Typ <b>Integration</b> hinzu:</li>
+        </ol>
+        <div class="repo"><code id="repo">https://github.com/SH1FT-W/unifi-unas</code><button class="copy" type="button" data-copy="repo"><span class="en">Copy</span><span class="de">Kopieren</span></button></div>
+        <ol class="steps" style="counter-reset: s 1">
+          <li class="en"><b>Download UniFi UNAS</b> and restart Home Assistant.</li>
+          <li class="en"><b>Add the UNAS.</b> It shows up under Settings, Devices &amp; services, Discovered; enter a local UniFi OS account. Otherwise add the UniFi UNAS integration and enter its address.</li>
+          <li class="de"><b>Lade UniFi UNAS herunter</b> und starte Home Assistant neu.</li>
+          <li class="de"><b>Füge die UNAS hinzu.</b> Sie erscheint unter Einstellungen, Geräte &amp; Dienste, Entdeckt; dann ein lokales UniFi-OS-Konto eingeben. Sonst die Integration UniFi UNAS hinzufügen und die Adresse eingeben.</li>
+        </ol>
+        <p class="note"><span class="en">New address or another account later? Three dots, Reconfigure.</span><span class="de">Später eine neue Adresse oder ein anderes Konto? Drei Punkte, Neu konfigurieren.</span></p>
+      </div>
+      <div class="panel reveal d1">
+        <h3><span class="en">What you need</span><span class="de">Was du brauchst</span></h3>
+        <p class="muted"><span class="en">No cloud account, no YAML, nothing on the NAS.</span><span class="de">Kein Cloud-Konto, kein YAML, nichts auf dem NAS.</span></p>
+        <ul class="req">
+          <li><span class="name">Home Assistant 2026.9+</span><span class="tg"><span class="en">Required</span><span class="de">Nötig</span></span></li>
+          <li><span class="name"><span class="en">A UNAS with UniFi Drive in the same network</span><span class="de">Eine UNAS mit UniFi Drive im selben Netz</span></span><span class="tg"><span class="en">Required</span><span class="de">Nötig</span></span></li>
+          <li><span class="name"><span class="en">A local UniFi OS user with access to Drive</span><span class="de">Ein lokaler UniFi-OS-Benutzer mit Zugriff auf Drive</span></span><span class="tg"><span class="en">Required</span><span class="de">Nötig</span></span></li>
+          <li><span class="name"><span class="en">Admin rights, for restart and updates</span><span class="de">Admin-Rechte, für Neustart und Updates</span></span><span class="tg opt"><span class="en">Optional</span><span class="de">Optional</span></span></li>
+        </ul>
+        <p class="note"><span class="en">Tested on a UNAS 2 (UniFi OS 6.0.11, Drive 4.4.17). UNAS 4, UNAS Pro, Pro 4 and Pro 8 share the same interface, but are untested. Feedback with a diagnostics file is welcome.</span><span class="de">Getestet an einer UNAS 2 (UniFi OS 6.0.11, Drive 4.4.17). UNAS 4, UNAS Pro, Pro 4 und Pro 8 nutzen dieselbe Schnittstelle, sind aber ungetestet. Rückmeldung mit Diagnose-Datei ist willkommen.</span></p>
+      </div>
+      <div class="panel full reveal">
+        <h3><span class="en">Without HACS</span><span class="de">Ohne HACS</span></h3>
+        <p class="muted"><span class="en">Download the <a href="https://github.com/SH1FT-W/unifi-unas/releases/latest">latest release</a>, copy its <code>custom_components/unas</code> folder into <code>/config/custom_components/</code>, restart Home Assistant and add the UNAS.</span><span class="de">Lade das <a href="https://github.com/SH1FT-W/unifi-unas/releases/latest">neueste Release</a> herunter, kopiere den Ordner <code>custom_components/unas</code> nach <code>/config/custom_components/</code>, starte Home Assistant neu und füge die UNAS hinzu.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="tint">
+  <div class="wrap narrow">
+    <div class="head center reveal">
+      <p class="eyebrow"><span class="en">Good to know</span><span class="de">Gut zu wissen</span></p>
+      <h2><span class="en">What UniFi Drive<br>does its own way.</span><span class="de">Was UniFi Drive<br>auf seine Art macht.</span></h2>
+    </div>
+    <div class="faq reveal">
+      <details open><summary><span class="en">Why not an API key?</span><span class="de">Warum kein API-Key?</span></summary><p><span class="en">On a UNAS 2 a UniFi OS API key reads storage, disks, system values and the fan profile, but not the drive usage, the updates or the storage throughput, and it cannot switch anything. So the integration logs in with a local account.</span><span class="de">An einer UNAS 2 liest ein API-Key aus UniFi OS Speicher, Platten, Systemwerte und das Lüfterprofil, aber nicht die Belegung der Laufwerke, die Updates oder den Speicher-Durchsatz, und schalten kann er nichts. Deshalb meldet sich die Integration mit einem lokalen Konto an.</span></p></details>
+      <details><summary><span class="en">Is this an official interface?</span><span class="de">Ist das eine offizielle Schnittstelle?</span></summary><p><span class="en">No. Ubiquiti offers no public API for UniFi Drive, the integration uses the interfaces of its web interface. A Drive update can change them; the entities then turn unavailable and the diagnostics show the error.</span><span class="de">Nein. Ubiquiti bietet für UniFi Drive keine öffentliche Schnittstelle, die Integration nutzt die der Weboberfläche. Ein Drive-Update kann sie ändern; dann sind die Entitäten nicht verfügbar und die Diagnose zeigt den Fehler.</span></p></details>
+      <details><summary><span class="en">What do the health scores 1 to 4 mean?</span><span class="de">Was bedeuten die Zustandswerte 1 bis 4?</span></summary><p><span class="en">UniFi Drive does not say. 5 is healthy, so Health shows Good for 5 and Check for anything below. Look at the disk in UniFi Drive under Storage.</span><span class="de">Das verrät UniFi Drive nicht. 5 ist gesund, deshalb zeigt Zustand bei 5 Gut und darunter Prüfen. Die Platte dann in UniFi Drive unter Speicher ansehen.</span></p></details>
+      <details><summary><span class="en">Restart says the account lacks the rights.</span><span class="de">Neustart meldet, dass Rechte fehlen.</span></summary><p><span class="en">Restart, shutdown and updates need admin rights in UniFi OS. Everything else works with a plain Drive user.</span><span class="de">Neustart, Ausschalten und Updates brauchen Admin-Rechte in UniFi OS. Alles andere geht mit einem einfachen Drive-Benutzer.</span></p></details>
+      <details><summary><span class="en">A repair says the certificate changed.</span><span class="de">Eine Reparatur meldet ein geändertes Zertifikat.</span></summary><p><span class="en">Normal after a factory reset, a reinstall of UniFi OS or a renewed certificate: accept it. If you changed nothing, do not accept it, something else may be answering at that address.</span><span class="de">Normal nach Zurücksetzen, Neuinstallation von UniFi OS oder einem erneuerten Zertifikat: annehmen. Hast du nichts geändert, nicht annehmen, dann antwortet womöglich ein anderes Gerät unter der Adresse.</span></p></details>
+      <details><summary><span class="en">Data scrubbing on a NAS with several pools?</span><span class="de">Datenprüfung bei mehreren Pools?</span></summary><p><span class="en">The button and the last run refer to the first pool. A UNAS 2 has exactly one. The SSD cache of the Pro models is not shown separately.</span><span class="de">Knopf und letzter Lauf beziehen sich auf den ersten Pool. Eine UNAS 2 hat genau einen. Der SSD-Cache der Pro-Modelle wird nicht gesondert angezeigt.</span></p></details>
+      <details><summary><span class="en">How do I report a bug?</span><span class="de">Wie melde ich einen Fehler?</span></summary><p><span class="en">Download the diagnostics (Settings, Devices &amp; services, UniFi UNAS, three dots) and attach them to a <a href="https://github.com/SH1FT-W/unifi-unas/issues">GitHub issue</a>. Address, MAC address and serial numbers are left out.</span><span class="de">Diagnose herunterladen (Einstellungen, Geräte &amp; Dienste, UniFi UNAS, drei Punkte) und an ein <a href="https://github.com/SH1FT-W/unifi-unas/issues">GitHub-Issue</a> hängen. Adresse, MAC-Adresse und Seriennummern sind nicht enthalten.</span></p></details>
+    </div>
+  </div>
+</section>
+
+<section class="finale">
+  <div class="wrap narrow reveal">
+    <p class="eyebrow">UniFi UNAS</p>
+    <h2><span class="en">Know your disks.<br><em>Locally.</em></span><span class="de">Kenne deine Platten.<br><em>Lokal.</em></span></h2>
+    <p class="lead"><span class="en">One integration, every value UniFi Drive shows, no cloud.</span><span class="de">Eine Integration, jeder Wert aus UniFi Drive, keine Cloud.</span></p>
+    <div class="cta">
+      <a class="btn" href="#install"><span class="en">Install UniFi UNAS</span><span class="de">UniFi UNAS installieren</span></a>
+      <a class="btn ghost" href="https://github.com/SH1FT-W/unifi-unas/releases"><span class="en">Releases</span><span class="de">Releases</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><img src="logo.png" alt="">UniFi UNAS</span>
+    <nav>
+      <a href="https://github.com/SH1FT-W/unifi-unas#readme">README</a>
+      <a href="https://github.com/SH1FT-W/unifi-unas/blob/main/CHANGELOG.md">Changelog</a>
+      <a href="https://github.com/SH1FT-W/unifi-unas/releases">Releases</a>
+      <a href="https://github.com/SH1FT-W/unifi-unas/issues"><span class="en">Issues</span><span class="de">Fehler melden</span></a>
+      <a href="https://hacs.xyz">HACS</a>
+      <a href="https://github.com/SH1FT-W/unifi-unas">GitHub</a>
+      <a href="https://github.com/SH1FT-W/unifi-unas/blob/main/LICENSE"><span class="en">Apache 2.0 License</span><span class="de">Apache-2.0-Lizenz</span></a>
+    </nav>
+    <p class="fine"><span class="en">UniFi UNAS is an independent project and is not affiliated with, endorsed by or sponsored by Ubiquiti Inc., Home Assistant or Nabu Casa. UniFi, UniFi OS, UniFi Drive and UNAS are trademarks of Ubiquiti Inc.</span><span class="de">UniFi UNAS ist ein unabhängiges Projekt und gehört weder zu Ubiquiti Inc., Home Assistant noch Nabu Casa und wird von ihnen nicht unterstützt. UniFi, UniFi OS, UniFi Drive und UNAS sind Marken von Ubiquiti Inc.</span></p>
+  </div>
+</footer>
+
+<script>
+  // Kopieren der Repo-Adresse
+  document.querySelectorAll('[data-copy]').forEach(function (b) {
+    var label = b.innerHTML;
+    b.addEventListener('click', function () {
+      var t = document.getElementById(b.dataset.copy).textContent;
+      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () {
+        b.innerHTML = '<span class="en">Copied</span><span class="de">Kopiert</span>';
+        setTimeout(function () { b.innerHTML = label; }, 1600);
+      }, function () {});
+    });
+  });
+
+  // Versionszeile: manifest.json aus dem Repo, sonst das letzte GitHub-Release; der Text oben ist der Fallback.
+  (function () {
+    var el = document.getElementById('unas-version');
+    function show(v) { if (v && el) el.textContent = 'Version ' + v; }
+    fetch('https://raw.githubusercontent.com/SH1FT-W/unifi-unas/main/custom_components/unas/manifest.json', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { if (j && j.version) show(String(j.version)); else throw 0; })
+      .catch(function () {
+        fetch('https://api.github.com/repos/SH1FT-W/unifi-unas/releases/latest')
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (j) { show(j && String(j.tag_name || '').replace(/^v/, '')); })
+          .catch(function () {});
+      });
+  })();
+</script>
+</body>
+</html>

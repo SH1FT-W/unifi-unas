@@ -1,0 +1,286 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "UniFi UNAS",
+        "description": "Bindet ein UniFi-NAS (UNAS 2, UNAS Pro …) über UniFi OS ein. Nimm ein lokales UniFi-OS-Konto (kein UI-Konto mit Zwei-Faktor-Anmeldung). Für Neustart, Ausschalten und Updates braucht das Konto zusätzlich Admin-Rechte in UniFi OS.",
+        "data": {
+          "host": "Adresse",
+          "username": "Benutzername",
+          "password": "Passwort",
+          "verify_ssl": "Zertifikat prüfen"
+        },
+        "data_description": {
+          "host": "IP-Adresse oder Hostname der UNAS.",
+          "username": "Lokales UniFi-OS-Konto mit Zugriff auf UniFi Drive.",
+          "verify_ssl": "Standardmäßig aus: UniFi OS nutzt ein selbstsigniertes Zertifikat, deshalb merkt sich die Integration das Zertifikat, das die UNAS bei der Einrichtung zeigt, und nimmt danach nur noch dieses an. Nur einschalten, wenn die UNAS ein Zertifikat einer vertrauenswürdigen Stelle hat."
+        }
+      },
+      "reauth_confirm": {
+        "title": "UniFi UNAS: neu anmelden",
+        "description": "Die UNAS hat die Anmeldung für {name} abgelehnt. Gib Benutzername und Passwort neu ein.",
+        "data": {
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      },
+      "reconfigure": {
+        "title": "UniFi UNAS",
+        "data": {
+          "host": "Adresse",
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      },
+      "zeroconf_confirm": {
+        "title": "UniFi UNAS",
+        "description": "{name} unter {host} gefunden. Gib ein lokales UniFi-OS-Konto ein.",
+        "data": {
+          "username": "Benutzername",
+          "password": "Passwort",
+          "verify_ssl": "Zertifikat prüfen"
+        },
+        "data_description": {
+          "verify_ssl": "Standardmäßig aus: UniFi OS nutzt ein selbstsigniertes Zertifikat, deshalb merkt sich die Integration das Zertifikat, das die UNAS bei der Einrichtung zeigt, und nimmt danach nur noch dieses an. Nur einschalten, wenn die UNAS ein Zertifikat einer vertrauenswürdigen Stelle hat."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Die UNAS antwortet nicht oder das Zertifikat wurde abgelehnt. Stimmen Adresse und Zertifikat-Option?",
+      "invalid_auth": "Benutzername oder Passwort falsch.",
+      "not_unas": "Das Gerät sieht nicht nach einem UniFi-NAS aus.",
+      "unknown": "Unerwarteter Fehler.",
+      "wrong_device": "Unter dieser Adresse antwortet eine andere UNAS.",
+      "no_permission": "Die Anmeldung klappt, aber das Konto hat keinen Zugriff auf UniFi Drive.",
+      "cert_changed": "Die UNAS zeigt ein anderes Zertifikat als bei der Einrichtung. Sieh dir die Meldung unter Einstellungen → Reparaturen an."
+    },
+    "abort": {
+      "already_configured": "Diese UNAS ist schon eingerichtet.",
+      "reauth_successful": "Anmeldung aktualisiert.",
+      "reconfigure_successful": "Einstellungen gespeichert.",
+      "wrong_device": "Unter dieser Adresse antwortet eine andere UNAS.",
+      "not_unas": "Das Gerät ist kein UniFi-NAS."
+    },
+    "flow_title": "{name}"
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "UniFi UNAS: Optionen",
+        "data": {
+          "verify_ssl": "Zertifikat prüfen"
+        },
+        "data_description": {
+          "verify_ssl": "Standardmäßig aus: UniFi OS nutzt ein selbstsigniertes Zertifikat, deshalb merkt sich die Integration das Zertifikat, das die UNAS bei der Einrichtung zeigt, und nimmt danach nur noch dieses an. Nur einschalten, wenn die UNAS ein Zertifikat einer vertrauenswürdigen Stelle hat."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Die UNAS antwortet nicht oder das Zertifikat wurde abgelehnt. Stimmen Adresse und Zertifikat-Option?",
+      "invalid_auth": "Benutzername oder Passwort falsch.",
+      "not_unas": "Das Gerät sieht nicht nach einem UniFi-NAS aus.",
+      "no_permission": "Die Anmeldung klappt, aber das Konto hat keinen Zugriff auf UniFi Drive.",
+      "cert_changed": "Die UNAS zeigt ein anderes Zertifikat als bei der Einrichtung. Sieh dir die Meldung unter Einstellungen → Reparaturen an."
+    }
+  },
+  "device": {
+    "disk": {
+      "name": "{name} Festplatte {slot}"
+    },
+    "ssd": {
+      "name": "{name} SSD {slot}"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "storage_problem": {
+        "name": "Speicherproblem"
+      },
+      "disk_problem": {
+        "name": "Problem"
+      },
+      "smb": {
+        "name": "SMB"
+      },
+      "time_machine": {
+        "name": "Time Machine"
+      },
+      "nfs": {
+        "name": "NFS"
+      }
+    },
+    "button": {
+      "restart": {
+        "name": "Neu starten"
+      },
+      "shutdown": {
+        "name": "Ausschalten"
+      },
+      "start_scrub": {
+        "name": "Datenprüfung starten"
+      },
+      "smart_test": {
+        "name": "SMART-Schnelltest starten"
+      }
+    },
+    "select": {
+      "fan_profile": {
+        "name": "Lüfterprofil",
+        "state": {
+          "quiet": "Leise",
+          "default": "Standard",
+          "cooling": "Kühlen"
+        }
+      }
+    },
+    "sensor": {
+      "storage_used": {
+        "name": "Speicher belegt"
+      },
+      "storage_free": {
+        "name": "Speicher frei"
+      },
+      "storage_capacity": {
+        "name": "Speicherkapazität"
+      },
+      "storage_used_percent": {
+        "name": "Speicherauslastung"
+      },
+      "disks_at_risk": {
+        "name": "Festplatten mit Risiko"
+      },
+      "hottest_disk": {
+        "name": "Heißeste Festplatte"
+      },
+      "storage_read": {
+        "name": "Speicher Lesen"
+      },
+      "storage_write": {
+        "name": "Speicher Schreiben"
+      },
+      "storage_status": {
+        "name": "Speicherstatus",
+        "state": {
+          "ok": "OK",
+          "degraded": "Eingeschränkt",
+          "rebuilding": "Wiederaufbau",
+          "initializing": "Wird eingerichtet",
+          "error": "Fehler",
+          "other": "Sonstiges"
+        }
+      },
+      "scrub_status": {
+        "name": "Datenprüfung",
+        "state": {
+          "idle": "Inaktiv",
+          "in_progress": "Läuft",
+          "paused": "Pausiert",
+          "other": "Sonstiges"
+        }
+      },
+      "scrub_last_run": {
+        "name": "Letzte Datenprüfung"
+      },
+      "cpu_load": {
+        "name": "CPU-Auslastung"
+      },
+      "cpu_temperature": {
+        "name": "CPU-Temperatur"
+      },
+      "memory_used": {
+        "name": "Arbeitsspeicher"
+      },
+      "started": {
+        "name": "Gestartet"
+      },
+      "network_receive": {
+        "name": "Netzwerk Empfang"
+      },
+      "network_transmit": {
+        "name": "Netzwerk Senden"
+      },
+      "link_speed": {
+        "name": "Verbindungsgeschwindigkeit"
+      },
+      "drive_version": {
+        "name": "UniFi-Drive-Version"
+      },
+      "drive_usage": {
+        "name": "{drive} belegt"
+      },
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "power_on_hours": {
+        "name": "Betriebsstunden"
+      },
+      "bad_sectors": {
+        "name": "Defekte Sektoren"
+      },
+      "uncorrectable_sectors": {
+        "name": "Nicht korrigierbare Sektoren"
+      },
+      "health_score": {
+        "name": "Zustand",
+        "state": {
+          "good": "Gut",
+          "check": "Prüfen"
+        }
+      },
+      "disk_read": {
+        "name": "Lesen"
+      },
+      "disk_write": {
+        "name": "Schreiben"
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "UniFi OS"
+      },
+      "drive_app": {
+        "name": "UniFi Drive"
+      }
+    }
+  },
+  "exceptions": {
+    "unreachable": {
+      "message": "UNAS nicht erreichbar: {error}"
+    },
+    "auth_failed": {
+      "message": "Die UNAS hat die Anmeldung abgelehnt."
+    },
+    "command_failed": {
+      "message": "Die UNAS hat den Befehl nicht angenommen: {error}"
+    },
+    "no_pool": {
+      "message": "Die UNAS hat keinen Speicher-Pool."
+    },
+    "disk_missing": {
+      "message": "Diese Festplatte ist nicht mehr eingebaut."
+    },
+    "no_permission": {
+      "message": "Dem Konto fehlen die Rechte dafür. Neustart, Ausschalten und Updates brauchen Admin-Rechte in UniFi OS."
+    },
+    "cert_changed": {
+      "message": "Die UNAS zeigt ein anderes Zertifikat als bei der Einrichtung. Sieh dir die Reparatur-Meldung an."
+    }
+  },
+  "issues": {
+    "cert_changed": {
+      "title": "{name}: Zertifikat geändert",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Neues Zertifikat von {name} annehmen?",
+            "description": "Die UNAS zeigt jetzt ein anderes Zertifikat als das bei der Einrichtung gemerkte. Deshalb schickt die Integration die Anmeldung nicht mehr.\n\nGemerkt: `{old}`\nJetzt: `{new}`\n\nDas ist normal nach einem Zurücksetzen, einer Neuinstallation von UniFi OS oder einem neuen Zertifikat. Hast du nichts geändert, nicht annehmen: Dann antwortet unter der Adresse womöglich ein anderes Gerät. Den Fingerabdruck kannst du mit dem Zertifikat vergleichen, das dein Browser für die UNAS anzeigt."
+          }
+        },
+        "abort": {
+          "entry_removed": "Die UNAS ist nicht mehr eingerichtet.",
+          "cannot_connect": "Die UNAS antwortet nicht. Versuche es erneut, sobald sie erreichbar ist."
+        }
+      }
+    }
+  }
+}

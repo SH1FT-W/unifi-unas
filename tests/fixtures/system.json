@@ -1,0 +1,57 @@
+{
+  "name": "UNAS 2",
+  "mac": "AABBCCDDEEFF",
+  "hardware": {
+    "shortname": "UNAS2W"
+  },
+  "firmware": {
+    "latest": {
+      "channel": "release",
+      "created": "2026-10-12T12:52:16Z",
+      "file_size": 786679893,
+      "id": "8765b1ea-9335-45ae-a5cc-b7e84e671fe8",
+      "md5": "74fddfe06581ec6cf4aac05b6ea7d520",
+      "sha256_checksum": "1b21ef7010bda03c7734a39de82923659bf0d1137c7335d6260d5534b045549a",
+      "platform": "UNAS2",
+      "product": "unifi-drive",
+      "updated": "2026-10-12T12:52:16Z",
+      "tags": {
+        "ubnt_version": "UNAS.rtd1619.v6.0.11.f63375a.261001.1050"
+      },
+      "version": "v6.0.11+f63375a",
+      "version_major": 6,
+      "version_minor": 0,
+      "version_patch": 11,
+      "version_build": "f63375a",
+      "_links": {
+        "self": {
+          "href": "https://fw-update.ui.com/api/firmware/8765b1ea-9335-45ae-a5cc-b7e84e671fe8"
+        },
+        "data": {
+          "href": "https://fw-download.ubnt.com/data/unifi-drive/c5a2-UNAS2-6.0.11-c5682352-182e-4ba4-9d25-fe3b9768723a.bin"
+        },
+        "upload": [
+          {
+            "name": "data",
+            "href": "https://fw-update.ui.com/api/firmware/8765b1ea-9335-45ae-a5cc-b7e84e671fe8/data"
+          },
+          {
+            "name": "changelog",
+            "href": "https://fw-update.ui.com/api/firmware/8765b1ea-9335-45ae-a5cc-b7e84e671fe8/changelog"
+          }
+        ]
+      },
+      "cachedAt": 1791892676574,
+      "timestamp": 1791894147394
+    }
+  },
+  "apps": {
+    "controllers": [
+      {
+        "name": "drive",
+        "version": "4.4.17",
+        "updateAvailable": null
+      }
+    ]
+  }
+}

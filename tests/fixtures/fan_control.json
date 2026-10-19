@@ -1,0 +1,8 @@
+{
+  "availableProfiles": [
+    "cooling",
+    "default",
+    "quiet"
+  ],
+  "currentProfile": "default"
+}

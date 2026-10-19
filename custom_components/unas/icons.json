@@ -1,0 +1,120 @@
+{
+  "entity": {
+    "binary_sensor": {
+      "smb": {
+        "default": "mdi:folder-network"
+      },
+      "time_machine": {
+        "default": "mdi:backup-restore"
+      },
+      "nfs": {
+        "default": "mdi:folder-network-outline"
+      }
+    },
+    "button": {
+      "shutdown": {
+        "default": "mdi:power"
+      },
+      "start_scrub": {
+        "default": "mdi:shield-check"
+      },
+      "smart_test": {
+        "default": "mdi:harddisk-plus"
+      }
+    },
+    "select": {
+      "fan_profile": {
+        "default": "mdi:fan",
+        "state": {
+          "quiet": "mdi:fan-speed-1",
+          "default": "mdi:fan-speed-2",
+          "cooling": "mdi:fan-speed-3"
+        }
+      }
+    },
+    "sensor": {
+      "storage_used": {
+        "default": "mdi:harddisk"
+      },
+      "storage_free": {
+        "default": "mdi:harddisk"
+      },
+      "storage_capacity": {
+        "default": "mdi:harddisk"
+      },
+      "storage_used_percent": {
+        "default": "mdi:chart-donut"
+      },
+      "storage_status": {
+        "default": "mdi:nas",
+        "state": {
+          "ok": "mdi:check-circle",
+          "degraded": "mdi:alert",
+          "rebuilding": "mdi:sync",
+          "error": "mdi:alert-circle"
+        }
+      },
+      "scrub_status": {
+        "default": "mdi:shield-check"
+      },
+      "scrub_last_run": {
+        "default": "mdi:shield-check-outline"
+      },
+      "cpu_load": {
+        "default": "mdi:cpu-64-bit"
+      },
+      "memory_used": {
+        "default": "mdi:memory"
+      },
+      "started": {
+        "default": "mdi:clock-start"
+      },
+      "network_receive": {
+        "default": "mdi:download-network"
+      },
+      "network_transmit": {
+        "default": "mdi:upload-network"
+      },
+      "link_speed": {
+        "default": "mdi:ethernet"
+      },
+      "drive_version": {
+        "default": "mdi:information-outline"
+      },
+      "drive_usage": {
+        "default": "mdi:folder"
+      },
+      "power_on_hours": {
+        "default": "mdi:timer-outline"
+      },
+      "bad_sectors": {
+        "default": "mdi:harddisk-remove"
+      },
+      "uncorrectable_sectors": {
+        "default": "mdi:harddisk-remove"
+      },
+      "health_score": {
+        "default": "mdi:heart-pulse",
+        "state": {
+          "good": "mdi:heart-pulse",
+          "check": "mdi:heart-broken"
+        }
+      },
+      "disk_read": {
+        "default": "mdi:download"
+      },
+      "disk_write": {
+        "default": "mdi:upload"
+      },
+      "disks_at_risk": {
+        "default": "mdi:harddisk-remove"
+      },
+      "storage_read": {
+        "default": "mdi:database-arrow-down"
+      },
+      "storage_write": {
+        "default": "mdi:database-arrow-up"
+      }
+    }
+  }
+}

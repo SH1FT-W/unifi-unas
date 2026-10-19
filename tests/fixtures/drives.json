@@ -1,0 +1,121 @@
+{
+  "drives": [
+    {
+      "id": "b63261a6-9324-4e0a-9a26-0fc246310639",
+      "type": "personal",
+      "name": "Home",
+      "status": "active",
+      "storagePoolId": "f92106bf-5fa4-4daa-aa69-ce16c5404e39",
+      "dataSync": "",
+      "recordSize": "",
+      "compressionLevel": "",
+      "deduplication": "",
+      "deduplicationEverEnabled": false,
+      "quota": -1,
+      "usage": 131072,
+      "role": "",
+      "protections": {
+        "encryptionStatus": "unencrypted",
+        "remoteBackupEnabled": false,
+        "snapshotEnabled": false
+      },
+      "memberCount": 1,
+      "owner": {
+        "id": "owner",
+        "firstName": "Test",
+        "lastName": "User",
+        "status": "active"
+      }
+    },
+    {
+      "id": "1ae4aef2-4b50-4cbc-81c0-303eeadfbca0",
+      "type": "shared",
+      "name": "Projects",
+      "status": "active",
+      "storagePoolId": "f92106bf-5fa4-4daa-aa69-ce16c5404e39",
+      "sambaRecycleEnabled": true,
+      "sambaRecycleStatus": "optimal",
+      "dataSync": "",
+      "recordSize": "",
+      "compressionLevel": "",
+      "deduplication": "",
+      "deduplicationEverEnabled": false,
+      "quota": -1,
+      "usage": 42411687936,
+      "role": "admin",
+      "protections": {
+        "encryptionStatus": "unencrypted",
+        "remoteBackupEnabled": false,
+        "snapshotEnabled": false
+      },
+      "memberCount": 2,
+      "nfsIsolated": false,
+      "owner": {
+        "id": "owner",
+        "firstName": "Test",
+        "lastName": "User",
+        "status": "active"
+      }
+    },
+    {
+      "id": "a50986f9-bb2c-4b8f-b4c7-ddb1fe975e9c",
+      "type": "shared",
+      "name": "Media",
+      "status": "active",
+      "storagePoolId": "f92106bf-5fa4-4daa-aa69-ce16c5404e39",
+      "sambaRecycleEnabled": false,
+      "sambaRecycleStatus": "",
+      "dataSync": "",
+      "recordSize": "",
+      "compressionLevel": "",
+      "deduplication": "",
+      "deduplicationEverEnabled": false,
+      "quota": -1,
+      "usage": 28816179200,
+      "role": "admin",
+      "protections": {
+        "encryptionStatus": "unencrypted",
+        "remoteBackupEnabled": false,
+        "snapshotEnabled": false
+      },
+      "memberCount": 2,
+      "nfsIsolated": false,
+      "owner": {
+        "id": "owner",
+        "firstName": "Test",
+        "lastName": "User",
+        "status": "active"
+      }
+    },
+    {
+      "id": "04145243-2ff2-4f14-98ca-0e67e9596ba4",
+      "type": "shared",
+      "name": "TimeMachine",
+      "status": "active",
+      "storagePoolId": "f92106bf-5fa4-4daa-aa69-ce16c5404e39",
+      "sambaRecycleEnabled": false,
+      "sambaRecycleStatus": "",
+      "dataSync": "",
+      "recordSize": "",
+      "compressionLevel": "",
+      "deduplication": "",
+      "deduplicationEverEnabled": false,
+      "quota": -1,
+      "usage": 466204491776,
+      "role": "admin",
+      "protections": {
+        "encryptionStatus": "unencrypted",
+        "remoteBackupEnabled": false,
+        "snapshotEnabled": false
+      },
+      "memberCount": 2,
+      "nfsIsolated": false,
+      "owner": {
+        "id": "owner",
+        "firstName": "Test",
+        "lastName": "User",
+        "status": "active"
+      }
+    }
+  ]
+}
