@@ -1,10 +1,40 @@
 {
   "$comment": "Content of the README card pictures. Render with sh1ft-w.github.io/theme/v1/readme-images: node render.mjs <this repo> cards. The title image is the original artwork, unchanged.",
   "colors": {
-    "light": { "bg": "#F4F7FC", "bg2": "#E7EEF9", "ink": "#0B1526", "ink2": "#475569", "ink3": "#7C8899", "accentText": "#0058D6", "accent": "#006FFF", "accent2": "#5CA3FF",
-      "glow1": "rgba(0,111,255,0.13)", "glow2": "rgba(0,60,150,0.08)", "frame": "rgba(5,25,60,0.10)", "pillBg": "#ffffff", "pillLine": "rgba(5,25,60,0.08)", "win": "#060d1a", "bar": "" },
-    "dark": { "bg": "#060B14", "bg2": "#0C1626", "ink": "#EAF1FB", "ink2": "rgba(220,230,245,0.84)", "ink3": "rgba(220,230,245,0.52)", "accentText": "#6AAEFF", "accent": "#2F8BFF", "accent2": "#006FFF",
-      "glow1": "rgba(47,139,255,0.20)", "glow2": "rgba(0,60,150,0.18)", "frame": "rgba(255,255,255,0.10)", "pillBg": "rgba(255,255,255,0.06)", "pillLine": "rgba(255,255,255,0.10)", "win": "#060d1a", "bar": "" }
+    "light": {
+      "bg": "#F4F7FC",
+      "bg2": "#E7EEF9",
+      "ink": "#0B1526",
+      "ink2": "#475569",
+      "ink3": "#7C8899",
+      "accentText": "#0058D6",
+      "accent": "#006FFF",
+      "accent2": "#5CA3FF",
+      "glow1": "rgba(0,111,255,0.13)",
+      "glow2": "rgba(0,60,150,0.08)",
+      "frame": "rgba(5,25,60,0.10)",
+      "pillBg": "#ffffff",
+      "pillLine": "rgba(5,25,60,0.08)",
+      "win": "#060d1a",
+      "bar": ""
+    },
+    "dark": {
+      "bg": "#060B14",
+      "bg2": "#0C1626",
+      "ink": "#EAF1FB",
+      "ink2": "rgba(220,230,245,0.84)",
+      "ink3": "rgba(220,230,245,0.52)",
+      "accentText": "#6AAEFF",
+      "accent": "#2F8BFF",
+      "accent2": "#006FFF",
+      "glow1": "rgba(47,139,255,0.20)",
+      "glow2": "rgba(0,60,150,0.18)",
+      "frame": "rgba(255,255,255,0.10)",
+      "pillBg": "rgba(255,255,255,0.06)",
+      "pillLine": "rgba(255,255,255,0.10)",
+      "win": "#060d1a",
+      "bar": ""
+    }
   },
   "fonts": {
     "display": "\"Archivo\", -apple-system, system-ui, sans-serif",
@@ -14,28 +44,104 @@
   },
   "cards": {
     "new": [
-      { "icon": "certificate-outline", "title": "Remembers its certificate", "ver": "26.10.2", "text": "At setup the integration remembers the certificate the UNAS shows and only sends the password to that one. If it ever changes, a repair shows the old and the new fingerprint." },
-      { "icon": "shield-account-outline", "title": "Clear about missing rights", "ver": "26.10.2", "text": "An account without UniFi OS admin rights gets a plain message for restart, shutdown and updates instead of a request for a new password." },
-      { "icon": "database-arrow-down", "title": "Storage throughput", "ver": "26.10.2", "text": "Read and write rate of all disks together, the five minute average the UniFi Drive graph shows." },
-      { "icon": "heart-pulse", "title": "Health in words", "ver": "26.10.2", "text": "Each disk shows Good or Check instead of a bare 5. Plus disks at risk, the hottest disk and lost redundancy in the storage problem." }
+      {
+        "icon": "monitor",
+        "title": "Display and night mode",
+        "ver": "26.10.3",
+        "text": "The UNAS display is a light with its brightness, the status LED can be turned off, and the night mode has a start and an end, as in UniFi OS."
+      },
+      {
+        "icon": "image-outline",
+        "title": "Your model's picture",
+        "ver": "26.10.3",
+        "text": "The UniFi OS and Drive updates show the product picture of your UNAS model, from Ubiquiti's public device catalog."
+      },
+      {
+        "icon": "magnify",
+        "title": "Found even when renamed",
+        "ver": "26.10.3",
+        "text": "A UNAS that no longer carries its default name is still discovered, through Home Assistant's network discovery."
+      },
+      {
+        "icon": "certificate-outline",
+        "title": "Remembers its certificate",
+        "ver": "26.10.2",
+        "text": "At setup the integration remembers the certificate the UNAS shows and only sends the password to that one. If it ever changes, a repair shows the old and the new fingerprint."
+      }
     ],
     "features": [
-      { "icon": "harddisk", "title": "Storage at a glance", "text": "Used, free, capacity and usage over all pools, the storage status and a problem sensor for degraded pools or lost redundancy." },
-      { "icon": "nas", "title": "Every disk its own device", "text": "Temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick SMART test." },
-      { "icon": "folder-outline", "title": "Drives and shares", "text": "Usage of every shared and personal drive, with quota, members, snapshots and remote backup as attributes." },
-      { "icon": "chart-line", "title": "System and network", "text": "CPU load and temperature, memory, uptime, network throughput and the link speed, so a port stuck at 1 GbE stands out." },
-      { "icon": "fan", "title": "Fan profile", "text": "Quiet, default or cooling, switchable from Home Assistant, for example quiet at night." },
-      { "icon": "shield-check", "title": "Data scrubbing", "text": "State and last run of the scrub, and a button to start one." },
-      { "icon": "update", "title": "UniFi OS and Drive updates", "text": "Both appear under Settings, Updates, with an install button, just like in the UniFi interface." },
-      { "icon": "lan", "title": "Local and discovered", "text": "Talks to UniFi OS on your network, no cloud account. A UNAS with its default name is discovered on its own." }
+      {
+        "icon": "harddisk",
+        "title": "Storage at a glance",
+        "text": "Used, free, capacity and usage over all pools, the storage status and a problem sensor for degraded pools or lost redundancy."
+      },
+      {
+        "icon": "nas",
+        "title": "Every disk its own device",
+        "text": "Temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick SMART test."
+      },
+      {
+        "icon": "folder-outline",
+        "title": "Drives and shares",
+        "text": "Usage of every shared and personal drive, with quota, members, snapshots and remote backup as attributes."
+      },
+      {
+        "icon": "chart-line",
+        "title": "System and network",
+        "text": "CPU load and temperature, memory, uptime, network throughput and the link speed, so a port stuck at 1 GbE stands out."
+      },
+      {
+        "icon": "fan",
+        "title": "Fan profile",
+        "text": "Quiet, default or cooling, switchable from Home Assistant, for example quiet at night."
+      },
+      {
+        "icon": "shield-check",
+        "title": "Data scrubbing",
+        "text": "State and last run of the scrub, and a button to start one."
+      },
+      {
+        "icon": "update",
+        "title": "UniFi OS and Drive updates",
+        "text": "Both appear under Settings, Updates, with an install button, just like in the UniFi interface."
+      },
+      {
+        "icon": "lan",
+        "title": "Local and discovered",
+        "text": "Talks to UniFi OS on your network, no cloud account. A UNAS is discovered on its own, even after renaming it."
+      }
     ],
     "entities": [
-      { "icon": "harddisk", "title": "Storage", "text": "storage_used, storage_free, storage_capacity, storage_usage, storage_status, storage_read and storage_write." },
-      { "icon": "alert-circle-outline", "title": "Problems and health", "text": "storage_problem, disks_at_risk, hottest_disk, data_scrubbing and last_data_scrubbing." },
-      { "icon": "nas", "title": "Per disk", "text": "temperature, power_on_hours, bad_sectors, health, problem and run_quick_smart_test, on a device per disk." },
-      { "icon": "chart-line", "title": "System", "text": "cpu_load, cpu_temperature, memory_usage, started, network_receive, network_transmit and link_speed." },
-      { "icon": "toggle-switch-outline", "title": "Services and controls", "text": "smb, time_machine and nfs as binary sensors, fan_profile as a select, restart, shut_down and start_data_scrubbing." },
-      { "icon": "update", "title": "Updates", "text": "update.unas_2_unifi_os and update.unas_2_unifi_drive with the installed and the latest version." }
+      {
+        "icon": "harddisk",
+        "title": "Storage",
+        "text": "storage_used, storage_free, storage_capacity, storage_usage, storage_status, storage_read and storage_write."
+      },
+      {
+        "icon": "alert-circle-outline",
+        "title": "Problems and health",
+        "text": "storage_problem, disks_at_risk, hottest_disk, data_scrubbing and last_data_scrubbing."
+      },
+      {
+        "icon": "nas",
+        "title": "Per disk",
+        "text": "temperature, power_on_hours, bad_sectors, health, problem and run_quick_smart_test, on a device per disk."
+      },
+      {
+        "icon": "chart-line",
+        "title": "System",
+        "text": "cpu_load, cpu_temperature, memory_usage, started, network_receive, network_transmit and link_speed."
+      },
+      {
+        "icon": "toggle-switch-outline",
+        "title": "Services and controls",
+        "text": "smb, time_machine and nfs as binary sensors, fan_profile as a select, restart, shut_down and start_data_scrubbing."
+      },
+      {
+        "icon": "update",
+        "title": "Updates",
+        "text": "update.unas_2_unifi_os and update.unas_2_unifi_drive with the installed and the latest version."
+      }
     ]
   }
 }

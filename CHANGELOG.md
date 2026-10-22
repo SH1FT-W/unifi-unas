@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 26.10.3 – 22.10.2026
 
 - **New:** The UNAS display as a light (on/off and brightness), the status LED (on/off) and the night mode start and end, as in UniFi OS. Changing them needs an account with admin rights in UniFi OS.
 - **New:** The UniFi OS and UniFi Drive updates show the product picture of your UNAS model, from Ubiquiti's public device catalog (fetched at most once a week; without internet there is simply no picture).

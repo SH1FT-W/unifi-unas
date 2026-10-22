@@ -30,11 +30,11 @@ UniFi UNAS brings a **UniFi NAS** into Home Assistant: storage, every disk with 
 
 <a id="new"></a>
 <sub><b>JUST ARRIVED</b></sub>
-## Safer login, clearer health.
+## Display, night mode and your model.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-cards-new-dark.png" />
-  <img src="docs/images/readme-cards-new-light.png" alt="Remembers its certificate (26.10.2): at setup the integration remembers the certificate the UNAS shows and only sends the password to that one; if it ever changes, a repair shows the old and the new fingerprint. Clear about missing rights (26.10.2): an account without UniFi OS admin rights gets a plain message for restart, shutdown and updates instead of a request for a new password. Storage throughput (26.10.2): read and write rate of all disks together, the five minute average the UniFi Drive graph shows. Health in words (26.10.2): each disk shows Good or Check instead of a bare 5, plus disks at risk, the hottest disk and lost redundancy in the storage problem." />
+  <img src="docs/images/readme-cards-new-light.png" alt="Display and night mode (26.10.3): The UNAS display is a light with its brightness, the status LED can be turned off, and the night mode has a start and an end, as in UniFi OS. Your model's picture (26.10.3): The UniFi OS and Drive updates show the product picture of your UNAS model, from Ubiquiti's public device catalog. Found even when renamed (26.10.3): A UNAS that no longer carries its default name is still discovered, through Home Assistant's network discovery. Remembers its certificate (26.10.2): At setup the integration remembers the certificate the UNAS shows and only sends the password to that one. If it ever changes, a repair shows the old and the new fingerprint." />
 </picture>
 
 Every change, release by release, in the [changelog](CHANGELOG.md).
@@ -44,7 +44,7 @@ Every change, release by release, in the [changelog](CHANGELOG.md).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-cards-features-dark.png" />
-  <img src="docs/images/readme-cards-features-light.png" alt="Storage at a glance: used, free, capacity and usage over all pools, the storage status and a problem sensor for degraded pools or lost redundancy. Every disk its own device: temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick SMART test. Drives and shares: usage of every shared and personal drive, with quota, members, snapshots and remote backup as attributes. System and network: CPU load and temperature, memory, uptime, network throughput and the link speed. Fan profile: quiet, default or cooling, switchable from Home Assistant. Data scrubbing: state and last run of the scrub, and a button to start one. UniFi OS and Drive updates: both appear under Settings, Updates, with an install button. Local and discovered: talks to UniFi OS on your network, no cloud account, a UNAS with its default name is discovered on its own." />
+  <img src="docs/images/readme-cards-features-light.png" alt="Storage at a glance: used, free, capacity and usage over all pools, the storage status and a problem sensor for degraded pools or lost redundancy. Every disk its own device: temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick SMART test. Drives and shares: usage of every shared and personal drive, with quota, members, snapshots and remote backup as attributes. System and network: CPU load and temperature, memory, uptime, network throughput and the link speed. Fan profile: quiet, default or cooling, switchable from Home Assistant. Data scrubbing: state and last run of the scrub, and a button to start one. UniFi OS and Drive updates: both appear under Settings, Updates, with an install button. Local and discovered: talks to UniFi OS on your network, no cloud account, a UNAS is discovered on its own, even after renaming it." />
 </picture>
 
 <a id="entities"></a>
