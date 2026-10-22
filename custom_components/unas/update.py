@@ -29,6 +29,10 @@ class FirmwareUpdate(UnasEntity, UpdateEntity):
         super().__init__(coordinator, "firmware")
 
     @property
+    def entity_picture(self) -> str | None:
+        return self.coordinator.picture or super().entity_picture
+
+    @property
     def installed_version(self) -> str | None:
         return self.coordinator.data.system.firmware or None
 
@@ -52,6 +56,10 @@ class DriveUpdate(UnasEntity, UpdateEntity):
 
     def __init__(self, coordinator: UnasCoordinator) -> None:
         super().__init__(coordinator, "drive_app")
+
+    @property
+    def entity_picture(self) -> str | None:
+        return self.coordinator.picture or super().entity_picture
 
     @property
     def installed_version(self) -> str | None:

@@ -11,6 +11,8 @@ UPDATE_INTERVAL = timedelta(seconds=30)
 # Firmware-Stand, Snapshots und Dienste ändern sich selten: nur jede 10. Runde (alle 5 Minuten)
 SLOW_EVERY = 10
 HTTP_TIMEOUT = 20
+# Gespeicherte Daten (.storage), hier der Bilder-Katalog
+STORAGE_VERSION = 1
 
 # SHA-256 des bei der Einrichtung gemerkten Zertifikats (entry.data)
 CONF_FINGERPRINT = "fingerprint"

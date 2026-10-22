@@ -57,6 +57,8 @@ Every change, release by release, in the [changelog](CHANGELOG.md).
 
 All IDs start with the device name, for example `sensor.unas_2_storage_used`. Every disk is a device of its own under the UNAS (`UNAS 2 disk 1`, SSDs are called `SSD 1`), every UniFi Drive drive gets a usage sensor named after it (`sensor.unas_2_media_used`). New disks and drives appear without a restart. Entity names are available in English and German.
 
+The UNAS display is a light (`light.unas_2_display`, on/off and brightness), the status LED one more (`light.unas_2_status_led`, on/off), and the night mode has a start and an end (`time.unas_2_night_mode_start`, `time.unas_2_night_mode_end`). Changing them needs admin rights in UniFi OS. The two update entities show the product picture of your model, loaded from Ubiquiti's public device catalog.
+
 <details>
 <summary>All entity IDs (for a UNAS named "UNAS 2" with English names)</summary>
 

@@ -22,6 +22,17 @@
         "default": "mdi:harddisk-plus"
       }
     },
+    "light": {
+      "display": {
+        "default": "mdi:monitor"
+      },
+      "status_led": {
+        "default": "mdi:led-on",
+        "state": {
+          "off": "mdi:led-off"
+        }
+      }
+    },
     "select": {
       "fan_profile": {
         "default": "mdi:fan",
@@ -114,6 +125,14 @@
       },
       "storage_write": {
         "default": "mdi:database-arrow-up"
+      }
+    },
+    "time": {
+      "night_mode_start": {
+        "default": "mdi:weather-night"
+      },
+      "night_mode_end": {
+        "default": "mdi:weather-sunny"
       }
     }
   }

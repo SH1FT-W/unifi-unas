@@ -5,12 +5,113 @@
     "@SH1FT-W"
   ],
   "config_flow": true,
+  "dhcp": [
+    {
+      "macaddress": "74F92C*"
+    },
+    {
+      "macaddress": "942A6F*"
+    },
+    {
+      "macaddress": "245A4C*"
+    },
+    {
+      "macaddress": "265A4C*"
+    },
+    {
+      "macaddress": "74ACB9*"
+    },
+    {
+      "macaddress": "784558*"
+    },
+    {
+      "macaddress": "E063DA*"
+    },
+    {
+      "macaddress": "68D79A*"
+    },
+    {
+      "macaddress": "18E829*"
+    },
+    {
+      "macaddress": "F09FC2*"
+    },
+    {
+      "macaddress": "802AA8*"
+    },
+    {
+      "macaddress": "B4FBE4*"
+    },
+    {
+      "macaddress": "1C6A1B*"
+    },
+    {
+      "macaddress": "6C63F8*"
+    },
+    {
+      "macaddress": "D8B370*"
+    },
+    {
+      "macaddress": "F4E2C6*"
+    },
+    {
+      "macaddress": "9C05D6*"
+    },
+    {
+      "macaddress": "0418D6*"
+    },
+    {
+      "macaddress": "24A43C*"
+    },
+    {
+      "macaddress": "44D9E7*"
+    },
+    {
+      "macaddress": "788A20*"
+    },
+    {
+      "macaddress": "AC8BA9*"
+    },
+    {
+      "macaddress": "D021F9*"
+    },
+    {
+      "macaddress": "E43883*"
+    },
+    {
+      "macaddress": "FCECDA*"
+    },
+    {
+      "macaddress": "602232*"
+    },
+    {
+      "macaddress": "0CEA14*"
+    },
+    {
+      "macaddress": "28704E*"
+    },
+    {
+      "macaddress": "58D61F*"
+    },
+    {
+      "macaddress": "70A741*"
+    },
+    {
+      "macaddress": "1C0B8B*"
+    },
+    {
+      "macaddress": "847848*"
+    },
+    {
+      "macaddress": "8C3066*"
+    }
+  ],
   "documentation": "https://github.com/SH1FT-W/unifi-unas",
   "integration_type": "device",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/SH1FT-W/unifi-unas/issues",
   "requirements": [],
-  "version": "26.10.2",
+  "version": "26.10.3",
   "zeroconf": [
     {
       "type": "_smb._tcp.local.",

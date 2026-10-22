@@ -42,6 +42,14 @@ Release auf genau dieser Nummer. CHANGELOG `## YY.M.N – DD.MM.YYYY` (englisch)
   `POST v2/storage/disks/<slot>/smart-tests {type: quick|extended}`, `POST /api/system/reboot|poweroff`,
   `POST /api/firmware/update`, `POST /api/controllers/<app>/update` (Pfade im UniFi-OS-Bundle bestätigt,
   Installation selbst noch ungeprüft).
+- UniFi OS (22.10.2026 an der Test-UNAS geprüft, gleich wie am Dream Router 7): `/api/system` angemeldet liefert
+  `lcmSettings` (enabled, brightness 1–100, color ohne Wirkung: Farbe nur bei `features.hasBezel`), `ledSettings`
+  (enabled), `nightMode` (onMinute/offMinute), `features.hasLCM`, `hardware.sysid` (60002 = ea62 = UNAS 2 weiß).
+  Ändern: `PATCH /api/system` mit nur dem geänderten Teil, braucht Super Admin (sonst 403). Produktbild:
+  `catalog.py` wie im Repo unifi-dreamrouter7 (Katalog `static.ui.com/fingerprint/ui/public.json`, Store `unas.catalog`).
+- Erkennung umbenannter UNAS: DHCP-Matcher (Ubiquiti-OUIs ohne Hostname; Rückwärts-DNS der UNAS ist ihre
+  `…id.ui.direct`-Adresse), `async_step_dhcp` → `/api/system` wie bei Zeroconf. HA lädt eine Custom-Integration ohne
+  Eintrag nur über solche Matcher.
 - Alle ~220 Drive-Pfade: im Bundle `/app-assets/drive/index.<hash>.js` (nur angemeldet), Muster
   `name:(0,x.fO)("/pfad")` (fO = v2, `_$` = v1). Weitere Kandidaten: snapshots, remote-backup/tasks, systems/logs.
 

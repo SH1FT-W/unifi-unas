@@ -73,8 +73,9 @@ rules:
   discovery:
     status: done
     comment: >-
-      Zeroconf `_smb._tcp` mit Namen „unas*“ (Standardname der UNAS); /api/system (ohne Anmeldung) bestätigt
-      Modell und MAC. Umbenannte Geräte richtet man von Hand ein.
+      Zeroconf `_smb._tcp` mit Namen „unas*“ (Standardname der UNAS) und DHCP-Matcher auf Ubiquiti-MAC-Präfixe
+      (HAs DHCP-Erkennung sieht DHCP-Anfragen und die ARP-Tabelle) für umbenannte Geräte; /api/system (ohne
+      Anmeldung) bestätigt Modell und MAC, andere UniFi-Geräte werden still aussortiert.
   docs-data-update: done
   docs-examples: done
   docs-known-limitations: done

@@ -62,6 +62,9 @@ def mock_unas(mock: AiohttpClientMocker, *, login_status: int = 200, clear: bool
     mock.post(f"{BASE}/api/system/poweroff", json={})
     mock.post(f"{BASE}/api/firmware/update", json={})
     mock.post(f"{BASE}/api/controllers/drive/update", json={})
+    mock.patch(f"{BASE}/api/system", json={})
+    # Produktbild: ohne eigene Antwort im Test kein Katalog (wie offline)
+    mock.get("https://static.ui.com/fingerprint/ui/public.json", status=404)
 
 
 def calls(mock: AiohttpClientMocker, method: str, path: str) -> list[tuple[Any, Any]]:

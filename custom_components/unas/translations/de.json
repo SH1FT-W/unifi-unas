@@ -123,6 +123,14 @@
         "name": "SMART-Schnelltest starten"
       }
     },
+    "light": {
+      "display": {
+        "name": "Display"
+      },
+      "status_led": {
+        "name": "Status-LED"
+      }
+    },
     "select": {
       "fan_profile": {
         "name": "Lüfterprofil",
@@ -232,6 +240,14 @@
       },
       "disk_write": {
         "name": "Schreiben"
+      }
+    },
+    "time": {
+      "night_mode_start": {
+        "name": "Nachtmodus Beginn"
+      },
+      "night_mode_end": {
+        "name": "Nachtmodus Ende"
       }
     },
     "update": {

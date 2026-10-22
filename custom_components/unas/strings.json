@@ -123,6 +123,14 @@
         "name": "Run quick SMART test"
       }
     },
+    "light": {
+      "display": {
+        "name": "Display"
+      },
+      "status_led": {
+        "name": "Status LED"
+      }
+    },
     "select": {
       "fan_profile": {
         "name": "Fan profile",
@@ -232,6 +240,14 @@
       },
       "disk_write": {
         "name": "Write rate"
+      }
+    },
+    "time": {
+      "night_mode_start": {
+        "name": "Night mode start"
+      },
+      "night_mode_end": {
+        "name": "Night mode end"
       }
     },
     "update": {

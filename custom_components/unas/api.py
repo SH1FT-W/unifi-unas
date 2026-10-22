@@ -158,6 +158,11 @@ class UnasData:
     # Lese-/Schreibrate aller Platten, Mittel der letzten vollen 5 Minuten (wie die Drive-Grafik)
     storage_read_kbps: float | None = None
     storage_write_kbps: float | None = None
+    # UniFi OS: Display (lcmSettings enabled/brightness), Status-LED (ledSettings enabled), Nachtmodus
+    # (nightMode onMinute/offMinute) und ob es ein Display gibt (hasLCM); nur angemeldet in /api/system
+    os_settings: dict[str, Any] = field(default_factory=dict)
+    # Hardware-Kennung (hex, z. B. "ea62" = UNAS 2 weiß) für das Produktbild aus Ubiquitis Katalog
+    sysid: str = ""
 
 
 def _dt(value: Any) -> datetime | None:
@@ -268,6 +273,18 @@ def parse_system(raw: dict[str, Any]) -> SystemInfo:
         link_speed=nic.get("linkSpeed") or "",
         max_link_speed=nic.get("maxSpeed") or "",
     )
+
+
+def parse_os_settings(system: dict[str, Any]) -> dict[str, Any]:
+    """Display, Status-LED und Nachtmodus aus /api/system; was die UNAS nicht meldet, fehlt."""
+    settings: dict[str, Any] = {
+        key: dict(system[key])
+        for key in ("lcmSettings", "ledSettings", "nightMode")
+        if isinstance(system.get(key), dict)
+    }
+    features: dict[str, Any] = system["features"] if isinstance(system.get("features"), dict) else {}
+    settings["hasLCM"] = bool(features.get("hasLCM")) and "lcmSettings" in settings
+    return settings
 
 
 def parse_firmware(raw: dict[str, Any]) -> Firmware | None:
@@ -472,6 +489,9 @@ class UnasClient:
             )
             # updateAvailable ist null oder die neue Versionsnummer
             data.drive_update = str(drive["updateAvailable"]) if drive.get("updateAvailable") else None
+            data.os_settings = parse_os_settings(system)
+            sysid = (system.get("hardware") or {}).get("sysid")
+            data.sysid = f"{sysid:x}" if isinstance(sysid, int) and not isinstance(sysid, bool) and sysid else ""
         for service in ("smb", "time-machine", "nfs"):
             try:
                 result = await self._get_v1(f"/services/{service}/settings")
@@ -498,6 +518,11 @@ class UnasClient:
 
     async def run_smart_test(self, slot: str, test_type: str) -> None:
         await self._request("POST", f"{V2}/storage/disks/{slot}/smart-tests", {"type": test_type})
+
+    async def set_os(self, changes: dict[str, Any]) -> None:
+        """UniFi-OS-Einstellungen ändern wie die Oberfläche (PATCH /api/system, nur die geänderten Teile), z. B.
+        {"lcmSettings": {"brightness": 60}} oder {"nightMode": {"onMinute": 1320, "offMinute": 480}}."""
+        await self._request("PATCH", "/api/system", changes)
 
     async def update_firmware(self) -> None:
         await self._request("POST", "/api/firmware/update")

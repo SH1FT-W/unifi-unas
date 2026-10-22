@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Awaitable, Callable
 import logging
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -20,6 +21,7 @@ from .api import (
     UnasPermissionError,
     format_fingerprint,
 )
+from .catalog import async_load_pictures
 from .const import CONF_FINGERPRINT, DOMAIN, SLOW_EVERY, UPDATE_INTERVAL
 
 _LOGGER = logging.getLogger(__name__)
@@ -41,6 +43,17 @@ class UnasCoordinator(DataUpdateCoordinator[UnasData]):
         self._cert_issue = False
         # Gerät der UNAS (in async_setup_entry angelegt); Festplatten hängen darunter
         self.device_id: str | None = None
+        # Produktbilder je sysid (catalog.py), im Hintergrund nach dem Start geladen
+        self.pictures: dict[str, str] = {}
+
+    async def async_load_pictures(self) -> None:
+        self.pictures = await async_load_pictures(self.hass)
+        self.async_update_listeners()
+
+    @property
+    def picture(self) -> str | None:
+        sysid = self.data.sysid if self.data else ""
+        return self.pictures.get(sysid) if sysid else None
 
     async def _async_update_data(self) -> UnasData:
         try:
@@ -53,6 +66,8 @@ class UnasCoordinator(DataUpdateCoordinator[UnasData]):
                 data.services = self.data.services
                 data.storage_read_kbps = self.data.storage_read_kbps
                 data.storage_write_kbps = self.data.storage_write_kbps
+                data.os_settings = self.data.os_settings
+                data.sysid = self.data.sysid
         except UnasAuthError as err:
             raise ConfigEntryAuthFailed(translation_domain=DOMAIN, translation_key="auth_failed") from err
         except UnasCertificateError as err:
@@ -87,6 +102,11 @@ class UnasCoordinator(DataUpdateCoordinator[UnasData]):
             data={"entry_id": entry.entry_id},
         )
         self._cert_issue = True
+
+    async def async_os_command(self, changes: dict[str, Any]) -> None:
+        """UniFi-OS-Einstellung ändern; diese stehen im langsamen Teil, deshalb den gleich mit abfragen."""
+        self._round = 0
+        await self.async_command(lambda: self.client.set_os(changes))
 
     async def async_command(self, command: Callable[[], Awaitable[None]]) -> None:
         """Befehl an die UNAS schicken und danach (gebündelt) neu abfragen."""

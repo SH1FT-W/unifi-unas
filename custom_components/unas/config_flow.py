@@ -14,6 +14,7 @@ from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME, CONF_VE
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import selector
 from homeassistant.helpers.device_registry import format_mac
+from homeassistant.helpers.service_info.dhcp import DhcpServiceInfo
 from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 import voluptuous as vol
 
@@ -75,7 +76,14 @@ class UnasConfigFlow(ConfigFlow, domain=DOMAIN):
 
     async def async_step_zeroconf(self, discovery_info: ZeroconfServiceInfo) -> ConfigFlowResult:
         """Gefunden über SMB-Ankündigung „UNAS-…“; /api/system bestätigt Modell und MAC ohne Anmeldung."""
-        host = str(discovery_info.ip_address)
+        return await self._async_discovered(str(discovery_info.ip_address))
+
+    async def async_step_dhcp(self, discovery_info: DhcpServiceInfo) -> ConfigFlowResult:
+        """Von HAs DHCP-Erkennung gefunden (DHCP-Anfrage oder ARP-Tabelle, Ubiquiti-MAC): findet auch eine umbenannte
+        UNAS, die per mDNS nicht mehr „UNAS-…“ heißt. /api/system bestätigt Modell und MAC ohne Anmeldung."""
+        return await self._async_discovered(discovery_info.ip)
+
+    async def _async_discovered(self, host: str) -> ConfigFlowResult:
         try:
             mac, name, _model = await create_client(
                 self.hass, {CONF_HOST: host, CONF_USERNAME: "", CONF_PASSWORD: ""}

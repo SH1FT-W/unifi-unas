@@ -17,7 +17,15 @@ from .const import CONF_FINGERPRINT, DOMAIN
 from .coordinator import UnasConfigEntry, UnasCoordinator
 from .entity import disk_identifier, entry_key, unas_device_info
 
-PLATFORMS = [Platform.BINARY_SENSOR, Platform.BUTTON, Platform.SELECT, Platform.SENSOR, Platform.UPDATE]
+PLATFORMS = [
+    Platform.BINARY_SENSOR,
+    Platform.BUTTON,
+    Platform.LIGHT,
+    Platform.SELECT,
+    Platform.SENSOR,
+    Platform.TIME,
+    Platform.UPDATE,
+]
 
 
 def create_client(hass: HomeAssistant, data: Mapping[str, Any], *, verify_ssl: bool = False) -> UnasClient:
@@ -61,6 +69,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: UnasConfigEntry) -> bool
     device = dr.async_get(hass).async_get_or_create(config_entry_id=entry.entry_id, **unas_device_info(coordinator))
     coordinator.device_id = device.id
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    # Produktbild kommt aus dem Internet; der Start wartet nicht darauf
+    entry.async_create_background_task(hass, coordinator.async_load_pictures(), "unas device picture")
     # Geänderte Optionen (Zertifikat prüfen) gelten nach dem Neuladen
     entry.async_on_unload(entry.add_update_listener(_async_options_updated))
     return True

@@ -2,7 +2,8 @@
   "name": "UNAS 2",
   "mac": "AABBCCDDEEFF",
   "hardware": {
-    "shortname": "UNAS2W"
+    "shortname": "UNAS2W",
+    "sysid": 60002
   },
   "firmware": {
     "latest": {
@@ -53,5 +54,21 @@
         "updateAvailable": null
       }
     ]
+  },
+  "features": {
+    "hasLCM": true,
+    "hasBezel": false
+  },
+  "lcmSettings": {
+    "enabled": true,
+    "brightness": 80,
+    "color": "0139FF"
+  },
+  "ledSettings": {
+    "enabled": true
+  },
+  "nightMode": {
+    "onMinute": 1320,
+    "offMinute": 480
   }
 }
