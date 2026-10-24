@@ -1,8 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-title-dark.png" />
-  <img src="docs/images/readme-title-light.png" alt="UniFi UNAS for Home Assistant: Your NAS, fully local. A UniFi UNAS on a desk next to a monitor in warm morning light (AI-generated scene)." />
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-title-dark.webp" />
+  <img src="docs/images/readme-title-light.webp" alt="UniFi UNAS: Your NAS, in plain sight. The feature overview of the project page in a window." />
 </picture>
 
 <p>Your UniFi NAS in Home Assistant.<br/>
@@ -32,28 +32,37 @@ UniFi UNAS brings a **UniFi NAS** into Home Assistant: storage, every disk with 
 <sub><b>JUST ARRIVED</b></sub>
 ## Display, night mode and your model.
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-cards-new-dark.png" />
-  <img src="docs/images/readme-cards-new-light.png" alt="Display and night mode (26.10.3): The UNAS display is a light with its brightness, the status LED can be turned off, and the night mode has a start and an end, as in UniFi OS. Your model's picture (26.10.3): The UniFi OS and Drive updates show the product picture of your UNAS model, from Ubiquiti's public device catalog. Found even when renamed (26.10.3): A UNAS that no longer carries its default name is still discovered, through Home Assistant's network discovery. Remembers its certificate (26.10.2): At setup the integration remembers the certificate the UNAS shows and only sends the password to that one. If it ever changes, a repair shows the old and the new fingerprint." />
-</picture>
+<!-- cards:new -->
+<table>
+<tr><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/monitor-dark.svg"><img src="docs/images/icons/monitor-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Display and night mode</b> <code>26.10.3</code><br>The UNAS display is a light with its brightness, the status LED can be turned off, and the night mode has a start and an end, as in UniFi OS.</td><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/image-outline-dark.svg"><img src="docs/images/icons/image-outline-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Your model's picture</b> <code>26.10.3</code><br>The UniFi OS and Drive updates show the product picture of your UNAS model, from Ubiquiti's public device catalog.</td></tr>
+<tr><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/magnify-dark.svg"><img src="docs/images/icons/magnify-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Found even when renamed</b> <code>26.10.3</code><br>A UNAS that no longer carries its default name is still discovered, through Home Assistant's network discovery.</td><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/certificate-outline-dark.svg"><img src="docs/images/icons/certificate-outline-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Remembers its certificate</b> <code>26.10.2</code><br>At setup the integration remembers the certificate the UNAS shows and only sends the password to that one. If it ever changes, a repair shows the old and the new fingerprint.</td></tr>
+</table>
+<!-- /cards:new -->
 
 Every change, release by release, in the [changelog](CHANGELOG.md).
 
 <a id="features"></a>
 ## Features
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-cards-features-dark.png" />
-  <img src="docs/images/readme-cards-features-light.png" alt="Storage at a glance: used, free, capacity and usage over all pools, the storage status and a problem sensor for degraded pools or lost redundancy. Every disk its own device: temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick SMART test. Drives and shares: usage of every shared and personal drive, with quota, members, snapshots and remote backup as attributes. System and network: CPU load and temperature, memory, uptime, network throughput and the link speed. Fan profile: quiet, default or cooling, switchable from Home Assistant. Data scrubbing: state and last run of the scrub, and a button to start one. UniFi OS and Drive updates: both appear under Settings, Updates, with an install button. Local and discovered: talks to UniFi OS on your network, no cloud account, a UNAS is discovered on its own, even after renaming it." />
-</picture>
+<!-- cards:features -->
+<table>
+<tr><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/harddisk-dark.svg"><img src="docs/images/icons/harddisk-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Storage at a glance</b><br>Used, free, capacity and usage over all pools, the storage status and a problem sensor for degraded pools or lost redundancy.</td><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/nas-dark.svg"><img src="docs/images/icons/nas-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Every disk its own device</b><br>Temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick SMART test.</td></tr>
+<tr><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/folder-outline-dark.svg"><img src="docs/images/icons/folder-outline-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Drives and shares</b><br>Usage of every shared and personal drive, with quota, members, snapshots and remote backup as attributes.</td><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/chart-line-dark.svg"><img src="docs/images/icons/chart-line-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>System and network</b><br>CPU load and temperature, memory, uptime, network throughput and the link speed, so a port stuck at 1 GbE stands out.</td></tr>
+<tr><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/fan-dark.svg"><img src="docs/images/icons/fan-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Fan profile</b><br>Quiet, default or cooling, switchable from Home Assistant, for example quiet at night.</td><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/shield-check-dark.svg"><img src="docs/images/icons/shield-check-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Data scrubbing</b><br>State and last run of the scrub, and a button to start one.</td></tr>
+<tr><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/update-dark.svg"><img src="docs/images/icons/update-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>UniFi OS and Drive updates</b><br>Both appear under Settings, Updates, with an install button, just like in the UniFi interface.</td><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/lan-dark.svg"><img src="docs/images/icons/lan-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Local and discovered</b><br>Talks to UniFi OS on your network, no cloud account. A UNAS is discovered on its own, even after renaming it.</td></tr>
+</table>
+<!-- /cards:features -->
 
 <a id="entities"></a>
 ## Entities
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-cards-entities-dark.png" />
-  <img src="docs/images/readme-cards-entities-light.png" alt="Storage: storage_used, storage_free, storage_capacity, storage_usage, storage_status, storage_read and storage_write. Problems and health: storage_problem, disks_at_risk, hottest_disk, data_scrubbing and last_data_scrubbing. Per disk: temperature, power_on_hours, bad_sectors, health, problem and run_quick_smart_test, on a device per disk. System: cpu_load, cpu_temperature, memory_usage, started, network_receive, network_transmit and link_speed. Services and controls: smb, time_machine and nfs as binary sensors, fan_profile as a select, restart, shut_down and start_data_scrubbing. Updates: update.unas_2_unifi_os and update.unas_2_unifi_drive with the installed and the latest version." />
-</picture>
+<!-- cards:entities -->
+<table>
+<tr><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/harddisk-dark.svg"><img src="docs/images/icons/harddisk-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Storage</b><br>storage_used, storage_free, storage_capacity, storage_usage, storage_status, storage_read and storage_write.</td><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/alert-circle-outline-dark.svg"><img src="docs/images/icons/alert-circle-outline-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Problems and health</b><br>storage_problem, disks_at_risk, hottest_disk, data_scrubbing and last_data_scrubbing.</td></tr>
+<tr><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/nas-dark.svg"><img src="docs/images/icons/nas-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Per disk</b><br>temperature, power_on_hours, bad_sectors, health, problem and run_quick_smart_test, on a device per disk.</td><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/chart-line-dark.svg"><img src="docs/images/icons/chart-line-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>System</b><br>cpu_load, cpu_temperature, memory_usage, started, network_receive, network_transmit and link_speed.</td></tr>
+<tr><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/toggle-switch-outline-dark.svg"><img src="docs/images/icons/toggle-switch-outline-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Services and controls</b><br>smb, time_machine and nfs as binary sensors, fan_profile as a select, restart, shut_down and start_data_scrubbing.</td><td width="34" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/update-dark.svg"><img src="docs/images/icons/update-light.svg" width="26" height="26" alt=""></picture></td><td width="46%" valign="top"><b>Updates</b><br>update.unas_2_unifi_os and update.unas_2_unifi_drive with the installed and the latest version.</td></tr>
+</table>
+<!-- /cards:entities -->
 
 All IDs start with the device name, for example `sensor.unas_2_storage_used`. Every disk is a device of its own under the UNAS (`UNAS 2 disk 1`, SSDs are called `SSD 1`), every UniFi Drive drive gets a usage sensor named after it (`sensor.unas_2_media_used`). New disks and drives appear without a restart. Entity names are available in English and German.
 
