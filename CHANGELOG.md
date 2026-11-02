@@ -1,6 +1,6 @@
 # Changelog
 
-## 26.11.1 – unreleased
+## 26.11.1 – 02.11.2026
 
 - **New:** "Storage pool 1" (one per pool) is a problem sensor that turns on when the RAID is damaged, that is when the pool can no longer lose as many disks as it is set up for (a disk failed or was removed). As long as a pool is damaged, Settings → Repairs shows a notice naming the pool and the affected disks; it goes away by itself once the pool is healthy again. A pool state the integration does not know yet is shown as unknown (and written to the debug log) instead of raising an alarm.
 - **New:** "Run extended SMART test" per disk, next to the quick test. The extended test reads the whole disk and takes several hours; UniFi Drive shows the result.
