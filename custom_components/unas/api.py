@@ -10,7 +10,8 @@ UniFi OS 6.0.11).
 from __future__ import annotations
 
 import asyncio
-from dataclasses import dataclass, field
+import copy
+from dataclasses import dataclass, field, fields
 from datetime import datetime
 import hashlib
 from json import loads as json_loads
@@ -141,6 +142,10 @@ class Firmware:
     changelog_url: str | None
 
 
+# Field metadata: marks the fields of UnasData that only fetch_slow() reads
+SLOW: dict[str, bool] = {"slow": True}
+
+
 @dataclass(slots=True)
 class UnasData:
     system: SystemInfo
@@ -152,17 +157,27 @@ class UnasData:
     fan_profile: str | None
     fan_profiles: list[str]
     # Langsame Werte (nur jede SLOW_EVERY-te Runde neu geholt)
-    latest_firmware: Firmware | None = None
-    drive_update: str | None = None
-    services: dict[str, bool] = field(default_factory=dict)
+    # Slow values carry metadata SLOW; keep_slow() copies them from the previous poll
+    latest_firmware: Firmware | None = field(default=None, metadata=SLOW)
+    drive_update: str | None = field(default=None, metadata=SLOW)
+    services: dict[str, bool] = field(default_factory=dict, metadata=SLOW)
     # Lese-/Schreibrate aller Platten, Mittel der letzten vollen 5 Minuten (wie die Drive-Grafik)
-    storage_read_kbps: float | None = None
-    storage_write_kbps: float | None = None
+    storage_read_kbps: float | None = field(default=None, metadata=SLOW)
+    storage_write_kbps: float | None = field(default=None, metadata=SLOW)
     # UniFi OS: Display (lcmSettings enabled/brightness), Status-LED (ledSettings enabled), Nachtmodus
     # (nightMode onMinute/offMinute) und ob es ein Display gibt (hasLCM); nur angemeldet in /api/system
-    os_settings: dict[str, Any] = field(default_factory=dict)
+    os_settings: dict[str, Any] = field(default_factory=dict, metadata=SLOW)
     # Hardware-Kennung (hex, z. B. "ea62" = UNAS 2 weiß) für das Produktbild aus Ubiquitis Katalog
-    sysid: str = ""
+    sysid: str = field(default="", metadata=SLOW)
+
+    def keep_slow(self, old: UnasData) -> None:
+        """Take over all slow values from the previous poll.
+
+        fetch_slow() then only overwrites what it could read, so a failed request keeps the last known value.
+        Copies are shallow so fetch_slow() never changes the previous data."""
+        for item in fields(self):
+            if item.metadata.get("slow"):
+                setattr(self, item.name, copy.copy(getattr(old, item.name)))
 
 
 def _dt(value: Any) -> datetime | None:
@@ -477,7 +492,9 @@ class UnasClient:
         )
 
     async def fetch_slow(self, data: UnasData) -> None:
-        """Firmware-Stand und Dienste; Fehler hier lassen die schnellen Werte unberührt."""
+        """Firmware-Stand und Dienste; Fehler hier lassen die schnellen Werte unberührt.
+
+        Failed parts leave the fields of `data` as they are (the previous values after keep_slow())."""
         try:
             system = await self._request("GET", "/api/system") or {}
         except UnasError as err:

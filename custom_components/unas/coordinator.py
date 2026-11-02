@@ -56,18 +56,14 @@ class UnasCoordinator(DataUpdateCoordinator[UnasData]):
         return self.pictures.get(sysid) if sysid else None
 
     async def _async_update_data(self) -> UnasData:
+        old = self.data
         try:
             data = await self.client.fetch()
-            if self._round % SLOW_EVERY == 0 or self.data is None:
+            if old is not None:
+                # Last slow values stay until a slow round reads them again, also if that round fails
+                data.keep_slow(old)
+            if self._round % SLOW_EVERY == 0 or old is None:
                 await self.client.fetch_slow(data)
-            else:
-                data.latest_firmware = self.data.latest_firmware
-                data.drive_update = self.data.drive_update
-                data.services = self.data.services
-                data.storage_read_kbps = self.data.storage_read_kbps
-                data.storage_write_kbps = self.data.storage_write_kbps
-                data.os_settings = self.data.os_settings
-                data.sysid = self.data.sysid
         except UnasAuthError as err:
             raise ConfigEntryAuthFailed(translation_domain=DOMAIN, translation_key="auth_failed") from err
         except UnasCertificateError as err:
@@ -77,7 +73,8 @@ class UnasCoordinator(DataUpdateCoordinator[UnasData]):
             raise UpdateFailed(
                 translation_domain=DOMAIN, translation_key="unreachable", translation_placeholders={"error": str(err)}
             ) from err
-        if self._cert_issue:
+        if self._cert_issue or old is None:
+            # Also after a reload (e.g. once the repair accepted the new certificate), as in udr7
             ir.async_delete_issue(self.hass, DOMAIN, cert_issue_id(self.config_entry))
             self._cert_issue = False
         self._round += 1

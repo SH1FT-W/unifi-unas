@@ -1,5 +1,10 @@
 # Changelog
 
+## 26.11.1 – unreleased
+
+- **Fixed:** If only the slow status poll failed (firmware, display and LED settings, services, storage throughput, every 5 minutes), these values became unknown until the next slow poll. Now they keep their last known values.
+- **Fixed:** After the integration was reloaded, an old "certificate changed" repair could stay in Settings → Repairs although the UNAS answered normally again. The first successful poll now removes it.
+
 ## 26.10.3 – 22.10.2026
 
 - **New:** The UNAS display as a light (on/off and brightness), the status LED (on/off) and the night mode start and end, as in UniFi OS. Changing them needs an account with admin rights in UniFi OS.

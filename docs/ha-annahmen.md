@@ -19,6 +19,7 @@ Worauf sich dieses Repo bei Home Assistant verlässt. Bei jeder Änderung am Cod
 | Update-Entitäten zeigen `entity_picture`; ohne eigenes Bild das Logo der Integration | `update.py` | `test_os_features.py::test_product_picture` |
 | `async_get_clientsession(verify_ssl=False)` liefert eine Session ohne CA-Prüfung, `aiohttp.Fingerprint` pinnt je Anfrage | `__init__.py`, `api.py` | `test_features.py` (Zertifikat) |
 | `RepairsFlow` mit `async_create_fix_flow(hass, issue_id, data)` | `repairs.py` | `test_features.py` |
+| Nicht dauerhafte Reparaturhinweise (`is_persistent=False`) überleben das Neuladen eines Eintrags bis zum HA-Neustart; der erste erfolgreiche Abruf nach dem Laden löscht sie deshalb | `coordinator.py` `_async_update_data` | `test_features.py::test_stale_certificate_repair_removed_after_reload` |
 | `ConfigEntry.async_create_background_task` für den Bilder-Katalog | `__init__.py` | `test_os_features.py` |
 
 ## Fremde Integrationen

@@ -22,7 +22,7 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 from custom_components.unas.api import UnasClient, UnasError, format_fingerprint
 from custom_components.unas.const import DOMAIN
 
-from .conftest import ENTRY_DATA, FINGERPRINT, HOST, MAC, V1, V2, fixture, mock_unas
+from .conftest import BASE, ENTRY_DATA, FINGERPRINT, HOST, MAC, V1, V2, fixture, mock_unas
 
 DISK1 = "unas_2_disk_1"
 NEW_FINGERPRINT = "cd" * 32
@@ -250,3 +250,57 @@ async def test_storage_throughput_unavailable(
     await _setup(hass)
     assert hass.states.get("sensor.unas_2_storage_read").state == "unknown"
     assert hass.states.get("sensor.unas_2_storage_used").state != STATE_UNAVAILABLE
+
+
+async def test_stale_certificate_repair_removed_after_reload(
+    hass: HomeAssistant, aioclient_mock: AiohttpClientMocker
+) -> None:
+    """A repair left over from before a reload is removed by the first successful poll."""
+    mock_unas(aioclient_mock)
+    entry = MockConfigEntry(
+        domain=DOMAIN, title="UNAS 2", unique_id=MAC, data={**ENTRY_DATA, "fingerprint": FINGERPRINT}
+    )
+    entry.add_to_hass(hass)
+    issue_id = f"cert_changed_{entry.entry_id}"
+    ir.async_create_issue(
+        hass, DOMAIN, issue_id, is_fixable=True, severity=ir.IssueSeverity.ERROR, translation_key="cert_changed"
+    )
+    await hass.config_entries.async_setup(entry.entry_id)
+    await hass.async_block_till_done()
+    assert entry.state is ConfigEntryState.LOADED
+    assert ir.async_get(hass).async_get_issue(DOMAIN, issue_id) is None
+
+
+async def test_slow_round_failure_keeps_last_values(hass: HomeAssistant, aioclient_mock: AiohttpClientMocker) -> None:
+    """If only the slow part fails, firmware, OS settings, services and throughput keep their last values."""
+    system = {
+        **fixture("system"),
+        "firmware": {"latest": {"version": "v6.1.2+abc"}},
+        "apps": {"controllers": [{"name": "drive", "version": "4.4.17", "updateAvailable": "4.5.0"}]},
+    }
+    mock_unas(aioclient_mock, system=system)
+    entry = await _setup(hass)
+    before = entry.runtime_data.data
+    assert hass.states.get("update.unas_2_unifi_os").state == STATE_ON
+    read_before = hass.states.get("sensor.unas_2_storage_read").state
+
+    # Next round is a slow one, and every slow request fails
+    entry.runtime_data._round = 0
+    aioclient_mock.clear_requests()
+    aioclient_mock.get(f"{BASE}/api/system", status=500)
+    for service in ("smb", "time-machine", "nfs"):
+        aioclient_mock.get(f"{V1}/services/{service}/settings", status=500)
+    aioclient_mock.get(f"{V1}/systems/storage-io-stats?interval=300", status=500)
+    mock_unas(aioclient_mock, clear=False)
+    await _tick(hass, entry)
+
+    after = entry.runtime_data.data
+    assert after is not before
+    assert after.latest_firmware == before.latest_firmware
+    assert after.drive_update == "4.5.0"
+    assert after.os_settings == before.os_settings and after.os_settings
+    assert after.sysid == before.sysid and after.sysid
+    assert after.services == before.services and after.services
+    assert hass.states.get("update.unas_2_unifi_os").state == STATE_ON
+    assert hass.states.get("light.unas_2_display").state == STATE_ON
+    assert hass.states.get("sensor.unas_2_storage_read").state == read_before != "unknown"
