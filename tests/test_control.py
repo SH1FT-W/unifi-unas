@@ -37,6 +37,7 @@ async def test_fan_profile(hass: HomeAssistant, setup: MockConfigEntry, unas: Ai
         ("button.unas_2_restart", "POST", "/api/system/reboot", None),
         ("button.unas_2_start_data_scrubbing", "POST", f"/storage/pools/{POOL_ID}/data-scrubbing/start", None),
         ("button.unas_2_disk_1_run_quick_smart_test", "POST", "/storage/disks/1/smart-tests", {"type": "quick"}),
+        ("button.unas_2_disk_1_run_extended_smart_test", "POST", "/storage/disks/1/smart-tests", {"type": "extended"}),
     ],
 )
 async def test_buttons(

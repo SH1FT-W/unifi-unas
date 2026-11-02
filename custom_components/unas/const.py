@@ -18,4 +18,6 @@ STORAGE_VERSION = 1
 CONF_FINGERPRINT = "fingerprint"
 
 FAN_PROFILES = ["quiet", "default", "cooling"]
+# SMART test types of POST v2/storage/disks/<slot>/smart-tests (from the UniFi Drive interface)
 SMART_TEST_QUICK = "quick"
+SMART_TEST_EXTENDED = "extended"

@@ -73,10 +73,16 @@ class Disk:
     write_kbps: float | None
     risk_reasons: tuple[str, ...]
     smart_test_supported: bool
+    # Storage pool the disk belongs to ("" = none, e.g. a spare or an unassigned disk)
+    pool_id: str = ""
 
     @property
     def at_risk(self) -> bool:
         return self.state != "optimal" or bool(self.risk_reasons)
+
+
+# Pool status of a healthy pool, as reported by UniFi Drive (seen on a real UNAS)
+POOL_STATUS_OK = "fullyOperational"
 
 
 @dataclass(frozen=True, slots=True)
@@ -101,6 +107,19 @@ class Pool:
             and self.expected_protection is not None
             and (self.protection < self.expected_protection)
         )
+
+    @property
+    def damaged(self) -> bool | None:
+        """True = damaged, False = healthy, None = state not known.
+
+        Only values seen on a real UNAS count: status "fullyOperational" is healthy, and fewer disks that may still
+        fail than configured (currentProtection < expectedProtection) means a disk of the RAID is missing or failed.
+        Any other status is not interpreted, as UniFi Drive does not document its values."""
+        if self.redundancy_lost:
+            return True
+        if self.status == POOL_STATUS_OK:
+            return False
+        return None
 
 
 @dataclass(frozen=True, slots=True)
@@ -215,6 +234,7 @@ def parse_disk(raw: dict[str, Any]) -> Disk:
         write_kbps=_num(raw.get("writeKBPS")),
         risk_reasons=tuple(str(r) for r in raw.get("riskReasons") or ()),
         smart_test_supported=bool(raw.get("smartTestSupported")),
+        pool_id=str(raw.get("poolId") or ""),
     )
 
 

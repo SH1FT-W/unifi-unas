@@ -96,6 +96,9 @@
       "storage_problem": {
         "name": "Storage problem"
       },
+      "pool_problem": {
+        "name": "Storage pool {pool}"
+      },
       "disk_problem": {
         "name": "Problem"
       },
@@ -121,6 +124,9 @@
       },
       "smart_test": {
         "name": "Run quick SMART test"
+      },
+      "smart_test_extended": {
+        "name": "Run extended SMART test"
       }
     },
     "light": {
@@ -297,6 +303,14 @@
           "cannot_connect": "The UNAS does not answer. Try again once it is reachable."
         }
       }
+    },
+    "pool_damaged": {
+      "title": "{name}: storage pool {pool} is damaged",
+      "description": "Storage pool {pool} ({raid}) on {name} has lost its protection: it can now survive the failure of {current} instead of {expected} disks. A disk has most likely failed or was removed.\n\nOpen UniFi Drive, check the pool under Storage and replace the failed disk. Until the RAID is rebuilt, another failing disk can mean data loss, so keep a backup at hand.\n\nThis notice goes away by itself once the pool is healthy again."
+    },
+    "pool_damaged_disks": {
+      "title": "{name}: storage pool {pool} is damaged",
+      "description": "Storage pool {pool} ({raid}) on {name} has lost its protection: it can now survive the failure of {current} instead of {expected} disks.\n\nAffected disks (bay and state in UniFi Drive): {disks}\n\nOpen UniFi Drive, check the pool under Storage and replace the failed disk. Until the RAID is rebuilt, another failing disk can mean data loss, so keep a backup at hand.\n\nThis notice goes away by itself once the pool is healthy again."
     }
   }
 }

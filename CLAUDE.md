@@ -32,7 +32,8 @@ Release auf genau dieser Nummer. CHANGELOG `## YY.M.N – DD.MM.YYYY` (englisch)
 - Drive: `/proxy/drive/api/v2/...` direkt, `/proxy/drive/api/v1/...` in `{"err", "data"}` verpackt.
   Gelesen: `systems/device-info` (cpu.currentload = Anteil 0–1, memory in KiB, `version` = Drive-App,
   `firmwareVersion` = UniFi OS), `storage` (pools mit raidGroups[].currentProtection/expectedProtection + disks;
-  leere Schächte `state: "empty"`; `healthScore` 5 = gesund, 1–4 unbekannt), `drives` (quota -1 = unbegrenzt,
+  leere Schächte `state: "empty"`; `healthScore` 5 = gesund, 1–4 unbekannt; Pool-`status` belegt nur
+  `fullyOperational`, andere Werte nie gesehen → Pool-Sensor „unbekannt“; Platten-`poolId`), `drives` (quota -1 = unbegrenzt,
   memberCount, protections), `systems/network-io` (KB/s), `systems/fan-control`, v1 `services/{smb,time-machine,nfs}/settings`,
   v1 `systems/storage-io-stats?interval=300&start&end` (Unix-s, `series.readKBPS/writeKBPS`, letzter Wert = jüngstes
   volles 5-Min-Mittel). UniFi OS: `/api/system` (`firmware.latest`, `apps.controllers[name=drive].updateAvailable`).

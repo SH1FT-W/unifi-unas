@@ -96,6 +96,9 @@
       "storage_problem": {
         "name": "Speicherproblem"
       },
+      "pool_problem": {
+        "name": "Speicherpool {pool}"
+      },
       "disk_problem": {
         "name": "Problem"
       },
@@ -121,6 +124,9 @@
       },
       "smart_test": {
         "name": "SMART-Schnelltest starten"
+      },
+      "smart_test_extended": {
+        "name": "SMART-Langtest starten"
       }
     },
     "light": {
@@ -297,6 +303,14 @@
           "cannot_connect": "Die UNAS antwortet nicht. Versuche es erneut, sobald sie erreichbar ist."
         }
       }
+    },
+    "pool_damaged": {
+      "title": "{name}: Speicherpool {pool} beschädigt",
+      "description": "Speicherpool {pool} ({raid}) auf {name} hat seinen Schutz verloren: Er verkraftet jetzt nur noch den Ausfall von {current} statt {expected} Platten. Wahrscheinlich ist eine Platte ausgefallen oder wurde entfernt.\n\nÖffne UniFi Drive, prüfe den Pool unter Speicher und ersetze die ausgefallene Platte. Bis das RAID wiederhergestellt ist, kann eine weitere defekte Platte Datenverlust bedeuten, halte also eine Sicherung bereit.\n\nDieser Hinweis verschwindet von selbst, sobald der Pool wieder in Ordnung ist."
+    },
+    "pool_damaged_disks": {
+      "title": "{name}: Speicherpool {pool} beschädigt",
+      "description": "Speicherpool {pool} ({raid}) auf {name} hat seinen Schutz verloren: Er verkraftet jetzt nur noch den Ausfall von {current} statt {expected} Platten.\n\nBetroffene Platten (Schacht und Zustand in UniFi Drive): {disks}\n\nÖffne UniFi Drive, prüfe den Pool unter Speicher und ersetze die ausgefallene Platte. Bis das RAID wiederhergestellt ist, kann eine weitere defekte Platte Datenverlust bedeuten, halte also eine Sicherung bereit.\n\nDieser Hinweis verschwindet von selbst, sobald der Pool wieder in Ordnung ist."
     }
   }
 }

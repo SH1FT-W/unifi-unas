@@ -14,7 +14,7 @@ from homeassistant.util.ssl import get_default_no_verify_context
 
 from .api import UnasClient, UnasError
 from .const import CONF_FINGERPRINT, DOMAIN
-from .coordinator import UnasConfigEntry, UnasCoordinator
+from .coordinator import UnasConfigEntry, UnasCoordinator, delete_pool_issues
 from .entity import disk_identifier, entry_key, unas_device_info
 
 PLATFORMS = [
@@ -82,6 +82,11 @@ async def _async_options_updated(hass: HomeAssistant, entry: UnasConfigEntry) ->
 
 async def async_unload_entry(hass: HomeAssistant, entry: UnasConfigEntry) -> bool:
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
+
+async def async_remove_entry(hass: HomeAssistant, entry: UnasConfigEntry) -> None:
+    """Removed UNAS: its pool notices would otherwise stay until Home Assistant restarts."""
+    delete_pool_issues(hass, entry)
 
 
 async def async_remove_config_entry_device(hass: HomeAssistant, entry: UnasConfigEntry, device: dr.DeviceEntry) -> bool:

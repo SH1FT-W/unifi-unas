@@ -20,6 +20,10 @@ Worauf sich dieses Repo bei Home Assistant verlässt. Bei jeder Änderung am Cod
 | `async_get_clientsession(verify_ssl=False)` liefert eine Session ohne CA-Prüfung, `aiohttp.Fingerprint` pinnt je Anfrage | `__init__.py`, `api.py` | `test_features.py` (Zertifikat) |
 | `RepairsFlow` mit `async_create_fix_flow(hass, issue_id, data)` | `repairs.py` | `test_features.py` |
 | Nicht dauerhafte Reparaturhinweise (`is_persistent=False`) überleben das Neuladen eines Eintrags bis zum HA-Neustart; der erste erfolgreiche Abruf nach dem Laden löscht sie deshalb | `coordinator.py` `_async_update_data` | `test_features.py::test_stale_certificate_repair_removed_after_reload` |
+| Nicht dauerhafte Reparaturhinweise ohne Fix-Flow (`is_fixable=False`, `is_persistent=False`) je beschädigtem Pool; `ir.async_get(hass).issues` ist ein Dict mit Schlüsseln `(domain, issue_id)`, über das veraltete Hinweise (Pool gesund, gelöscht oder vor dem Neuladen angelegt) gefunden und gelöscht werden | `coordinator.py` `_update_pool_issues` | `tests/test_pool_health.py` |
+| `async_remove_entry` läuft beim Entfernen eines Eintrags; nicht dauerhafte Hinweise blieben sonst bis zum HA-Neustart stehen | `__init__.py` `async_remove_entry` | `tests/test_pool_health.py::test_damaged_pool_keeps_notice_across_reload_and_removal_clears_it` |
+| Binärsensor `device_class: problem` mit `is_on = None` erscheint als „unbekannt“ (unbekannter Pool-Zustand löst keinen Alarm aus) | `binary_sensor.py` `PoolProblem` | `tests/test_pool_health.py::test_unknown_status_is_no_alarm` |
+| Entitätsname aus `translation_key` mit `translation_placeholders` („Storage pool {pool}“) | `binary_sensor.py` `PoolProblem` | `tests/test_pool_health.py::test_healthy_pool` |
 | `ConfigEntry.async_create_background_task` für den Bilder-Katalog | `__init__.py` | `test_os_features.py` |
 
 ## Fremde Integrationen

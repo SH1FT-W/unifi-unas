@@ -13,6 +13,7 @@ from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import (
+    Pool,
     UnasAuthError,
     UnasCertificateError,
     UnasClient,
@@ -33,6 +34,18 @@ def cert_issue_id(entry: ConfigEntry) -> str:
     return f"cert_changed_{entry.entry_id}"
 
 
+def pool_issue_prefix(entry: ConfigEntry) -> str:
+    return f"pool_damaged_{entry.entry_id}_"
+
+
+def delete_pool_issues(hass: HomeAssistant, entry: ConfigEntry, keep: set[str] | None = None) -> None:
+    """Delete the pool notices of this entry, except those in `keep`."""
+    prefix = pool_issue_prefix(entry)
+    for domain, issue_id in list(ir.async_get(hass).issues):
+        if domain == DOMAIN and issue_id.startswith(prefix) and issue_id not in (keep or set()):
+            ir.async_delete_issue(hass, DOMAIN, issue_id)
+
+
 class UnasCoordinator(DataUpdateCoordinator[UnasData]):
     config_entry: UnasConfigEntry
 
@@ -45,6 +58,8 @@ class UnasCoordinator(DataUpdateCoordinator[UnasData]):
         self.device_id: str | None = None
         # Produktbilder je sysid (catalog.py), im Hintergrund nach dem Start geladen
         self.pictures: dict[str, str] = {}
+        # Last pool status that could not be interpreted, per pool (logged once per change)
+        self._unknown_pool_status: dict[str, str] = {}
 
     async def async_load_pictures(self) -> None:
         self.pictures = await async_load_pictures(self.hass)
@@ -77,8 +92,62 @@ class UnasCoordinator(DataUpdateCoordinator[UnasData]):
             # Also after a reload (e.g. once the repair accepted the new certificate), as in udr7
             ir.async_delete_issue(self.hass, DOMAIN, cert_issue_id(self.config_entry))
             self._cert_issue = False
+        self._update_pool_issues(data)
         self._round += 1
         return data
+
+    def _update_pool_issues(self, data: UnasData) -> None:
+        """One repair notice per damaged pool; it goes away by itself once the pool is healthy again.
+
+        A pool in an unknown state keeps whatever notice it has: no new alarm, but no all-clear either."""
+        if not data.pools:
+            # No pools in the answer (e.g. while Drive starts up): no all-clear for notices of earlier polls
+            return
+        prefix = pool_issue_prefix(self.config_entry)
+        keep: set[str] = set()
+        for pool in data.pools.values():
+            issue_id = f"{prefix}{pool.id}"
+            damaged = pool.damaged
+            if damaged is None:
+                keep.add(issue_id)
+                if self._unknown_pool_status.get(pool.id) != pool.status:
+                    _LOGGER.debug(
+                        "Pool %s reports unknown status %r, not treated as a problem", pool.number, pool.status
+                    )
+                self._unknown_pool_status[pool.id] = pool.status
+                continue
+            self._unknown_pool_status.pop(pool.id, None)
+            if damaged:
+                keep.add(issue_id)
+                self._raise_pool_issue(issue_id, data, pool)
+        # Pools that are healthy or gone; also notices left over from before a reload
+        delete_pool_issues(self.hass, self.config_entry, keep)
+
+    def _raise_pool_issue(self, issue_id: str, data: UnasData, pool: Pool) -> None:
+        # Disks of this pool that UniFi Drive no longer lists as optimal (a failed disk may also be missing entirely)
+        disks = sorted(
+            (d for d in data.disks.values() if d.pool_id == pool.id and d.state != "optimal"),
+            key=lambda d: d.slot,
+        )
+        placeholders = {
+            "name": self.config_entry.title,
+            "pool": str(pool.number),
+            "raid": pool.raid_level.upper() or "?",
+            "current": "?" if pool.protection is None else str(pool.protection),
+            "expected": "?" if pool.expected_protection is None else str(pool.expected_protection),
+        }
+        if disks:
+            placeholders["disks"] = ", ".join(f"{d.slot} ({d.state})" for d in disks)
+        ir.async_create_issue(
+            self.hass,
+            DOMAIN,
+            issue_id,
+            is_fixable=False,
+            is_persistent=False,
+            severity=ir.IssueSeverity.ERROR,
+            translation_key="pool_damaged_disks" if disks else "pool_damaged",
+            translation_placeholders=placeholders,
+        )
 
     def _raise_cert_issue(self, err: UnasCertificateError) -> None:
         """Reparatur-Hinweis mit altem und neuem Fingerabdruck; bestätigt der Nutzer, gilt das neue Zertifikat."""

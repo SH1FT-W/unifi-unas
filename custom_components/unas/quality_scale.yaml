@@ -85,7 +85,7 @@ rules:
   docs-use-cases: done
   dynamic-devices:
     status: done
-    comment: Neue Festplatten und Drive-Laufwerke bekommen zur Laufzeit Entitäten.
+    comment: Neue Festplatten, Speicherpools und Drive-Laufwerke bekommen zur Laufzeit Entitäten.
   entity-category: done
   entity-device-class: done
   entity-disabled-by-default:
@@ -99,7 +99,9 @@ rules:
     status: done
     comment: >-
       Zeigt die UNAS ein anderes Zertifikat als das gemerkte, erscheint eine Reparatur mit altem und neuem
-      Fingerabdruck; nach Bestätigung gilt das neue (repairs.py).
+      Fingerabdruck; nach Bestätigung gilt das neue (repairs.py). Ist ein Speicherpool beschädigt (weniger
+      Ausfallschutz als eingerichtet), erscheint je Pool ein nicht dauerhafter Hinweis mit Pool und betroffenen
+      Platten, der von selbst verschwindet, sobald der Pool wieder gesund ist.
   stale-devices:
     status: done
     comment: Ausgebaute Festplatten lassen sich entfernen (async_remove_config_entry_device).

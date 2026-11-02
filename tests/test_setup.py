@@ -227,6 +227,7 @@ async def test_disks_without_serial_are_kept_apart(hass: HomeAssistant, aioclien
     assert hass.states.get("sensor.unas_2_disk_2_temperature_2") is None
     assert hass.states.get("binary_sensor.unas_2_disk_2_problem").state == STATE_OFF
     assert hass.states.get("button.unas_2_disk_2_run_quick_smart_test") is not None
+    assert hass.states.get("button.unas_2_disk_2_run_extended_smart_test") is not None
 
     # Platte 2 ausgebaut: ihre Werte sind nicht verfügbar, Platte 1 bleibt
     storage["disks"].pop()

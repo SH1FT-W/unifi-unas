@@ -1,4 +1,4 @@
-"""Neustart, Ausschalten, Datenträger-Prüfung (Scrub) und SMART-Schnelltest je Festplatte."""
+"""Restart, shutdown, data scrubbing, and a quick and an extended SMART test per disk."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .api import Disk, UnasClient
-from .const import DOMAIN, SMART_TEST_QUICK
+from .const import DOMAIN, SMART_TEST_EXTENDED, SMART_TEST_QUICK
 from .coordinator import UnasConfigEntry, UnasCoordinator
 from .entity import UnasDiskEntity, UnasEntity, disk_keys, disks_for, track_new_items
 from .sensor import first_pool
@@ -59,7 +59,12 @@ async def async_setup_entry(
     async_add_entities(UnasButton(coordinator, description) for description in BUTTONS)
 
     def _disk_entities(keys: set[str]) -> list[Entity]:
-        return [SmartTestButton(coordinator, d) for d in disks_for(coordinator.data, keys) if d.smart_test_supported]
+        disks = [d for d in disks_for(coordinator.data, keys) if d.smart_test_supported]
+        return [
+            SmartTestButton(coordinator, d, key, test_type)
+            for d in disks
+            for key, test_type in (("smart_test", SMART_TEST_QUICK), ("smart_test_extended", SMART_TEST_EXTENDED))
+        ]
 
     entry.async_on_unload(track_new_items(coordinator, disk_keys, _disk_entities, async_add_entities))
 
@@ -76,17 +81,18 @@ class UnasButton(UnasEntity, ButtonEntity):
 
 
 class SmartTestButton(UnasDiskEntity, ButtonEntity):
-    """SMART-Schnelltest (ein paar Minuten); das Ergebnis zeigt Drive im Gesundheitsmonitor."""
+    """Starts a SMART test on the disk: quick (a few minutes) or extended (several hours).
+
+    UniFi Drive shows the result in its health monitor."""
 
     _attr_entity_category = EntityCategory.CONFIG
 
-    def __init__(self, coordinator: UnasCoordinator, disk: Disk) -> None:
-        super().__init__(coordinator, disk, "smart_test")
+    def __init__(self, coordinator: UnasCoordinator, disk: Disk, key: str, test_type: str) -> None:
+        super().__init__(coordinator, disk, key)
+        self._test_type = test_type
 
     async def async_press(self) -> None:
         disk = self.disk
         if disk is None:
             raise HomeAssistantError(translation_domain=DOMAIN, translation_key="disk_missing")
-        await self.coordinator.async_command(
-            lambda: self.coordinator.client.run_smart_test(disk.slot, SMART_TEST_QUICK)
-        )
+        await self.coordinator.async_command(lambda: self.coordinator.client.run_smart_test(disk.slot, self._test_type))

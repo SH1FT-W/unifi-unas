@@ -73,12 +73,12 @@
       {
         "icon": "harddisk",
         "title": "Storage at a glance",
-        "text": "Used, free, capacity and usage over all pools, the storage status and a problem sensor for degraded pools or lost redundancy."
+        "text": "Used, free, capacity and usage over all pools, the storage status and a problem sensor per pool, with a repair notice while a RAID is damaged."
       },
       {
         "icon": "nas",
         "title": "Every disk its own device",
-        "text": "Temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick SMART test."
+        "text": "Temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick and an extended SMART test."
       },
       {
         "icon": "folder-outline",

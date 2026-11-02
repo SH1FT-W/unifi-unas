@@ -9,6 +9,12 @@
       },
       "nfs": {
         "default": "mdi:folder-network-outline"
+      },
+      "pool_problem": {
+        "default": "mdi:database-check",
+        "state": {
+          "on": "mdi:database-alert"
+        }
       }
     },
     "button": {
@@ -19,6 +25,9 @@
         "default": "mdi:shield-check"
       },
       "smart_test": {
+        "default": "mdi:harddisk-plus"
+      },
+      "smart_test_extended": {
         "default": "mdi:harddisk-plus"
       }
     },
