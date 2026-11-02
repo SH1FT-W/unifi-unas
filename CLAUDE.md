@@ -6,7 +6,7 @@ UniFi Drive, entwickelt und geprüft an einer UNAS 2 (der Test-UNAS).
 - Repo ist **öffentlich**: nichts Persönliches ins Repo (keine Namen, echten IPs/MACs/Seriennummern, Laufwerksnamen,
   Heimnetz-Details, lokalen Pfade). Testdaten bleiben fiktiv (192.0.2.x, aa:bb:cc:dd:ee:ff, SERIAL1, Zufalls-UUIDs).
 - README, CHANGELOG, Release-Notizen, Issue-Texte und Commit-Texte auf Englisch, ohne Gedankenstriche im Fließtext.
-  Code-Kommentare deutsch.
+  Code-Kommentare englisch (bestehende deutsche nur bei Änderungen an der Datei mit übersetzen).
 - Lokal committen ok, Push und Releases nur nach Rückfrage. Prod-HA nie selbst anfassen (Update kommt über HACS).
 - Qualität: Platin der HA Integration Quality Scale ist die Untergrenze (`quality_scale.yaml` mitpflegen).
 
