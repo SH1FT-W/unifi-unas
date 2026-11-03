@@ -10,7 +10,7 @@ Storage, disks and health, local, no cloud.</p>
 
 [![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FSH1FT-W%2Funifi-unas%2Fmain%2Fcustom_components%2Funas%2Fmanifest.json&query=%24.version&label=version&style=flat-square&color=006FFF&labelColor=0B1526)](https://github.com/SH1FT-W/unifi-unas/releases/latest)
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2026.9%2B-006FFF?style=flat-square&labelColor=0B1526&logo=homeassistant&logoColor=white)](https://www.home-assistant.io)
-[![HACS](https://img.shields.io/badge/HACS-custom%20repository-006FFF?style=flat-square&labelColor=0B1526)](https://hacs.xyz)
+[![Marketplace](https://img.shields.io/badge/Marketplace-custom%20repository-006FFF?style=flat-square&labelColor=0B1526)](https://hacs.xyz)
 [![IoT class](https://img.shields.io/badge/iot-local%20polling-006FFF?style=flat-square&labelColor=0B1526)](https://developers.home-assistant.io/docs/creating_integration_manifest/#iot-class)
 [![Quality scale](https://img.shields.io/badge/quality%20scale-platinum%20(self--assessed)-006FFF?style=flat-square&labelColor=0B1526)](custom_components/unas/quality_scale.yaml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-006FFF?style=flat-square&labelColor=0B1526)](LICENSE)
@@ -115,11 +115,13 @@ The **problem** sensor of a disk turns on as soon as Drive no longer lists it as
 <a id="installation"></a>
 ## Installation
 
-### HACS (custom repository)
+### Marketplace (custom repository)
 
-[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=SH1FT-W&repository=unifi-unas&category=integration)
+The Marketplace is under Settings → Marketplace. On Home Assistant before 2026.11 it is still called HACS.
 
-1. In HACS, open the three dots menu, choose **Custom repositories** and add `https://github.com/SH1FT-W/unifi-unas` with the type **Integration**.
+[![Open in the Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=SH1FT-W&repository=unifi-unas&category=integration)
+
+1. In the Marketplace, open the three dots menu, choose **Custom repositories** and add `https://github.com/SH1FT-W/unifi-unas` with the type **Integration**.
 2. Search for **UniFi UNAS**, download it and restart Home Assistant.
 
 ### Manual
@@ -236,7 +238,7 @@ When you open an [issue](https://github.com/SH1FT-W/unifi-unas/issues), please a
 ## Removal
 
 1. **Settings > Devices & services > UniFi UNAS > three dots > Delete.**
-2. Delete the folder `/config/custom_components/unas` (or remove the repository in HACS) and restart Home Assistant.
+2. Delete the folder `/config/custom_components/unas` (or remove the repository in the Marketplace) and restart Home Assistant.
 
 Nothing stays on the UNAS except the user you created for it.
 
