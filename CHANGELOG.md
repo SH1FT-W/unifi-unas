@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 26.11.2 – 03.11.2026
 
 - **Fixed:** The integration now logs in to UniFi OS on its own HTTP session without cookies instead of Home Assistant's shared one. With the UNAS set up by host name (for example `unas.local`), the login cookie landed in the shared session, so adding, re-authenticating or reconfiguring with another account could silently swap the session of the running integration. Sessions used while setting up are released afterwards.
 
