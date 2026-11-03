@@ -57,6 +57,8 @@ async def validate(
         return "cert_changed", None, ""
     except UnasError:
         return "cannot_connect", None, ""
+    finally:
+        client.detach()
     if not result.system.mac:
         return "not_unas", None, ""
     return None, format_mac(result.system.mac), result.system.name
@@ -84,12 +86,13 @@ class UnasConfigFlow(ConfigFlow, domain=DOMAIN):
         return await self._async_discovered(discovery_info.ip)
 
     async def _async_discovered(self, host: str) -> ConfigFlowResult:
+        client = create_client(self.hass, {CONF_HOST: host, CONF_USERNAME: "", CONF_PASSWORD: ""})
         try:
-            mac, name, _model = await create_client(
-                self.hass, {CONF_HOST: host, CONF_USERNAME: "", CONF_PASSWORD: ""}
-            ).identify()
+            mac, name, _model = await client.identify()
         except UnasError:
             return self.async_abort(reason="not_unas")
+        finally:
+            client.detach()
         await self.async_set_unique_id(format_mac(mac))
         self._abort_if_unique_id_configured(updates={CONF_HOST: host})
         self._host, self._name = host, name

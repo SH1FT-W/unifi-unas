@@ -10,7 +10,7 @@ import aiohttp
 from homeassistant.config_entries import SOURCE_USER, SOURCE_ZEROCONF
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -182,13 +182,16 @@ async def test_zeroconf_not_unas(hass: HomeAssistant, aioclient_mock: AiohttpCli
 
 
 async def test_user_flow_verify_ssl(hass: HomeAssistant, unas: AiohttpClientMocker) -> None:
-    """„Zertifikat prüfen“ landet in den Optionen; der Client nutzt dann HAs prüfende Session."""
-    with patch("custom_components.unas.async_get_clientsession", wraps=async_get_clientsession) as session:
+    """'Verify certificate' goes into the options; the client then gets its own session with CA check."""
+    with patch("custom_components.unas.async_create_clientsession", wraps=async_create_clientsession) as session:
         result = await hass.config_entries.flow.async_configure(await _start(hass), {**ENTRY_DATA, "verify_ssl": True})
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["data"] == ENTRY_DATA
     assert result["options"] == {"verify_ssl": True}
-    assert session.call_args.kwargs == {"verify_ssl": True}
+    assert session.call_args.kwargs["verify_ssl"] is True
+    assert isinstance(session.call_args.kwargs["cookie_jar"], aiohttp.DummyCookieJar)
+    # Flow check: released by us (detach); entry setup: released by HA on unload
+    assert [c.kwargs["auto_cleanup"] for c in session.call_args_list] == [False, True]
     await hass.async_block_till_done()
     assert result["result"].runtime_data.client.verify_ssl is True
     assert result["result"].runtime_data.client.fingerprint is None

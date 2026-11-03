@@ -5,11 +5,12 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
+import aiohttp
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME, CONF_VERIFY_SSL, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import device_registry as dr
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.aiohttp_client import async_create_clientsession, async_get_clientsession
 from homeassistant.util.ssl import get_default_no_verify_context
 
 from .api import UnasClient, UnasError
@@ -28,17 +29,33 @@ PLATFORMS = [
 ]
 
 
-def create_client(hass: HomeAssistant, data: Mapping[str, Any], *, verify_ssl: bool = False) -> UnasClient:
-    # Selbstsigniertes Zertifikat der UNAS: standardmäßig HAs Session ohne CA-Prüfung, dafür nur das gemerkte
-    # Zertifikat (Fingerabdruck in entry.data); mit der Option „Zertifikat prüfen“ die normale Session mit Prüfung
-    return UnasClient(
-        async_get_clientsession(hass, verify_ssl=verify_ssl),
-        data[CONF_HOST],
-        data[CONF_USERNAME],
-        data[CONF_PASSWORD],
-        verify_ssl=verify_ssl,
-        fingerprint=data.get(CONF_FINGERPRINT),
+def create_client(
+    hass: HomeAssistant, data: Mapping[str, Any], *, verify_ssl: bool = False, auto_cleanup: bool = False
+) -> UnasClient:
+    # Self-signed certificate: by default no CA check, only the remembered certificate (fingerprint in entry.data);
+    # with the option "verify certificate" the normal CA check.
+    # Each client gets its own session without a cookie jar: HA's shared session would keep the TOKEN cookie of a
+    # login for host names and send it along, so another login on the same host (config flow, reauth, reconfigure)
+    # would swap the session of a running entry (HACS review hacs/default#13228).
+    # The entry setup passes auto_cleanup=True: HA then detaches the session when the entry unloads (also after a
+    # failed setup). Everywhere else (config flow) call client.detach() when done; HA replaces close() of these
+    # sessions with a warning.
+    session = async_create_clientsession(
+        hass, verify_ssl=verify_ssl, auto_cleanup=auto_cleanup, cookie_jar=aiohttp.DummyCookieJar()
     )
+    try:
+        return UnasClient(
+            session,
+            data[CONF_HOST],
+            data[CONF_USERNAME],
+            data[CONF_PASSWORD],
+            verify_ssl=verify_ssl,
+            fingerprint=data.get(CONF_FINGERPRINT),
+            owns_session=True,
+        )
+    except Exception:
+        session.detach()  # e.g. a broken fingerprint in entry.data
+        raise
 
 
 async def async_read_fingerprint(hass: HomeAssistant, host: str) -> str:
@@ -62,7 +79,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: UnasConfigEntry) -> bool
                 translation_domain=DOMAIN, translation_key="unreachable", translation_placeholders={"error": str(err)}
             ) from err
         hass.config_entries.async_update_entry(entry, data={**entry.data, CONF_FINGERPRINT: fingerprint})
-    client = create_client(hass, entry.data, verify_ssl=verify_ssl)
+    client = create_client(hass, entry.data, verify_ssl=verify_ssl, auto_cleanup=True)
+    # Made in the entry setup: HA detaches the session when the entry unloads (also after a failed setup)
     coordinator = UnasCoordinator(hass, entry, client)
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator

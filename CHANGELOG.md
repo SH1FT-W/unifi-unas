@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Fixed:** The integration now logs in to UniFi OS on its own HTTP session without cookies instead of Home Assistant's shared one. With the UNAS set up by host name (for example `unas.local`), the login cookie landed in the shared session, so adding, re-authenticating or reconfiguring with another account could silently swap the session of the running integration. Sessions used while setting up are released afterwards.
+
 ## 26.11.1 – 02.11.2026
 
 - **New:** "Storage pool 1" (one per pool) is a problem sensor that turns on when the RAID is damaged, that is when the pool can no longer lose as many disks as it is set up for (a disk failed or was removed). As long as a pool is damaged, Settings → Repairs shows a notice naming the pool and the affected disks; it goes away by itself once the pool is healthy again. A pool state the integration does not know yet is shown as unknown (and written to the debug log) instead of raising an alarm.

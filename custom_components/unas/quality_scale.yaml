@@ -113,7 +113,9 @@ rules:
   inject-websession:
     status: done
     comment: >-
-      Nutzt HAs Session (async_get_clientsession); wegen des selbstsignierten Zertifikats standardmäßig ohne
-      CA-Prüfung, dafür je Anfrage nur mit dem gemerkten Fingerabdruck (aiohttp.Fingerprint); mit der Option
-      „Zertifikat prüfen“ die prüfende Session.
+      Uses a session from HA (async_create_clientsession) with aiohttp.DummyCookieJar, one per client, so the
+      login cookie never lands in HA's shared session (HACS review hacs/default#13228); released by HA when the
+      entry unloads, or with detach() after a config flow check. Because of the self-signed certificate no CA
+      check by default, instead only the remembered fingerprint per request (aiohttp.Fingerprint); with the option
+      "verify certificate" the CA check.
   strict-typing: done

@@ -4,13 +4,15 @@ from __future__ import annotations
 
 import asyncio
 import copy
+from http.cookies import SimpleCookie
 from typing import Any
+from unittest.mock import patch
 
 import aiohttp
 from homeassistant.config_entries import SOURCE_REAUTH, ConfigEntryState
 from homeassistant.const import STATE_OFF, STATE_ON, STATE_UNAVAILABLE
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import device_registry as dr, entity_registry as er
+from homeassistant.helpers import aiohttp_client, device_registry as dr, entity_registry as er
 from homeassistant.setup import async_setup_component
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
@@ -18,6 +20,8 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 from pytest_homeassistant_custom_component.typing import WebSocketGenerator
 from yarl import URL
 
+from custom_components.unas import create_client
+from custom_components.unas.api import UnasError
 from custom_components.unas.const import DOMAIN
 
 from .conftest import BASE, ENTRY_DATA, MAC, V2, calls, fixture, mock_unas
@@ -291,3 +295,102 @@ async def test_login_unreachable(hass: HomeAssistant, aioclient_mock: AiohttpCli
     entry.add_to_hass(hass)
     assert not await hass.config_entries.async_setup(entry.entry_id)
     assert entry.state is ConfigEntryState.SETUP_RETRY
+
+
+def _token(value: str) -> SimpleCookie:
+    """TOKEN cookie as UniFi OS sets it on login (valid for the whole host)."""
+    cookie: SimpleCookie = SimpleCookie()
+    cookie["TOKEN"] = value
+    cookie["TOKEN"]["path"] = "/"
+    return cookie
+
+
+async def test_login_cookie_stays_out_of_shared_session(hass: HomeAssistant) -> None:
+    """The TOKEN cookie of a login must not land in a cookie jar that another login on the same host fills too.
+
+    HA's shared session keeps cookies for host names (like unas.local, not for IP addresses) and aiohttp sends
+    them along with our own Cookie header: a config flow, reauth or reconfigure with another account would swap
+    the session of the running entry (HACS review hacs/default#13228).
+    """
+    data = {"host": "unas.local", "username": "ha-user", "password": "geheim"}
+    running = create_client(hass, data)
+    flow = create_client(hass, {**data, "username": "other"})
+    login = URL("https://unas.local/api/auth/login")
+    running._session.cookie_jar.update_cookies(_token("running-account"), login)
+    flow._session.cookie_jar.update_cookies(_token("other-account"), login)
+
+    sent = running._session.cookie_jar.filter_cookies(URL("https://unas.local/proxy/drive/api/v2/storage"))
+    assert "TOKEN" not in sent
+    running.detach()
+    flow.detach()
+
+
+async def test_flow_session_released_and_closed_session_reported(hass: HomeAssistant) -> None:
+    """A config-flow client releases its own session with detach() (HA turns close() into a warning only), and a
+    request on a released session fails with our own error instead of aiohttp's RuntimeError."""
+    client = create_client(hass, {"host": "unas.local", "username": "u", "password": "p"}, auto_cleanup=False)
+    client.detach()
+    assert client._session.closed
+    with pytest.raises(UnasError, match="session closed"):
+        await client.login()
+
+
+async def test_session_detached_while_connecting_gives_own_error(hass: HomeAssistant) -> None:
+    """HA detaches the entry's session on unload; a request still connecting then fails inside aiohttp
+    (AttributeError/RuntimeError). That must surface as our own error, so services raise HomeAssistantError."""
+    client = create_client(hass, {"host": "unas.local", "username": "u", "password": "p"})
+
+    async def detach_during_connect(*_args: Any, **_kwargs: Any) -> None:
+        client.detach()
+        raise AttributeError("'NoneType' object has no attribute '_timeout_ceil_threshold'")
+
+    with (
+        patch.object(client._session, "post", detach_during_connect),
+        pytest.raises(UnasError, match="session closed"),
+    ):
+        await client.login()
+    # Session still open: a real bug is not hidden behind "session closed"
+    other = create_client(hass, {"host": "unas.local", "username": "u", "password": "p"})
+    with patch.object(other._session, "post", side_effect=AttributeError("other bug")), pytest.raises(AttributeError):
+        await other.login()
+    other.detach()
+
+
+async def test_entry_session_released_on_unload_and_failed_setup(
+    hass: HomeAssistant, unas: AiohttpClientMocker
+) -> None:
+    """The entry's own session goes away with the entry (unload and failed setup), not only at HA stop.
+
+    aioclient_mock replaces HA's session factory and drops its cleanup hook; the wrapper runs that hook as HA
+    does, so this checks HA's per-entry cleanup (current_entry) together with create_client(auto_cleanup=True).
+    """
+    sessions: list[aiohttp.ClientSession] = []
+    mocked = aiohttp_client._async_create_clientsession
+
+    def factory(hass_: HomeAssistant, *args: Any, auto_cleanup_method: Any = None, **kwargs: Any) -> Any:
+        session = mocked(hass_, *args, auto_cleanup_method=auto_cleanup_method, **kwargs)
+        if auto_cleanup_method is not None:
+            auto_cleanup_method(hass_, session)
+        # Only sessions from async_create_clientsession (ours), not HA's shared one (product pictures)
+        if auto_cleanup_method is aiohttp_client._async_register_clientsession_shutdown:
+            sessions.append(session)
+        return session
+
+    with patch.object(aiohttp_client, "_async_create_clientsession", factory):
+        entry = MockConfigEntry(domain=DOMAIN, unique_id="session-test", data=ENTRY_DATA)
+        entry.add_to_hass(hass)
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+        assert sessions and not any(session.closed for session in sessions)
+        assert await hass.config_entries.async_unload(entry.entry_id)
+        assert all(session.closed for session in sessions)
+
+        # Failed setup (not reachable): released as well
+        sessions.clear()
+        unas.clear_requests()
+        unas.post(f"{BASE}/api/auth/login", exc=aiohttp.ClientError("down"))
+        await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+        assert entry.state is ConfigEntryState.SETUP_RETRY
+        assert sessions and all(session.closed for session in sessions)
+    assert not aiohttp_client.async_get_clientsession(hass).closed
