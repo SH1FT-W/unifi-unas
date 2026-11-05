@@ -2,7 +2,7 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-title-dark.webp" />
-  <img src="docs/images/readme-title-light.webp" alt="UniFi UNAS: Your NAS, in plain sight. The feature overview of the project page in a window." />
+  <img src="docs/images/readme-title-light.webp" alt="UniFi UNAS: Your NAS, in plain sight." />
 </picture>
 
 [![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FSH1FT-W%2Funifi-unas%2Fmain%2Fcustom_components%2Funas%2Fmanifest.json&query=%24.version&label=version&style=flat-square&color=006FFF&labelColor=0B1526)](https://github.com/SH1FT-W/unifi-unas/releases/latest)
