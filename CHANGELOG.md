@@ -1,5 +1,9 @@
 # Changelog
 
+## 26.11.4 – 05.11.2026
+
+- README and project page: new layout, shorter and easier to scan, with one table at the core.
+
 ## 26.11.3 – 05.11.2026
 
 - **Changed:** The update entities name their software: "UniFi OS" for the firmware and "UniFi Drive" for the Drive app. Home Assistant's update list shows it next to the version, so the firmware update is no longer mistaken for the update of this integration, which has nearly the same name.
