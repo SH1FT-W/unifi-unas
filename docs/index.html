@@ -180,6 +180,8 @@ section.tint { background: var(--bg-2); }
 .tbl th, .tbl td { text-align: left; padding: 14px 18px; border-top: 1px solid var(--line); vertical-align: top; }
 .tbl thead th { border-top: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-ink); background: var(--card-2); }
 .tbl td:first-child { font-weight: 600; white-space: nowrap; }
+.tbl.core td:first-child { white-space: normal; }
+.tbl.core th:not(:first-child), .tbl.core td:not(:first-child) { text-align: center; width: 24%; color: var(--accent-ink); font-weight: 600; }
 .tbl code { font-size: 13px; background: var(--chip); padding: 2px 6px; border-radius: 6px; overflow-wrap: anywhere; }
 .tbl td:last-child { color: var(--ink-2); }
 
@@ -259,6 +261,9 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
   .tbl tr { border-top: 1px solid var(--line); padding: 12px 16px; }
   .tbl tr:first-child { border-top: 0; }
   .tbl td { border: 0; padding: 2px 0; }
+  .tbl.core { display: table; font-size: 14px; } .tbl.core thead { display: table-header-group; } .tbl.core tbody { display: table-row-group; }
+  .tbl.core tr { display: table-row; padding: 0; } .tbl.core th, .tbl.core td { display: table-cell; padding: 10px; border-top: 1px solid var(--line); }
+  .tbl.core thead th { border-top: 0; font-size: 11px; letter-spacing: 0.02em; }
 }
 </style></head>
 <body>
@@ -270,7 +275,7 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
       <a href="#new"><span class="en">New</span><span class="de">Neu</span></a>
       <a href="#features"><span class="en">Features</span><span class="de">Funktionen</span></a>
       <a href="#entities"><span class="en">Entities</span><span class="de">Entitäten</span></a>
-      <a href="#security" class="opt"><span class="en">Security</span><span class="de">Sicherheit</span></a>
+      <a href="#account" class="opt"><span class="en">Account</span><span class="de">Konto</span></a>
       <a href="#faq" class="opt"><span class="en">Good to know</span><span class="de">Gut zu wissen</span></a>
       <a href="https://github.com/SH1FT-W/unifi-unas">GitHub</a>
     </div>
@@ -329,16 +334,13 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
 <section id="new" class="tint">
   <div class="wrap">
     <div class="head center reveal">
-      <p class="eyebrow"><span class="en">Just arrived</span><span class="de">Gerade neu</span></p>
-      <h2><span class="en">Safer login,<br>clearer health.</span><span class="de">Sicherer angemeldet,<br>klarer Zustand.</span></h2>
-      <p class="lead"><span class="en">26.10.2 pins the certificate of your UNAS, tells missing rights apart from a wrong password and puts disk health into words.</span><span class="de">26.10.2 merkt sich das Zertifikat deiner UNAS, unterscheidet fehlende Rechte von einem falschen Passwort und sagt den Zustand der Platten in Worten.</span></p>
+      <p class="eyebrow"><span class="en">New in 26.11</span><span class="de">Neu in 26.11</span></p>
+      <h2><span class="en">A damaged RAID<br>does not go unnoticed.</span><span class="de">Ein beschädigtes RAID<br>bleibt nicht unbemerkt.</span></h2>
     </div>
     <div class="bento">
-      <div class="b s6 reveal"><span class="tag">26.10.2</span><h3><span class="en">Remembers its certificate</span><span class="de">Merkt sich das Zertifikat</span></h3><p><span class="en">At setup the integration remembers the certificate the UNAS shows and only sends the password to that one. If it ever changes, a repair shows the old and the new fingerprint.</span><span class="de">Bei der Einrichtung merkt sich die Integration das Zertifikat der UNAS und schickt das Passwort nur noch dorthin. Ändert es sich, zeigt eine Reparatur alten und neuen Fingerabdruck.</span></p></div>
-      <div class="b s6 reveal d1"><span class="tag">26.10.2</span><h3><span class="en">Clear about missing rights</span><span class="de">Klar bei fehlenden Rechten</span></h3><p><span class="en">An account without UniFi OS admin rights gets a plain message for restart, shutdown and updates instead of a request for a new password.</span><span class="de">Fehlen dem Konto Admin-Rechte in UniFi OS, gibt es bei Neustart, Ausschalten und Updates eine klare Meldung statt einer Frage nach dem Passwort.</span></p></div>
-      <div class="b s4 reveal"><span class="tag">26.10.2</span><h3><span class="en">Storage throughput</span><span class="de">Speicher-Durchsatz</span></h3><p><span class="en">Read and write rate of all disks together, the five minute average of the Drive graph.</span><span class="de">Lese- und Schreibrate aller Platten zusammen, das Fünf-Minuten-Mittel der Drive-Grafik.</span></p></div>
-      <div class="b s4 reveal d1"><span class="tag">26.10.2</span><h3><span class="en">Health in words</span><span class="de">Zustand in Worten</span></h3><p><span class="en">Each disk shows <code>Good</code> or <code>Check</code> instead of a bare 5.</span><span class="de">Jede Platte zeigt <code>Gut</code> oder <code>Prüfen</code> statt einer nackten 5.</span></p></div>
-      <div class="b s4 reveal d2"><span class="tag">26.10.2</span><h3><span class="en">Disks at risk</span><span class="de">Platten mit Risiko</span></h3><p><span class="en">How many disks report a risk, the hottest disk, and lost redundancy in the storage problem.</span><span class="de">Wie viele Platten ein Risiko melden, die heißeste Platte und verlorene Redundanz im Speicherproblem.</span></p></div>
+      <div class="b s4 reveal"><span class="tag">26.11.1</span><h3><span class="en">A sensor per pool</span><span class="de">Ein Melder je Pool</span></h3><p><span class="en">Problem while the RAID is damaged, with a repair notice naming the pool and the affected disks.</span><span class="de">Problem, solange das RAID beschädigt ist, mit einer Reparaturmeldung, die Pool und betroffene Platten nennt.</span></p></div>
+      <div class="b s4 reveal d1"><span class="tag">26.11.1</span><h3><span class="en">Extended SMART test</span><span class="de">Erweiterter SMART-Test</span></h3><p><span class="en">Next to the quick test, per disk. It reads the whole disk and takes several hours.</span><span class="de">Neben dem Schnelltest, je Platte. Er liest die ganze Platte und dauert mehrere Stunden.</span></p></div>
+      <div class="b s4 reveal d2"><span class="tag">26.11.3</span><h3><span class="en">Updates with their name</span><span class="de">Updates mit Namen</span></h3><p><span class="en">The update list says UniFi OS or UniFi Drive, so the firmware is not mistaken for this integration.</span><span class="de">Die Update-Liste nennt UniFi OS oder UniFi Drive, damit die Firmware nicht mit dieser Integration verwechselt wird.</span></p></div>
     </div>
     <p class="cap reveal"><span class="en">Everything that changed, release by release: the <a href="https://github.com/SH1FT-W/unifi-unas/blob/main/CHANGELOG.md">changelog</a>.</span><span class="de">Alles, was sich geändert hat, Release für Release: das <a href="https://github.com/SH1FT-W/unifi-unas/blob/main/CHANGELOG.md">Changelog</a>.</span></p>
   </div>
@@ -352,8 +354,8 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
       <p class="lead"><span class="en">Every value comes from the same interfaces the UniFi Drive web interface uses, tried out on a UNAS 2.</span><span class="de">Jeder Wert kommt aus denselben Schnittstellen, die die Weboberfläche von UniFi Drive nutzt, ausprobiert an einer UNAS 2.</span></p>
     </div>
     <div class="grid3">
-      <div class="tile reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></div><h3><span class="en">Storage at a glance</span><span class="de">Speicher auf einen Blick</span></h3><p><span class="en">Used, free, capacity and usage over all pools, the storage status and a problem sensor for degraded pools or lost redundancy.</span><span class="de">Belegt, frei, Kapazität und Auslastung über alle Pools, der Speicherstatus und ein Problem-Melder für eingeschränkte Pools oder verlorene Redundanz.</span></p></div>
-      <div class="tile reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="12" cy="12" r="4"/><path d="M12 12l2.5 2.5"/></svg></div><h3><span class="en">Every disk its own device</span><span class="de">Jede Platte ein Gerät</span></h3><p><span class="en">Temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick SMART test.</span><span class="de">Temperatur, Betriebsstunden, defekte Sektoren, Zustand und ein Problem-Melder mit den Risiko-Gründen, dazu ein SMART-Schnelltest.</span></p></div>
+      <div class="tile reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></div><h3><span class="en">Storage at a glance</span><span class="de">Speicher auf einen Blick</span></h3><p><span class="en">Used, free, capacity and usage over all pools, the storage status and a problem sensor per pool for a damaged RAID.</span><span class="de">Belegt, frei, Kapazität und Auslastung über alle Pools, der Speicherstatus und ein Problem-Melder je Pool für ein beschädigtes RAID.</span></p></div>
+      <div class="tile reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="12" cy="12" r="4"/><path d="M12 12l2.5 2.5"/></svg></div><h3><span class="en">Every disk its own device</span><span class="de">Jede Platte ein Gerät</span></h3><p><span class="en">Temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick and an extended SMART test.</span><span class="de">Temperatur, Betriebsstunden, defekte Sektoren, Zustand und ein Problem-Melder mit den Risiko-Gründen, dazu ein schneller und ein erweiterter SMART-Test.</span></p></div>
       <div class="tile reveal d2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><h3><span class="en">Drives and shares</span><span class="de">Laufwerke und Freigaben</span></h3><p><span class="en">Usage of every shared and personal drive, with quota, members, snapshots and remote backup as attributes.</span><span class="de">Belegung jedes geteilten und persönlichen Laufwerks, mit Kontingent, Mitgliedern, Snapshots und Remote-Backup als Attribute.</span></p></div>
       <div class="tile reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div><h3><span class="en">System and network</span><span class="de">System und Netzwerk</span></h3><p><span class="en">CPU load and temperature, memory, uptime, throughput and the link speed, so a port stuck at 1 GbE stands out.</span><span class="de">CPU-Last und -Temperatur, Arbeitsspeicher, Laufzeit, Durchsatz und die Verbindungsgeschwindigkeit, damit ein Port auf 1 GbE auffällt.</span></p></div>
       <div class="tile reveal d1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M12 10c0-4 1-7 4-7 2 0 3 2 1 4l-3 3M14 12c4 0 7 1 7 4 0 2-2 3-4 1l-3-3M12 14c0 4-1 7-4 7-2 0-3-2-1-4l3-3M10 12c-4 0-7-1-7-4 0-2 2-3 4-1l3 3"/></svg></div><h3><span class="en">Fan profile and scrubbing</span><span class="de">Lüfter und Datenprüfung</span></h3><p><span class="en">Quiet, default or cooling, switchable from Home Assistant. State and last run of the data scrub, and a button to start one.</span><span class="de">Leise, Standard oder Kühlen, umschaltbar aus Home Assistant. Zustand und letzter Lauf der Datenprüfung und ein Knopf zum Starten.</span></p></div>
@@ -362,7 +364,30 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
   </div>
 </section>
 
-<section id="health" class="tint">
+<section id="account" class="tint">
+  <div class="wrap narrow">
+    <div class="head center reveal">
+      <p class="eyebrow"><span class="en">Which account</span><span class="de">Welches Konto</span></p>
+      <h2><span class="en">A Drive user reads.<br>Admin switches.</span><span class="de">Drive-Benutzer liest.<br>Admin schaltet.</span></h2>
+    </div>
+    <div class="reveal">
+      <table class="tbl core">
+        <thead><tr><th></th><th><span class="en">Local Drive user</span><span class="de">Lokaler Drive-Benutzer</span></th><th><span class="en">With UniFi OS admin</span><span class="de">Mit UniFi-OS-Admin</span></th></tr></thead>
+        <tbody>
+          <tr><td><span class="en">Storage, pools, disks and health</span><span class="de">Speicher, Pools, Platten und Zustand</span></td><td>&check;</td><td>&check;</td></tr>
+          <tr><td><span class="en">Usage per drive, system and network values</span><span class="de">Belegung je Laufwerk, System- und Netzwerkwerte</span></td><td>&check;</td><td>&check;</td></tr>
+          <tr><td><span class="en">Fan profile, data scrubbing, SMART tests</span><span class="de">Lüfterprofil, Datenprüfung, SMART-Tests</span></td><td>&check;</td><td>&check;</td></tr>
+          <tr><td><span class="en">Update available for UniFi OS and Drive</span><span class="de">Update verfügbar für UniFi OS und Drive</span></td><td>&check;</td><td>&check;</td></tr>
+          <tr><td><span class="en">Display, status LED and night mode</span><span class="de">Display, Status-LED und Nachtmodus</span></td><td><span class="en">shown</span><span class="de">angezeigt</span></td><td>&check;</td></tr>
+          <tr><td><span class="en">Restart, shut down, install updates</span><span class="de">Neustart, Ausschalten, Updates installieren</span></td><td></td><td>&check;</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap reveal"><span class="en">Without admin rights these buttons say the account lacks the rights; everything else keeps working. UI accounts with two-factor login do not work.</span><span class="de">Ohne Admin-Rechte melden diese Knöpfe fehlende Rechte; alles andere läuft weiter. UI-Konten mit Zwei-Faktor-Anmeldung gehen nicht.</span></p>
+  </div>
+</section>
+
+<section id="health">
   <div class="wrap split">
     <div class="reveal">
       <p class="eyebrow"><span class="en">Health</span><span class="de">Zustand</span></p>
@@ -387,7 +412,7 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
   </div>
 </section>
 
-<section id="entities">
+<section id="entities" class="tint">
   <div class="wrap">
     <div class="head center reveal">
       <p class="eyebrow"><span class="en">Entities</span><span class="de">Entitäten</span></p>
@@ -402,8 +427,9 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
           <tr><td>Sensor</td><td><code>storage_read</code> <code>storage_write</code> <code>disks_at_risk</code> <code>hottest_disk</code></td><td><span class="en">Throughput as five minute average</span><span class="de">Durchsatz als Fünf-Minuten-Mittel</span></td></tr>
           <tr><td>Sensor</td><td><code>cpu_load</code> <code>cpu_temperature</code> <code>memory_usage</code> <code>started</code> <code>network_receive</code> <code>network_transmit</code> <code>link_speed</code></td><td></td></tr>
           <tr><td>Sensor</td><td><code>&lt;drive&gt;_used</code></td><td><span class="en">One per drive, quota and members as attributes</span><span class="de">Je Laufwerk, Kontingent und Mitglieder als Attribute</span></td></tr>
-          <tr><td><span class="en">Per disk</span><span class="de">Je Platte</span></td><td><code>temperature</code> <code>power_on_hours</code> <code>bad_sectors</code> <code>health</code> <code>problem</code> <code>run_quick_smart_test</code></td><td><span class="en">Device <code>UNAS 2 disk 1</code> …</span><span class="de">Gerät <code>UNAS 2 Festplatte 1</code> …</span></td></tr>
-          <tr><td><span class="en">Binary sensor</span><span class="de">Binärsensor</span></td><td><code>storage_problem</code> <code>smb</code> <code>time_machine</code> <code>nfs</code></td><td></td></tr>
+          <tr><td><span class="en">Per disk</span><span class="de">Je Platte</span></td><td><code>temperature</code> <code>power_on_hours</code> <code>bad_sectors</code> <code>health</code> <code>problem</code> <code>run_quick_smart_test</code> <code>run_extended_smart_test</code></td><td><span class="en">Device <code>UNAS 2 disk 1</code> …</span><span class="de">Gerät <code>UNAS 2 Festplatte 1</code> …</span></td></tr>
+          <tr><td><span class="en">Binary sensor</span><span class="de">Binärsensor</span></td><td><code>storage_problem</code> <code>storage_pool_1</code> <code>smb</code> <code>time_machine</code> <code>nfs</code></td><td><span class="en">One pool sensor per pool</span><span class="de">Ein Pool-Melder je Pool</span></td></tr>
+          <tr><td><span class="en">Light, time</span><span class="de">Licht, Zeit</span></td><td><code>display</code> <code>status_led</code> <code>night_mode_start</code> <code>night_mode_end</code></td><td><span class="en">Changing needs admin rights</span><span class="de">Ändern braucht Admin-Rechte</span></td></tr>
           <tr><td><span class="en">Select</span><span class="de">Auswahl</span></td><td><code>fan_profile</code></td><td><span class="en">Quiet, default, cooling</span><span class="de">Leise, Standard, Kühlen</span></td></tr>
           <tr><td><span class="en">Button</span><span class="de">Taste</span></td><td><code>restart</code> <code>shut_down</code> <code>start_data_scrubbing</code></td><td><span class="en">Shut down is disabled by default</span><span class="de">Ausschalten ist standardmäßig deaktiviert</span></td></tr>
           <tr><td>Update</td><td><code>unifi_os</code> <code>unifi_drive</code></td><td><span class="en">With install button</span><span class="de">Mit Installieren-Knopf</span></td></tr>
@@ -413,7 +439,7 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
   </div>
 </section>
 
-<section id="security" class="tint">
+<section id="security">
   <div class="wrap">
     <div class="head center reveal">
       <p class="eyebrow"><span class="en">Security</span><span class="de">Sicherheit</span></p>
@@ -425,11 +451,10 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
       <div class="lane reveal d1"><div class="end"><b>Home Assistant</b><span><span class="en">every request</span><span class="de">jede Anfrage</span></span></div><div class="arrow"><svg viewBox="0 0 120 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h112M108 2l6 5-6 5"/></svg>HTTPS :443</div><div class="end r"><b>UniFi OS + UniFi Drive</b><span><span class="en">only with that certificate</span><span class="de">nur mit diesem Zertifikat</span></span></div></div>
       <div class="lane reveal d2"><div class="end"><b><span class="en">Settings, Repairs</span><span class="de">Einstellungen, Reparaturen</span></b><span><span class="en">if it changes</span><span class="de">wenn es sich ändert</span></span></div><div class="arrow"><svg viewBox="0 0 120 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M118 7H6M12 2L6 7l6 5"/></svg><span class="en">you decide</span><span class="de">du entscheidest</span></div><div class="end r"><b><span class="en">Old and new fingerprint</span><span class="de">Alter und neuer Fingerabdruck</span></b><span><span class="en">accept after a reset, refuse otherwise</span><span class="de">nach Zurücksetzen annehmen, sonst ablehnen</span></span></div></div>
     </div>
-    <p class="cap reveal"><span class="en">For monitoring a local account with access to UniFi Drive is enough. Admin rights in UniFi OS are only needed for restart, shutdown and updates.</span><span class="de">Für die Anzeige reicht ein lokales Konto mit Zugriff auf UniFi Drive. Admin-Rechte in UniFi OS braucht es nur für Neustart, Ausschalten und Updates.</span></p>
   </div>
 </section>
 
-<section id="install">
+<section id="install" class="tint">
   <div class="wrap">
     <div class="head center reveal">
       <p class="eyebrow"><span class="en">Install</span><span class="de">Installation</span></p>
@@ -457,7 +482,6 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
           <li><span class="name">Home Assistant 2026.9+</span><span class="tg"><span class="en">Required</span><span class="de">Nötig</span></span></li>
           <li><span class="name"><span class="en">A UNAS with UniFi Drive in the same network</span><span class="de">Eine UNAS mit UniFi Drive im selben Netz</span></span><span class="tg"><span class="en">Required</span><span class="de">Nötig</span></span></li>
           <li><span class="name"><span class="en">A local UniFi OS user with access to Drive</span><span class="de">Ein lokaler UniFi-OS-Benutzer mit Zugriff auf Drive</span></span><span class="tg"><span class="en">Required</span><span class="de">Nötig</span></span></li>
-          <li><span class="name"><span class="en">Admin rights, for restart and updates</span><span class="de">Admin-Rechte, für Neustart und Updates</span></span><span class="tg opt"><span class="en">Optional</span><span class="de">Optional</span></span></li>
         </ul>
         <p class="note"><span class="en">Tested on a UNAS 2 (UniFi OS 6.0.11, Drive 4.4.17). UNAS 4, UNAS Pro, Pro 4 and Pro 8 share the same interface, but are untested. Feedback with a diagnostics file is welcome.</span><span class="de">Getestet an einer UNAS 2 (UniFi OS 6.0.11, Drive 4.4.17). UNAS 4, UNAS Pro, Pro 4 und Pro 8 nutzen dieselbe Schnittstelle, sind aber ungetestet. Rückmeldung mit Diagnose-Datei ist willkommen.</span></p>
       </div>
@@ -469,7 +493,7 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
   </div>
 </section>
 
-<section id="faq" class="tint">
+<section id="faq">
   <div class="wrap narrow">
     <div class="head center reveal">
       <p class="eyebrow"><span class="en">Good to know</span><span class="de">Gut zu wissen</span></p>
@@ -479,7 +503,6 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
       <details open><summary><span class="en">Why not an API key?</span><span class="de">Warum kein API-Key?</span></summary><p><span class="en">On a UNAS 2 a UniFi OS API key reads storage, disks, system values and the fan profile, but not the drive usage, the updates or the storage throughput, and it cannot switch anything. So the integration logs in with a local account.</span><span class="de">An einer UNAS 2 liest ein API-Key aus UniFi OS Speicher, Platten, Systemwerte und das Lüfterprofil, aber nicht die Belegung der Laufwerke, die Updates oder den Speicher-Durchsatz, und schalten kann er nichts. Deshalb meldet sich die Integration mit einem lokalen Konto an.</span></p></details>
       <details><summary><span class="en">Is this an official interface?</span><span class="de">Ist das eine offizielle Schnittstelle?</span></summary><p><span class="en">No. Ubiquiti offers no public API for UniFi Drive, the integration uses the interfaces of its web interface. A Drive update can change them; the entities then turn unavailable and the diagnostics show the error.</span><span class="de">Nein. Ubiquiti bietet für UniFi Drive keine öffentliche Schnittstelle, die Integration nutzt die der Weboberfläche. Ein Drive-Update kann sie ändern; dann sind die Entitäten nicht verfügbar und die Diagnose zeigt den Fehler.</span></p></details>
       <details><summary><span class="en">What do the health scores 1 to 4 mean?</span><span class="de">Was bedeuten die Zustandswerte 1 bis 4?</span></summary><p><span class="en">UniFi Drive does not say. 5 is healthy, so Health shows Good for 5 and Check for anything below. Look at the disk in UniFi Drive under Storage.</span><span class="de">Das verrät UniFi Drive nicht. 5 ist gesund, deshalb zeigt Zustand bei 5 Gut und darunter Prüfen. Die Platte dann in UniFi Drive unter Speicher ansehen.</span></p></details>
-      <details><summary><span class="en">Restart says the account lacks the rights.</span><span class="de">Neustart meldet, dass Rechte fehlen.</span></summary><p><span class="en">Restart, shutdown and updates need admin rights in UniFi OS. Everything else works with a plain Drive user.</span><span class="de">Neustart, Ausschalten und Updates brauchen Admin-Rechte in UniFi OS. Alles andere geht mit einem einfachen Drive-Benutzer.</span></p></details>
       <details><summary><span class="en">A repair says the certificate changed.</span><span class="de">Eine Reparatur meldet ein geändertes Zertifikat.</span></summary><p><span class="en">Normal after a factory reset, a reinstall of UniFi OS or a renewed certificate: accept it. If you changed nothing, do not accept it, something else may be answering at that address.</span><span class="de">Normal nach Zurücksetzen, Neuinstallation von UniFi OS oder einem erneuerten Zertifikat: annehmen. Hast du nichts geändert, nicht annehmen, dann antwortet womöglich ein anderes Gerät unter der Adresse.</span></p></details>
       <details><summary><span class="en">Data scrubbing on a NAS with several pools?</span><span class="de">Datenprüfung bei mehreren Pools?</span></summary><p><span class="en">The button and the last run refer to the first pool. A UNAS 2 has exactly one. The SSD cache of the Pro models is not shown separately.</span><span class="de">Knopf und letzter Lauf beziehen sich auf den ersten Pool. Eine UNAS 2 hat genau einen. Der SSD-Cache der Pro-Modelle wird nicht gesondert angezeigt.</span></p></details>
       <details><summary><span class="en">How do I report a bug?</span><span class="de">Wie melde ich einen Fehler?</span></summary><p><span class="en">Download the diagnostics (Settings, Devices &amp; services, UniFi UNAS, three dots) and attach them to a <a href="https://github.com/SH1FT-W/unifi-unas/issues">GitHub issue</a>. Address, MAC address and serial numbers are left out.</span><span class="de">Diagnose herunterladen (Einstellungen, Geräte &amp; Dienste, UniFi UNAS, drei Punkte) und an ein <a href="https://github.com/SH1FT-W/unifi-unas/issues">GitHub-Issue</a> hängen. Adresse, MAC-Adresse und Seriennummern sind nicht enthalten.</span></p></details>

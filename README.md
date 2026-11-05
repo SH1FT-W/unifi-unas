@@ -5,164 +5,98 @@
   <img src="docs/images/readme-title-light.webp" alt="UniFi UNAS: Your NAS, in plain sight. The feature overview of the project page in a window." />
 </picture>
 
-<p>Your UniFi NAS in Home Assistant.<br/>
-Storage, disks and health, local, no cloud.</p>
-
 [![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FSH1FT-W%2Funifi-unas%2Fmain%2Fcustom_components%2Funas%2Fmanifest.json&query=%24.version&label=version&style=flat-square&color=006FFF&labelColor=0B1526)](https://github.com/SH1FT-W/unifi-unas/releases/latest)
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2026.9%2B-006FFF?style=flat-square&labelColor=0B1526&logo=homeassistant&logoColor=white)](https://www.home-assistant.io)
 [![Marketplace](https://img.shields.io/badge/Marketplace-default-006FFF?style=flat-square&labelColor=0B1526)](https://hacs.xyz)
-[![IoT class](https://img.shields.io/badge/iot-local%20polling-006FFF?style=flat-square&labelColor=0B1526)](https://developers.home-assistant.io/docs/creating_integration_manifest/#iot-class)
-[![Quality scale](https://img.shields.io/badge/quality%20scale-platinum%20(self--assessed)-006FFF?style=flat-square&labelColor=0B1526)](custom_components/unas/quality_scale.yaml)
-[![License](https://img.shields.io/badge/license-Apache%202.0-006FFF?style=flat-square&labelColor=0B1526)](LICENSE)
 
-<p><a href="https://sh1ft-w.github.io/unifi-unas"><b>Website</b></a> &nbsp;·&nbsp; <a href="#new">New</a> &nbsp;·&nbsp; <a href="#features">Features</a> &nbsp;·&nbsp; <a href="#entities">Entities</a> &nbsp;·&nbsp; <a href="#installation">Install</a> &nbsp;·&nbsp; <a href="#security">Security</a> &nbsp;·&nbsp; <a href="#troubleshooting">Troubleshooting</a> &nbsp;·&nbsp; <a href="CHANGELOG.md">Changelog</a></p>
+<a href="https://sh1ft-w.github.io/unifi-unas"><b>Website</b></a>&emsp;<a href="#install">Install</a>&emsp;<a href="#set-up">Set up</a>&emsp;<a href="#entities">Entities</a>&emsp;<a href="CHANGELOG.md">Changelog</a>
 
 </div>
 
 <br/>
 
-UniFi UNAS brings a **UniFi NAS** into Home Assistant: storage, every disk with its health, drives and shares, system values, the fan profile, data scrubbing and the UniFi OS and Drive updates. It talks to UniFi OS and UniFi Drive on your own network, the same way their web interface does. No cloud account, no extra packages, nothing installed on the NAS.
+Your UniFi NAS in Home Assistant: **storage, every disk with its health, drives, system values, fan profile, data scrubbing and the UniFi OS and Drive updates.** It talks to UniFi OS and UniFi Drive on your own network, the way their web interface does. No cloud account, nothing installed on the NAS.
 
-> [!NOTE]
-> UniFi UNAS is an independent project. It is not affiliated with, endorsed by or sponsored by Ubiquiti Inc. UniFi, UniFi OS, UniFi Drive and UNAS are trademarks of Ubiquiti Inc.
+Ubiquiti offers no public API for UniFi Drive, so a Drive update can change what the integration reads. It is tested on a **UNAS 2**; UNAS 4, UNAS Pro, Pro 4 and Pro 8 share the same interface but are untested.
 
-<br/>
+## Which account for what
 
-<a id="new"></a>
-<sub><b>JUST ARRIVED</b></sub>
-## Display, night mode and your model.
+|  | Local Drive user | With UniFi OS admin |
+|:--|:--:|:--:|
+| Storage, pools, disks and health | ✓ | ✓ |
+| Usage per drive, system and network values | ✓ | ✓ |
+| Fan profile, data scrubbing, SMART tests | ✓ | ✓ |
+| Update available for UniFi OS and Drive | ✓ | ✓ |
+| Display, status LED and night mode | shown | ✓ |
+| Restart, shut down, install updates | | ✓ |
 
-<!-- cards:new -->
-<table>
-<tr><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/monitor-dark.svg"><img src="docs/images/icons/monitor-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Display and night mode</b> <code>26.10.3</code><br>The UNAS display is a light with its brightness, the status LED can be turned off, and the night mode has a start and an end, as in UniFi OS.</td><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/image-outline-dark.svg"><img src="docs/images/icons/image-outline-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Your model's picture</b> <code>26.10.3</code><br>The UniFi OS and Drive updates show the product picture of your UNAS model, from Ubiquiti's public device catalog.</td></tr>
-<tr><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/magnify-dark.svg"><img src="docs/images/icons/magnify-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Found even when renamed</b> <code>26.10.3</code><br>A UNAS that no longer carries its default name is still discovered, through Home Assistant's network discovery.</td><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/certificate-outline-dark.svg"><img src="docs/images/icons/certificate-outline-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Remembers its certificate</b> <code>26.10.2</code><br>At setup the integration remembers the certificate the UNAS shows and only sends the password to that one. If it ever changes, a repair shows the old and the new fingerprint.</td></tr>
-</table>
-<!-- /cards:new -->
+Without admin rights these buttons say the account lacks the rights; everything else keeps working.
 
-Every change, release by release, in the [changelog](CHANGELOG.md).
+**New in 26.11:** a problem sensor per storage pool with a repair notice while a RAID is damaged, and an extended SMART test per disk. Every change is in the [changelog](CHANGELOG.md).
 
-<a id="features"></a>
-## Features
+<a id="install"></a>
+## Install
 
-<!-- cards:features -->
-<table>
-<tr><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/harddisk-dark.svg"><img src="docs/images/icons/harddisk-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Storage at a glance</b><br>Used, free, capacity and usage over all pools, the storage status and a problem sensor per pool, with a repair notice while a RAID is damaged.</td><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/nas-dark.svg"><img src="docs/images/icons/nas-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Every disk its own device</b><br>Temperature, power-on hours, bad sectors, health and a problem sensor with the risk reasons, plus a quick and an extended SMART test.</td></tr>
-<tr><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/folder-outline-dark.svg"><img src="docs/images/icons/folder-outline-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Drives and shares</b><br>Usage of every shared and personal drive, with quota, members, snapshots and remote backup as attributes.</td><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/chart-line-dark.svg"><img src="docs/images/icons/chart-line-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>System and network</b><br>CPU load and temperature, memory, uptime, network throughput and the link speed, so a port stuck at 1 GbE stands out.</td></tr>
-<tr><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/fan-dark.svg"><img src="docs/images/icons/fan-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Fan profile</b><br>Quiet, default or cooling, switchable from Home Assistant, for example quiet at night.</td><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/shield-check-dark.svg"><img src="docs/images/icons/shield-check-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Data scrubbing</b><br>State and last run of the scrub, and a button to start one.</td></tr>
-<tr><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/update-dark.svg"><img src="docs/images/icons/update-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>UniFi OS and Drive updates</b><br>Both appear under Settings, Updates, with an install button, just like in the UniFi interface.</td><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/lan-dark.svg"><img src="docs/images/icons/lan-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Local and discovered</b><br>Talks to UniFi OS on your network, no cloud account. A UNAS is discovered on its own, even after renaming it.</td></tr>
-</table>
-<!-- /cards:features -->
+[![Open in the Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=SH1FT-W&repository=unifi-unas&category=integration)
+
+Search for **UniFi UNAS** under **Settings > Marketplace** (called HACS before Home Assistant 2026.11), download it and restart Home Assistant.
+
+<details>
+<summary>Install by hand</summary>
+
+1. Download the [latest release](https://github.com/SH1FT-W/unifi-unas/releases/latest).
+2. Copy `custom_components/unas` into `/config/custom_components/` and restart Home Assistant.
+
+</details>
+
+<a id="set-up"></a>
+## Set up
+
+You need a **local** UniFi OS user with access to UniFi Drive. UI accounts with two-factor login do not work.
+
+1. **Create the user** in UniFi OS. Give it admin rights only if you want the buttons from the table above.
+2. **Add the UNAS.** It usually shows up under **Settings > Devices & services > Discovered**, even after renaming it. If not, choose **Add integration > UniFi UNAS** and enter its IP address or host name.
+3. **Enter username and password.** Leave **Verify certificate** off unless the UNAS has a certificate from a trusted authority (see [Your data](#your-data)).
+
+New address or another account: **three dots > Reconfigure**. Verify certificate: **Configure**. If the UNAS rejects the password later, Home Assistant asks for new credentials by itself.
 
 <a id="entities"></a>
 ## Entities
 
-<!-- cards:entities -->
-<table>
-<tr><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/harddisk-dark.svg"><img src="docs/images/icons/harddisk-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Storage</b><br>storage_used, storage_free, storage_capacity, storage_usage, storage_status, storage_read and storage_write.</td><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/alert-circle-outline-dark.svg"><img src="docs/images/icons/alert-circle-outline-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Problems and health</b><br>storage_problem, storage_pool_1 (one per pool), disks_at_risk, hottest_disk, data_scrubbing and last_data_scrubbing.</td></tr>
-<tr><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/nas-dark.svg"><img src="docs/images/icons/nas-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Per disk</b><br>temperature, power_on_hours, bad_sectors, health, problem, run_quick_smart_test and run_extended_smart_test, on a device per disk.</td><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/chart-line-dark.svg"><img src="docs/images/icons/chart-line-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>System</b><br>cpu_load, cpu_temperature, memory_usage, started, network_receive, network_transmit and link_speed.</td></tr>
-<tr><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/toggle-switch-outline-dark.svg"><img src="docs/images/icons/toggle-switch-outline-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Services and controls</b><br>smb, time_machine and nfs as binary sensors, fan_profile as a select, restart, shut_down and start_data_scrubbing.</td><td width="50%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/icons/update-dark.svg"><img src="docs/images/icons/update-light.svg" width="22" height="22" align="absmiddle" alt=""></picture> <b>Updates</b><br>update.unas_2_unifi_os and update.unas_2_unifi_drive with the installed and the latest version.</td></tr>
-</table>
-<!-- /cards:entities -->
+IDs for a UNAS named "UNAS 2". Names are in English and German. New disks and drives appear without a restart.
 
-All IDs start with the device name, for example `sensor.unas_2_storage_used`. Every disk is a device of its own under the UNAS (`UNAS 2 disk 1`, SSDs are called `SSD 1`), every UniFi Drive drive gets a usage sensor named after it (`sensor.unas_2_media_used`). New disks and drives appear without a restart. Entity names are available in English and German.
-
-The UNAS display is a light (`light.unas_2_display`, on/off and brightness), the status LED one more (`light.unas_2_status_led`, on/off), and the night mode has a start and an end (`time.unas_2_night_mode_start`, `time.unas_2_night_mode_end`). Changing them needs admin rights in UniFi OS. The two update entities show the product picture of your model, loaded from Ubiquiti's public device catalog.
+| Entity | Shows |
+|:--|:--|
+| `sensor.unas_2_storage_used`, `_free`, `_capacity`, `_usage`, `_status` | Storage over all pools |
+| `binary_sensor.unas_2_storage_problem` | On when a pool is degraded, rebuilding, failed or lost its redundancy |
+| `binary_sensor.unas_2_storage_pool_1` | One per pool. Problem while the RAID is damaged, then a notice under **Settings > Repairs** |
+| `sensor.unas_2_disk_1_health` | One device per disk. **Good** is Drive's top score 5, **Check** anything below (attribute `score`) |
+| `binary_sensor.unas_2_disk_1_problem` | On when Drive no longer lists the disk as optimal, attribute `risk_reasons` |
+| `sensor.unas_2_disk_1_temperature`, `_power_on_hours`, `_bad_sectors` | Per disk |
+| `button.unas_2_disk_1_run_quick_smart_test`, `_run_extended_smart_test` | A few minutes or several hours. Drive shows the result |
+| `sensor.unas_2_<drive>_used` | One per drive, with quota, members, snapshots and remote backup as attributes |
+| `select.unas_2_fan_profile` | Quiet, default or cooling |
+| `update.unas_2_unifi_os`, `update.unas_2_unifi_drive` | Installed against latest version, with your model's picture |
 
 <details>
-<summary>All entity IDs (for a UNAS named "UNAS 2" with English names)</summary>
+<summary>More entities</summary>
 
-```
-sensor.unas_2_storage_used            sensor.unas_2_storage_free
-sensor.unas_2_storage_capacity        sensor.unas_2_storage_usage
-sensor.unas_2_storage_status          sensor.unas_2_storage_read
-sensor.unas_2_storage_write           sensor.unas_2_disks_at_risk
-sensor.unas_2_hottest_disk            sensor.unas_2_data_scrubbing
-sensor.unas_2_last_data_scrubbing     sensor.unas_2_cpu_load
-sensor.unas_2_cpu_temperature         sensor.unas_2_memory_usage
-sensor.unas_2_started                 sensor.unas_2_network_receive
-sensor.unas_2_network_transmit        sensor.unas_2_link_speed
-sensor.unas_2_unifi_drive_version     (disabled by default)
-sensor.unas_2_<drive>_used            one per drive
-binary_sensor.unas_2_storage_problem  binary_sensor.unas_2_storage_pool_1 (one per pool)
-binary_sensor.unas_2_smb              binary_sensor.unas_2_time_machine
-binary_sensor.unas_2_nfs
-select.unas_2_fan_profile
-button.unas_2_restart                 button.unas_2_shut_down (disabled by default)
-button.unas_2_start_data_scrubbing
-update.unas_2_unifi_os                update.unas_2_unifi_drive
-
-Per disk (here disk 1):
-sensor.unas_2_disk_1_temperature      sensor.unas_2_disk_1_power_on_hours
-sensor.unas_2_disk_1_bad_sectors      sensor.unas_2_disk_1_health
-sensor.unas_2_disk_1_read_rate        sensor.unas_2_disk_1_write_rate (both disabled by default)
-sensor.unas_2_disk_1_uncorrectable_sectors (disabled by default)
-binary_sensor.unas_2_disk_1_problem   button.unas_2_disk_1_run_quick_smart_test
-button.unas_2_disk_1_run_extended_smart_test
-```
+| Entity | Shows |
+|:--|:--|
+| `sensor.unas_2_storage_read`, `_storage_write` | Throughput of all disks, average of 5 minutes |
+| `sensor.unas_2_disks_at_risk`, `_hottest_disk` | Count and temperature |
+| `sensor.unas_2_data_scrubbing`, `_last_data_scrubbing` | State and last run of the scrub (first pool) |
+| `sensor.unas_2_cpu_load`, `_cpu_temperature`, `_memory_usage`, `_started` | System |
+| `sensor.unas_2_network_receive`, `_network_transmit`, `_link_speed` | Network, so a port stuck at 1 GbE stands out |
+| `binary_sensor.unas_2_smb`, `_time_machine`, `_nfs` | Services |
+| `light.unas_2_display`, `light.unas_2_status_led` | Display with brightness, status LED on or off |
+| `time.unas_2_night_mode_start`, `_night_mode_end` | Night mode, as in UniFi OS |
+| `button.unas_2_restart`, `_start_data_scrubbing` | |
+| `button.unas_2_shut_down` | Disabled by default: afterwards only the power button switches it on |
+| `sensor.unas_2_unifi_drive_version` | Disabled by default |
+| `sensor.unas_2_disk_1_read_rate`, `_write_rate`, `_uncorrectable_sectors` | Per disk, disabled by default |
 
 </details>
-
-### Health
-
-**Health** translates the health score of UniFi Drive into words: **Good** is 5, the highest score, **Check** is anything below. The number itself is in the attribute `score` (`5 / 5`). UniFi Drive does not say what the scores 1 to 4 mean, so there are only these two levels. When a disk shows Check, look at it in UniFi Drive under Storage.
-
-The **problem** sensor of a disk turns on as soon as Drive no longer lists it as optimal or reports risk reasons (attribute `risk_reasons`). **Storage problem** turns on when a pool is degraded, rebuilding, failed or has lost its redundancy (attribute `redundancy`).
-
-**Storage pool 1** (one sensor per pool) shows **Problem** when the RAID is damaged: the pool can no longer lose as many disks as it is set up for, because a disk failed or was removed. Attributes: `status` (as UniFi Drive reports it), `raid`, `redundancy` and `disks` (bay and state of the pool's disks). While a pool is damaged, **Settings > Repairs** shows a notice with the pool and the affected disks; it goes away by itself once the pool is healthy again. UniFi Drive does not document its pool states, so only states seen on a real UNAS count: a state the integration does not know yet makes the sensor unknown and is written to the debug log, instead of raising an alarm.
-
-**SMART tests.** Every disk that supports it has two buttons: the **quick** test takes a few minutes, the **extended** test reads the whole disk and takes several hours. UniFi Drive shows the result under Storage; the integration does not read it back yet.
-
-<a id="installation"></a>
-## Installation
-
-### Marketplace
-
-The Marketplace is under Settings → Marketplace. On Home Assistant before 2026.11 it is still called HACS.
-
-[![Open in the Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=SH1FT-W&repository=unifi-unas&category=integration)
-
-UniFi UNAS is in the Marketplace.
-
-1. In the Marketplace, search for **UniFi UNAS** (or click **Open in the Marketplace** above), download it and restart Home Assistant.
-
-### Manual
-
-1. Download the [latest release](https://github.com/SH1FT-W/unifi-unas/releases/latest).
-2. Copy the folder `custom_components/unas` into `/config/custom_components/` and restart Home Assistant.
-
-Requires Home Assistant 2026.9 or newer.
-
-## Setup
-
-1. In UniFi OS, create a **local** user (not a UI account with two-factor login) with access to UniFi Drive. That is enough for every value. Only restart, shutdown and the updates need **admin rights in UniFi OS** as well.
-2. Home Assistant usually finds the UNAS on its own (**Settings > Devices & services > Discovered**), then enter username and password. Discovery uses the SMB announcement with the default name `UNAS-…`; a renamed UNAS is added by hand.
-3. Otherwise choose **Add integration > UniFi UNAS** and enter address, username and password.
-
-| Field | Meaning |
-|:--|:--|
-| Host | IP address or host name of the UNAS |
-| Username / password | the local UniFi OS account |
-| Verify certificate | off by default, see [Security](#security). Turn it on only if the UNAS has a certificate from a trusted authority. |
-
-New address or another account later: **three dots > Reconfigure**. Switch **Verify certificate** later: **Configure** (the connection is tested first). If the UNAS rejects the login (password changed), Home Assistant asks for new credentials on its own.
-
-<a id="security"></a>
-## Security
-
-- **The password only goes to your UNAS.** UniFi OS uses a self-signed certificate, so the integration remembers the certificate the UNAS shows at setup and from then on only talks to a UNAS with exactly that certificate (trust on first use). If the certificate changes, the integration stops and **Settings > Repairs** shows the old and the new fingerprint. That is normal after a factory reset, a reinstall of UniFi OS or a renewed certificate. If you changed nothing, do not accept it: something else may be answering at that address. You can compare the fingerprint with the certificate your browser shows for the UNAS.
-- **Least privilege.** For monitoring, a local account with access to UniFi Drive is enough. Admin rights in UniFi OS are only needed for restart, shutdown and installing updates. Without them these buttons report that the account lacks the rights, everything else keeps working.
-- **Shut down** is disabled by default: afterwards the UNAS can only be switched on with its power button.
-- **Diagnostics** leave out address, credentials, MAC address and serial numbers.
-
-## Data updates
-
-Every 30 seconds: system, storage, disks, drives, network and fan. Every 5 minutes: firmware status, services and storage throughput (the UNAS only computes it in five minute steps anyway). After every command there is an extra refresh a few seconds later; the fan profile shows the new value right away.
-
-While the UNAS restarts or installs an update, its values are briefly unavailable and come back on their own. Home Assistant only asks for new credentials when the UNAS really rejects the login.
-
-## Supported devices
-
-Tested with the **UNAS 2** (UniFi OS 6.0.11, UniFi Drive 4.4.17). It should work with every UNAS model running UniFi Drive (UNAS 4, UNAS Pro, Pro 4, Pro 8), they share the same interface, but these are untested. Feedback is welcome as an [issue](https://github.com/SH1FT-W/unifi-unas/issues) with the diagnostics file attached.
 
 ## Examples
 
@@ -181,7 +115,8 @@ actions:
       message: "UNAS: {{ trigger.to_state.name }} ({{ trigger.to_state.attributes.risk_reasons | join(', ') }})"
 ```
 
-Warn when storage gets full:
+<details>
+<summary>Warn when storage gets full</summary>
 
 ```yaml
 triggers:
@@ -194,38 +129,29 @@ actions:
       message: "UNAS storage is above 85 %."
 ```
 
-More ideas: fan profile Quiet at night, a monthly data scrub, a notification when `sensor.unas_2_link_speed` is not `2.5 GbE`.
+</details>
 
-## Known limitations
+<a id="your-data"></a>
+## Your data
 
-- **Unofficial interface.** Ubiquiti offers no public API for UniFi Drive, so the integration uses the interfaces of the Drive web interface. A Drive update can change them; the entities then turn unavailable and the diagnostics show the error.
-- **No API key.** UniFi OS API keys were tested on a UNAS 2 and only cover part of the data, so the integration logs in with a local account:
+- **The password only goes to your UNAS.** UniFi OS uses a self-signed certificate, so the integration remembers the one the UNAS shows at setup and talks to nothing else. If it changes, **Settings > Repairs** shows the old and the new fingerprint. Accept it after a factory reset, a reinstall or a renewed certificate; if you changed nothing, do not.
+- **The only internet access** is the product picture of your model from Ubiquiti's public device catalog, at most once a week.
+- **Diagnostics leave out** address, credentials, MAC address and serial numbers.
 
-  | Reading | API key | Local account |
-  |:--|:--:|:--:|
-  | Storage, pools, disks, health | yes | yes |
-  | CPU, memory, network, fan profile | yes | yes |
-  | SMB, Time Machine, NFS | yes | yes |
-  | Usage per drive | no | yes |
-  | UniFi OS and Drive updates | no | yes |
-  | Storage throughput | no | yes |
-  | Fan profile switching and all buttons | no | yes |
+## Good to know
 
-- **Data scrubbing** (button and last run) refers to the first storage pool. A UNAS 2 has exactly one; models with several pools get no button per pool yet.
-- **SSD cache** of the Pro models is not shown separately.
-- **Snapshots, shares, remote backup and users** are not managed. Snapshot and remote backup status per drive are shown as attributes.
-- **Installing updates** is called the same way the UniFi interface does it; the install itself is only verified once an update shows up.
+- No API key: on a UNAS 2 it misses drive usage, updates and throughput and cannot switch anything, so the integration logs in with a local account.
+- UniFi Drive does not say what the health scores 1 to 4 mean, hence only Good and Check. A pool state the integration has not seen yet makes the pool sensor unknown instead of raising an alarm.
+- Data scrubbing refers to the first pool. The SSD cache of the Pro models is not shown separately.
+- Snapshots, shares, remote backup and users are not managed. Installing updates is called like the UniFi interface does it, but is only verified once an update shows up.
 
-<a id="troubleshooting"></a>
-## Troubleshooting
+<details>
+<summary>Troubleshooting</summary>
 
-- **"Username or password is wrong".** Is it a local account? UI accounts with two-factor login do not work. After several failed attempts UniFi OS locks logins for a short while (HTTP 429).
+- **"Username or password is wrong".** Is it a local account? After several failed attempts UniFi OS locks logins for a short while (HTTP 429).
 - **"Login works, but the account has no access to UniFi Drive".** Give the user access to UniFi Drive in UniFi OS.
-- **Restart or updates report that the account lacks the rights.** The user needs admin rights in UniFi OS.
-- **Repair "certificate changed".** See [Security](#security).
-- **Repair "storage pool is damaged".** A disk of the RAID failed or is missing. Check the pool in UniFi Drive under Storage and replace the disk; the notice goes away by itself once the pool is healthy again.
-- **All entities "unavailable".** The UNAS does not answer at its address. Check its IP address and use **three dots > Reconfigure**.
-- **Diagnostics:** **Settings > Devices & services > UniFi UNAS > three dots > Download diagnostics**. Address, MAC address and serial numbers are left out.
+- **Repair "storage pool is damaged".** A disk of the RAID failed or is missing. Replace it in UniFi Drive under Storage; the notice goes away by itself.
+- **All entities unavailable.** The UNAS does not answer at its address. Use **three dots > Reconfigure**. During a restart or an update the values are briefly unavailable and come back on their own.
 - **Debug log:**
 
   ```yaml
@@ -234,18 +160,35 @@ More ideas: fan profile Quiet at night, a monthly data scrub, a notification whe
       custom_components.unas: debug
   ```
 
-When you open an [issue](https://github.com/SH1FT-W/unifi-unas/issues), please attach the diagnostics file.
+When you open an [issue](https://github.com/SH1FT-W/unifi-unas/issues), attach the diagnostics (**Settings > Devices & services > UniFi UNAS > three dots > Download diagnostics**).
 
-## Removal
+</details>
 
-1. **Settings > Devices & services > UniFi UNAS > three dots > Delete.**
-2. Delete the folder `/config/custom_components/unas` (or remove the repository in the Marketplace) and restart Home Assistant.
+<details>
+<summary>Remove</summary>
+
+1. **Settings > Devices & services > UniFi UNAS > three dots > Delete**.
+2. Remove the repository in the Marketplace (or delete `/config/custom_components/unas`) and restart Home Assistant.
 
 Nothing stays on the UNAS except the user you created for it.
 
+</details>
+
 <details>
-<summary><b>Development</b></summary>
-<br/>
+<summary>How it works</summary>
+
+| What | How often |
+|:--|:--|
+| System, storage, disks, drives, network, fan | every 30 seconds |
+| Firmware, services, storage throughput | every 5 minutes (the UNAS computes throughput in 5 minute steps) |
+| After a command | one extra refresh a few seconds later |
+
+Everything goes over HTTPS to UniFi OS and UniFi Drive, using the interfaces of the Drive web interface. Discovery uses the SMB announcement of the UNAS and Home Assistant's DHCP discovery. Notes on the interfaces are in [`CLAUDE.md`](CLAUDE.md) (German).
+
+</details>
+
+<details>
+<summary>Development</summary>
 
 ```bash
 python -m pytest -q -p no:logging        # simulated UNAS in tests/conftest.py, no real NAS needed
@@ -254,24 +197,12 @@ uvx mypy@2.3.1 --python-executable <venv>/bin/python
 python tools/pruefe-uebersetzungen.py    # strings.json against translations/*.json
 ```
 
-Install the test requirements into a virtual environment with `pip install -r requirements_test.txt`. The same checks run on GitHub Actions for every push and pull request, plus HACS validation and hassfest. Notes on the UniFi OS and Drive interfaces are in [`CLAUDE.md`](CLAUDE.md) (German).
-
-</details>
-
-<details>
-<summary><b>Versions</b></summary>
-<br/>
-
-UniFi UNAS uses calendar versions **`YY.M.N`**: year, month, and the number of the release within that month. `26.10.2` is the second release of October 2026. Tags, release titles and the version badge are just the number, without a leading "v".
+Test requirements: `pip install -r requirements_test.txt`. GitHub Actions runs the same checks plus HACS validation and hassfest. Quality scale: platinum, [self-assessed](custom_components/unas/quality_scale.yaml).
 
 </details>
 
 ## License
 
-[Apache License 2.0](LICENSE), Copyright 2026 SH1FT-W.
+[Apache License 2.0](LICENSE). Copyright 2026 SH1FT-W.
 
-<br/>
-
-<div align="center">
-  <sub>A <a href="https://sh1ft-w.github.io"><b>SH1FT-W</b></a> project &nbsp;·&nbsp; <a href="https://sh1ft-w.github.io/casora">Casora</a> &nbsp;·&nbsp; <a href="https://sh1ft-w.github.io/flode">FLODE</a> &nbsp;·&nbsp; <a href="https://sh1ft-w.github.io/pulse">Pulse</a> &nbsp;·&nbsp; <a href="https://sh1ft-w.github.io/jbl-bar">JBL Bar</a> &nbsp;·&nbsp; <a href="https://sh1ft-w.github.io/agentbar">AgentBar</a> &nbsp;·&nbsp; Built with <a href="https://claude.ai">Claude</a></sub>
-</div>
+<sub>UniFi UNAS is an independent project, not affiliated with, endorsed or sponsored by Ubiquiti Inc. UniFi, UniFi OS, UniFi Drive and UNAS are trademarks of Ubiquiti Inc.</sub>
