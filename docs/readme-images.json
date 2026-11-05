@@ -57,7 +57,7 @@
         "v"
       ],
       [
-        "HACS"
+        "Marketplace"
       ]
     ],
     "logo": "docs/logo.png",
@@ -76,6 +76,7 @@
       "bar": "Home Assistant › UniFi UNAS",
       "left": 600,
       "top": 70
-    }
+    },
+    "layout": "center"
   }
 }
