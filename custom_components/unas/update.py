@@ -24,6 +24,9 @@ async def async_setup_entry(
 class FirmwareUpdate(UnasEntity, UpdateEntity):
     _attr_device_class = UpdateDeviceClass.FIRMWARE
     _attr_supported_features = UpdateEntityFeature.INSTALL
+    # Software name shown next to the version in HA's update list (under the device name), so the firmware update
+    # is not mistaken for the integration's own update
+    _attr_title = "UniFi OS"
 
     def __init__(self, coordinator: UnasCoordinator) -> None:
         super().__init__(coordinator, "firmware")
@@ -53,6 +56,7 @@ class FirmwareUpdate(UnasEntity, UpdateEntity):
 
 class DriveUpdate(UnasEntity, UpdateEntity):
     _attr_supported_features = UpdateEntityFeature.INSTALL
+    _attr_title = "UniFi Drive"
 
     def __init__(self, coordinator: UnasCoordinator) -> None:
         super().__init__(coordinator, "drive_app")

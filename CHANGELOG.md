@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Changed:** The update entities name their software: "UniFi OS" for the firmware and "UniFi Drive" for the Drive app. Home Assistant's update list shows it next to the version, so the firmware update is no longer mistaken for the update of this integration, which has nearly the same name.
+
 ## 26.11.2 – 03.11.2026
 
 - **Fixed:** The integration now logs in to UniFi OS on its own HTTP session without cookies instead of Home Assistant's shared one. With the UNAS set up by host name (for example `unas.local`), the login cookie landed in the shared session, so adding, re-authenticating or reconfiguring with another account could silently swap the session of the running integration. Sessions used while setting up are released afterwards.

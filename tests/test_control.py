@@ -131,6 +131,9 @@ async def test_updates(hass: HomeAssistant, aioclient_mock: AiohttpClientMocker)
     assert firmware.state == "on"
     assert (firmware.attributes["latest_version"], firmware.attributes["release_url"]) == ("6.1.2", "https://x/c")
     assert hass.states.get("update.unas_2_unifi_drive").attributes["latest_version"] == "4.5.0"
+    # HA's update list shows "<title> <version>" under the device name
+    assert firmware.attributes["title"] == "UniFi OS"
+    assert hass.states.get("update.unas_2_unifi_drive").attributes["title"] == "UniFi Drive"
 
     for entity_id, path in (
         ("update.unas_2_unifi_os", "/api/firmware/update"),

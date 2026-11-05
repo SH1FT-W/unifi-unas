@@ -26,6 +26,7 @@ Worauf sich dieses Repo bei Home Assistant verlässt. Bei jeder Änderung am Cod
 | Binärsensor `device_class: problem` mit `is_on = None` erscheint als „unbekannt“ (unbekannter Pool-Zustand löst keinen Alarm aus) | `binary_sensor.py` `PoolProblem` | `tests/test_pool_health.py::test_unknown_status_is_no_alarm` |
 | Entitätsname aus `translation_key` mit `translation_placeholders` („Storage pool {pool}“) | `binary_sensor.py` `PoolProblem` | `tests/test_pool_health.py::test_healthy_pool` |
 | `ConfigEntry.async_create_background_task` für den Bilder-Katalog | `__init__.py` | `test_os_features.py` |
+| Die Update-Liste in HA (Einstellungen › Updates) zeigt oben den Gerätenamen, darunter `Bereich · title latest_version` (Frontend `ha-config-updates.ts`); Casora nimmt `title` als Namen. Darum `title` „UniFi OS“ und „UniFi Drive“, sonst sähe das Firmware-Update aus wie das gleichnamige Update der Integration | `update.py` `FirmwareUpdate`, `DriveUpdate` | `tests/test_control.py::test_updates` (nur das Attribut, die Anzeige liegt im Frontend) |
 
 ## Fremde Integrationen
 
