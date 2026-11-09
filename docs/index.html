@@ -13,20 +13,17 @@
 <meta property="og:description" content="Your UniFi NAS in Home Assistant. Storage, disks and health, local, no cloud.">
 <meta property="og:image" content="https://sh1ft-w.github.io/unifi-unas/images/readme-title-social.png">
 <link rel="icon" href="logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<!-- Shared SH1FT-W design (tokens, glass navigation, light/dark, DE/EN, reveal) -->
-<link rel="stylesheet" href="https://sh1ft-w.github.io/theme/v1/theme.css">
-<script src="https://sh1ft-w.github.io/theme/v1/theme.js"></script>
+<!-- Shared SH1FT-W design, version 2 (tokens, Archivo, navigation, light/dark, DE/EN, the lanes) -->
+<link rel="stylesheet" href="https://sh1ft-w.github.io/theme/v2/theme.css">
+<script src="https://sh1ft-w.github.io/theme/v2/theme.js"></script>
 <style>
 /* UNAS-Palette: kühles Weiß bei Tag, tiefes Nachtblau bei Nacht, ein Akzent in UniFi-Blau */
 :root {
   --accent: #006FFF; --accent-ink: #0058D6; --on-accent: #ffffff;
   --orange: #006FFF; --orange-ink: #0058D6; --orange-tint: rgba(0,111,255,0.10); --orange-glow: rgba(0,111,255,0.34);
-  --font: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --display: "Archivo", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font: "Archivo", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --display: "Archivo", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
   --bg: #F4F7FC; --bg-2: #E9EFF8; --card: #FFFFFF; --card-2: #F1F5FB;
   --ink: #0B1526; --ink-2: #475569; --ink-3: rgba(11,21,38,0.54);
   --line: rgba(5,25,60,0.11); --chip: rgba(5,25,60,0.06);
@@ -93,9 +90,6 @@ section.tint { background: var(--bg-2); }
 
 /* Hero */
 .hero { padding: clamp(56px, 9vw, 112px) 0 clamp(64px, 8vw, 104px); text-align: center; overflow: hidden; }
-.hero .glow { position: absolute; inset: -20% -10% auto; height: 90%; pointer-events: none;
-  background: radial-gradient(40% 36% at 30% 30%, rgba(0,111,255,0.18), transparent 70%), radial-gradient(36% 34% at 72% 24%, rgba(92,163,255,0.16), transparent 70%);
-  filter: blur(50px); }
 .hero .wrap { position: relative; }
 .hero .lead { max-width: 640px; margin-left: auto; margin-right: auto; }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 34px; }
@@ -265,6 +259,44 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
   .tbl.core tr { display: table-row; padding: 0; } .tbl.core th, .tbl.core td { display: table-cell; padding: 10px; border-top: 1px solid var(--line); }
   .tbl.core thead th { border-top: 0; font-size: 11px; letter-spacing: 0.02em; }
 }
+/* ---- theme v2 ---- */
+:root { --lane-a: #006FFF; --lane-b: #5CA3FF; --radius: 20px; --radius-lg: 28px; --max: 1200px; }
+body { font-family: var(--font); }
+h1 { font-size: clamp(44px, 6vw, 84px); line-height: 1; font-weight: 800; font-stretch: 118%; font-style: italic; letter-spacing: -0.025em; }
+h2 { font-size: clamp(30px, 3.8vw, 48px); line-height: 1.08; font-weight: 750; font-stretch: 112%; letter-spacing: -0.02em; }
+h3 { font-stretch: 106%; }
+h1 em, h2 em { color: inherit; font-style: inherit; }
+.center { text-align: left; } .center .lead { margin-left: 0; margin-right: 0; }
+.head { max-width: 50em; }
+.eyebrow { text-transform: none; letter-spacing: 0; font-size: 16px; font-weight: 650; margin-bottom: 12px; }
+.eyebrow::before { display: none; }
+.cap, .fict { text-align: left; }
+.flow { margin: 0; }
+.btn { border-radius: 12px; box-shadow: none; }
+.btn.ghost { background: var(--chip); box-shadow: none; }
+.pill { box-shadow: none; background: var(--chip); border-radius: 8px; }
+.b, .tile, .panel, .panel-ill, .tbl, .faq details, .flow .lane { box-shadow: none; border: 1px solid var(--line); }
+.b .tag, .tg, .tbl thead th { text-transform: none; letter-spacing: 0; font-size: 13px; }
+.b .tag, .tg { border-radius: 6px; }
+.tile .ico { border-radius: 10px; }
+.hero { text-align: left; padding: clamp(48px, 7vw, 96px) 0 clamp(56px, 7vw, 96px); overflow: hidden; }
+.hero .wrap.cols { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
+.hero .mark { width: 64px; height: 64px; border-radius: 15px; margin-bottom: 26px; }
+.hero .lead { margin-left: 0; max-width: 34em; }
+.cta, .meta { justify-content: flex-start; }
+.finale .cta { justify-content: center; }
+.hero .s-lanes { margin-right: calc(-1 * var(--gutter) - 14vw); }
+.s-track b { color: #fff; font: italic 800 clamp(20px, 2.5vw, 34px)/1 var(--font); font-stretch: 116%; letter-spacing: -0.015em; white-space: nowrap; }
+/* The scene: a full-width stage below the two-column hero */
+.stage { max-width: none; margin: clamp(48px, 6vw, 80px) 0 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); }
+@media (max-width: 900px) { .hero .wrap.cols { grid-template-columns: 1fr; } .hero .s-lanes { margin: 8px calc(-1 * var(--gutter) - 8vw) 0 44px; } }
+/* Phone: the navigation has to fit the name, both switches and the button */
+@media (max-width: 480px) {
+  .nav { gap: 6px; padding: 0 6px 0 10px; }
+  .nav .brand { font-size: 14px; gap: 6px; min-width: 0; flex-shrink: 1; white-space: nowrap; overflow: hidden; }
+  .nav .btn.small { padding: 0 12px; flex: none; }
+  .s-track b { font-size: 17px; }
+}
 </style></head>
 <body>
 
@@ -289,20 +321,27 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
 </div>
 
 <section class="hero" id="top">
-  <div class="glow" aria-hidden="true"></div>
-  <div class="wrap">
-    <p class="eyebrow reveal"><span class="en">UniFi NAS in Home Assistant</span><span class="de">UniFi-NAS in Home Assistant</span></p>
-    <h1 class="reveal d1"><span class="en">Your NAS,<br><em>in plain sight.</em></span><span class="de">Dein NAS,<br><em>immer im Blick.</em></span></h1>
-    <p class="lead reveal d2"><span class="en">UniFi UNAS talks to UniFi OS and UniFi Drive the way their web interface does: <strong>storage, every disk with its health, drives, system values, the fan profile, data scrubbing and updates</strong>. Local, no cloud, nothing installed on the NAS.</span><span class="de">UniFi UNAS spricht mit UniFi OS und UniFi Drive wie deren Weboberfläche: <strong>Speicher, jede Festplatte mit ihrem Zustand, Laufwerke, Systemwerte, Lüfterprofil, Datenprüfung und Updates</strong>. Lokal, ohne Cloud, nichts auf dem NAS installiert.</span></p>
-    <div class="cta reveal d3">
-      <a class="btn" href="#install"><span class="en">Install from the Marketplace</span><span class="de">Über den Marketplace installieren</span></a>
-      <a class="btn ghost" href="https://github.com/SH1FT-W/unifi-unas#readme"><span class="en">Read the README</span><span class="de">Zur Anleitung</span></a>
+  <div class="wrap cols">
+    <div>
+      <img class="mark" src="logo.png" alt="" width="64" height="64">
+      <h1><span class="en">Your NAS, in plain sight.</span><span class="de">Dein NAS, immer im Blick.</span></h1>
+      <p class="lead reveal d2"><span class="en">UniFi UNAS talks to UniFi OS and UniFi Drive the way their web interface does: <strong>storage, every disk with its health, drives, system values, the fan profile, data scrubbing and updates</strong>. Local, no cloud, nothing installed on the NAS.</span><span class="de">UniFi UNAS spricht mit UniFi OS und UniFi Drive wie deren Weboberfläche: <strong>Speicher, jede Festplatte mit ihrem Zustand, Laufwerke, Systemwerte, Lüfterprofil, Datenprüfung und Updates</strong>. Lokal, ohne Cloud, nichts auf dem NAS installiert.</span></p>
+      <div class="cta reveal d3">
+        <a class="btn" href="#install"><span class="en">Install from the Marketplace</span><span class="de">Über den Marketplace installieren</span></a>
+        <a class="btn ghost" href="https://github.com/SH1FT-W/unifi-unas#readme"><span class="en">Read the README</span><span class="de">Zur Anleitung</span></a>
+      </div>
+      <p class="meta reveal d3">
+        <span class="pill"><i></i><span id="unas-version">Version 26.10.2</span></span>
+        <span class="en">Home Assistant 2026.9 or newer &middot; English and German &middot; Apache 2.0</span><span class="de">Home Assistant 2026.9 oder neuer &middot; Deutsch und Englisch &middot; Apache 2.0</span>
+      </p>
     </div>
-    <p class="meta reveal d3">
-      <span class="pill"><i></i><span id="unas-version">Version 26.10.2</span></span>
-      <span class="en">Home Assistant 2026.9 or newer &middot; English and German &middot; Apache 2.0</span><span class="de">Home Assistant 2026.9 oder neuer &middot; Deutsch und Englisch &middot; Apache 2.0</span>
-    </p>
-
+    <div class="s-lanes" aria-hidden="true">
+      <div class="s-lane"><div class="s-track"><b><span class="en">Local, no cloud</span><span class="de">Lokal, ohne Cloud</span></b></div></div>
+      <div class="s-lane"><div class="s-track"><b><span class="en">Every disk and its health</span><span class="de">Jede Festplatte mit Zustand</span></b></div></div>
+      <div class="s-lane"><div class="s-track"><b><span class="en">Storage and scrubs</span><span class="de">Speicher und Datenprüfung</span></b></div></div>
+    </div>
+  </div>
+  <div class="wrap">
     <div class="stage reveal d3" role="img" aria-label="Illustration: a UniFi NAS in a home setting, below it a storage card and a list of values. AI-generated scene, made-up values.">
       <img class="scene" src="images/hero-photo.webp" width="1106" height="563" fetchpriority="high" alt="">
       <div class="cards" style="margin-top: clamp(-28px, -2vw, -12px); position: relative;">
@@ -312,7 +351,7 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
             <div><div class="name">UNAS 2</div><div class="state"><span class="en">Storage OK &middot; RAID 1</span><span class="de">Speicher OK &middot; RAID 1</span></div></div>
             <span class="ok"><span class="en">Healthy</span><span class="de">Gesund</span></span>
           </div>
-          <div class="vol"><span><span class="en">USED</span><span class="de">BELEGT</span></span><span class="track"><i></i></span><span>18 %</span></div>
+          <div class="vol"><span><span class="en">Used</span><span class="de">Belegt</span></span><span class="track"><i></i></span><span>18 %</span></div>
           <div class="srcs"><span class="on"><span class="en">Default</span><span class="de">Standard</span></span><span><span class="en">Quiet</span><span class="de">Leise</span></span><span><span class="en">Cooling</span><span class="de">Kühlen</span></span></div>
           <div class="btns"><small><span class="en">Buttons</span><span class="de">Knöpfe</span></small><div class="srcs" style="margin-top:0"><span><span class="en">Restart</span><span class="de">Neu starten</span></span><span><span class="en">Data scrub</span><span class="de">Datenprüfung</span></span><span><span class="en">SMART test</span><span class="de">SMART-Test</span></span></div></div>
         </div>
@@ -512,8 +551,7 @@ footer .fine { flex-basis: 100%; line-height: 1.6; }
 
 <section class="finale">
   <div class="wrap narrow reveal">
-    <p class="eyebrow">UniFi UNAS</p>
-    <h2><span class="en">Know your disks.<br><em>Locally.</em></span><span class="de">Kenne deine Platten.<br><em>Lokal.</em></span></h2>
+    <h2><span class="en">Know your disks.<br>Locally.</span><span class="de">Kenne deine Platten.<br>Lokal.</span></h2>
     <p class="lead"><span class="en">One integration, every value UniFi Drive shows, no cloud.</span><span class="de">Eine Integration, jeder Wert aus UniFi Drive, keine Cloud.</span></p>
     <div class="cta">
       <a class="btn" href="#install"><span class="en">Install UniFi UNAS</span><span class="de">UniFi UNAS installieren</span></a>

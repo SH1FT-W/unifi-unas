@@ -1,5 +1,5 @@
 {
-  "$comment": "Content of the README card pictures. Render with sh1ft-w.github.io/theme/v1/readme-images: node render.mjs <this repo> cards. The title image is the original artwork, unchanged.",
+  "$comment": "Content of the README title. Render with sh1ft-w.github.io/theme/v2/readme-images (node render.mjs <this repo>): banner 1280 x 440 light and dark, social preview 1280 x 640. Used fields: title.name, title.line, title.lanes, title.logo, colors.*.bg/ink/ink2, colors.light.accent. The other fields are from the v1 title and no longer read.",
   "colors": {
     "light": {
       "bg": "#F4F7FC",
@@ -77,6 +77,12 @@
       "left": 600,
       "top": 70
     },
-    "layout": "center"
+    "layout": "center",
+    "line": "Your UniFi NAS in Home Assistant.",
+    "lanes": [
+      "Local, no cloud",
+      "Every disk and its health",
+      "Storage and scrubs"
+    ]
   }
 }

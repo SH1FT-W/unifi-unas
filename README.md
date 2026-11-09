@@ -2,14 +2,14 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme-title-dark.webp" />
-  <img src="docs/images/readme-title-light.webp" alt="UniFi UNAS: Your NAS, in plain sight." />
+  <img src="docs/images/readme-title-light.webp" alt="UniFi UNAS: your UniFi NAS in Home Assistant. Local, no cloud. Every disk and its health. Storage and scrubs." />
 </picture>
 
 [![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FSH1FT-W%2Funifi-unas%2Fmain%2Fcustom_components%2Funas%2Fmanifest.json&query=%24.version&label=version&style=flat-square&color=006FFF&labelColor=0B1526)](https://github.com/SH1FT-W/unifi-unas/releases/latest)
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2026.9%2B-006FFF?style=flat-square&labelColor=0B1526&logo=homeassistant&logoColor=white)](https://www.home-assistant.io)
 [![Marketplace](https://img.shields.io/badge/Marketplace-default-006FFF?style=flat-square&labelColor=0B1526)](https://hacs.xyz)
 
-<a href="https://sh1ft-w.github.io/unifi-unas"><b>Website</b></a>&emsp;<a href="#install">Install</a>&emsp;<a href="#set-up">Set up</a>&emsp;<a href="#entities">Entities</a>&emsp;<a href="CHANGELOG.md">Changelog</a>
+<a href="https://sh1ft-w.github.io/unifi-unas"><b>Website</b></a>&emsp;<a href="#get-started">Get started</a>&emsp;<a href="#entities">Entities</a>&emsp;<a href="#examples">Examples</a>&emsp;<a href="CHANGELOG.md">Changelog</a>
 
 </div>
 
@@ -19,7 +19,7 @@ Your UniFi NAS in Home Assistant: **storage, every disk with its health, drives,
 
 Ubiquiti offers no public API for UniFi Drive, so a Drive update can change what the integration reads. It is tested on a **UNAS 2**; UNAS 4, UNAS Pro, Pro 4 and Pro 8 share the same interface but are untested.
 
-## Which account for what
+## What you get
 
 |  | Local Drive user | With UniFi OS admin |
 |:--|:--:|:--:|
@@ -34,12 +34,19 @@ Without admin rights these buttons say the account lacks the rights; everything 
 
 **New in 26.11:** a problem sensor per storage pool with a repair notice while a RAID is damaged, and an extended SMART test per disk. Every change is in the [changelog](CHANGELOG.md).
 
-<a id="install"></a>
-## Install
+<a id="get-started"></a><a id="install"></a><a id="set-up"></a>
+## Get started
 
 [![Open in the Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=SH1FT-W&repository=unifi-unas&category=integration)
 
-Search for **UniFi UNAS** under **Settings > Marketplace** (called HACS before Home Assistant 2026.11), download it and restart Home Assistant.
+You need a **local** UniFi OS user with access to UniFi Drive. UI accounts with two-factor login do not work.
+
+1. **Install it.** Search for **UniFi UNAS** under **Settings > Marketplace** (called HACS before Home Assistant 2026.11), download it and restart Home Assistant.
+2. **Create the user** in UniFi OS. Give it admin rights only if you want the buttons from the table above.
+3. **Add the UNAS.** It usually shows up under **Settings > Devices & services > Discovered**, even after renaming it. If not, choose **Add integration > UniFi UNAS** and enter its IP address or host name.
+4. **Enter username and password.** Leave **Verify certificate** off unless the UNAS has a certificate from a trusted authority (see [Your data](#your-data)).
+
+New address or another account: **three dots > Reconfigure**. Verify certificate: **Configure**. If the UNAS rejects the password later, Home Assistant asks for new credentials by itself.
 
 <details>
 <summary>Install by hand</summary>
@@ -48,17 +55,6 @@ Search for **UniFi UNAS** under **Settings > Marketplace** (called HACS before H
 2. Copy `custom_components/unas` into `/config/custom_components/` and restart Home Assistant.
 
 </details>
-
-<a id="set-up"></a>
-## Set up
-
-You need a **local** UniFi OS user with access to UniFi Drive. UI accounts with two-factor login do not work.
-
-1. **Create the user** in UniFi OS. Give it admin rights only if you want the buttons from the table above.
-2. **Add the UNAS.** It usually shows up under **Settings > Devices & services > Discovered**, even after renaming it. If not, choose **Add integration > UniFi UNAS** and enter its IP address or host name.
-3. **Enter username and password.** Leave **Verify certificate** off unless the UNAS has a certificate from a trusted authority (see [Your data](#your-data)).
-
-New address or another account: **three dots > Reconfigure**. Verify certificate: **Configure**. If the UNAS rejects the password later, Home Assistant asks for new credentials by itself.
 
 <a id="entities"></a>
 ## Entities
@@ -98,6 +94,7 @@ IDs for a UNAS named "UNAS 2". Names are in English and German. New disks and dr
 
 </details>
 
+<a id="examples"></a>
 ## Examples
 
 Get a push when a disk reports a problem:
@@ -206,3 +203,11 @@ Test requirements: `pip install -r requirements_test.txt`. GitHub Actions runs t
 [Apache License 2.0](LICENSE). Copyright 2026 SH1FT-W.
 
 <sub>UniFi UNAS is an independent project, not affiliated with, endorsed or sponsored by Ubiquiti Inc. UniFi, UniFi OS, UniFi Drive and UNAS are trademarks of Ubiquiti Inc.</sub>
+
+<br/>
+
+<div align="center">
+<a href="https://sh1ft-w.github.io"><img src="https://sh1ft-w.github.io/readme/footer.png" width="640" alt="All SH1FT-W projects"></a>
+<br/>
+<sub>More open source for Home Assistant and the Mac at <a href="https://sh1ft-w.github.io">sh1ft-w.github.io</a></sub>
+</div>
