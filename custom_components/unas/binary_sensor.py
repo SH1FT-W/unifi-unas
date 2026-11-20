@@ -25,9 +25,10 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: UnasConfigEntry, async_add_entities: AddConfigEntryEntitiesCallback
 ) -> None:
     coordinator = entry.runtime_data
-    entities: list[Entity] = [StorageProblem(coordinator)]
-    entities += [ServiceRunning(coordinator, service) for service in SERVICES if service in coordinator.data.services]
-    async_add_entities(entities)
+    async_add_entities([StorageProblem(coordinator)])
+
+    def _service_entities(services: set[str]) -> list[Entity]:
+        return [ServiceRunning(coordinator, service) for service in SERVICES if service in services]
 
     def _disk_entities(keys: set[str]) -> list[Entity]:
         return [DiskProblem(coordinator, d) for d in disks_for(coordinator.data, keys)]
@@ -37,6 +38,10 @@ async def async_setup_entry(
 
     entry.async_on_unload(track_new_items(coordinator, disk_keys, _disk_entities, async_add_entities))
     entry.async_on_unload(track_new_items(coordinator, lambda d: d.pools.keys(), _pool_entities, async_add_entities))
+    # Services come from the slow poll: if it failed at startup, the sensors appear once it succeeds
+    entry.async_on_unload(
+        track_new_items(coordinator, lambda d: d.services.keys(), _service_entities, async_add_entities)
+    )
 
 
 class PoolProblem(UnasEntity, BinarySensorEntity):

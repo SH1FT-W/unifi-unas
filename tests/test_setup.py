@@ -22,9 +22,9 @@ from yarl import URL
 
 from custom_components.unas import create_client
 from custom_components.unas.api import UnasError
-from custom_components.unas.const import DOMAIN
+from custom_components.unas.const import DOMAIN, SLOW_EVERY
 
-from .conftest import BASE, ENTRY_DATA, MAC, V2, calls, fixture, mock_unas
+from .conftest import BASE, ENTRY_DATA, MAC, V1, V2, calls, fixture, mock_unas
 
 # Tests laufen auf Englisch
 DISK1 = "unas_2_disk_1"
@@ -394,3 +394,43 @@ async def test_entry_session_released_on_unload_and_failed_setup(
         assert entry.state is ConfigEntryState.SETUP_RETRY
         assert sessions and all(session.closed for session in sessions)
     assert not aiohttp_client.async_get_clientsession(hass).closed
+
+
+async def test_slow_entities_added_once_first_slow_poll_succeeds(
+    hass: HomeAssistant, aioclient_mock: AiohttpClientMocker
+) -> None:
+    """At startup only the slow part fails (UniFi OS and Drive services not ready yet): display, status LED, night
+    mode and service sensors appear with the first slow poll that reads them, without a reload."""
+    aioclient_mock.clear_requests()
+    aioclient_mock.get(f"{BASE}/api/system", status=502)
+    for service in ("smb", "time-machine", "nfs"):
+        aioclient_mock.get(f"{V1}/services/{service}/settings", status=502)
+    mock_unas(aioclient_mock, clear=False)
+    entry = MockConfigEntry(domain=DOMAIN, title="UNAS 2", unique_id=MAC, data=ENTRY_DATA)
+    entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(entry.entry_id)
+    await hass.async_block_till_done()
+    slow_entities = (
+        "light.unas_2_display",
+        "light.unas_2_status_led",
+        "time.unas_2_night_mode_start",
+        "time.unas_2_night_mode_end",
+        "binary_sensor.unas_2_smb",
+        "binary_sensor.unas_2_time_machine",
+        "binary_sensor.unas_2_nfs",
+    )
+    assert all(hass.states.get(entity_id) is None for entity_id in slow_entities)
+    assert hass.states.get("sensor.unas_2_storage_used").state != STATE_UNAVAILABLE
+
+    mock_unas(aioclient_mock)
+    for _ in range(SLOW_EVERY):
+        await _tick(hass, entry)
+    assert all(hass.states.get(entity_id) is not None for entity_id in slow_entities)
+    assert hass.states.get("light.unas_2_display").state == STATE_ON
+    assert hass.states.get("binary_sensor.unas_2_nfs").state == STATE_OFF
+    # Later slow polls add nothing twice
+    registry = er.async_get(hass)
+    count = len(er.async_entries_for_config_entry(registry, entry.entry_id))
+    for _ in range(SLOW_EVERY):
+        await _tick(hass, entry)
+    assert len(er.async_entries_for_config_entry(registry, entry.entry_id)) == count

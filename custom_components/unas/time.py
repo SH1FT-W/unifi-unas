@@ -7,10 +7,12 @@ from datetime import time
 from homeassistant.components.time import TimeEntity
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
+from .api import UnasData
 from .coordinator import UnasConfigEntry, UnasCoordinator
-from .entity import UnasEntity
+from .entity import UnasEntity, track_new_items
 
 PARALLEL_UPDATES = 1
 
@@ -22,8 +24,15 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: UnasConfigEntry, async_add_entities: AddConfigEntryEntitiesCallback
 ) -> None:
     coordinator = entry.runtime_data
-    if "nightMode" in coordinator.data.os_settings:
-        async_add_entities(NightModeTime(coordinator, key) for key in NIGHT_MODE)
+
+    def _keys(data: UnasData) -> list[str]:
+        return list(NIGHT_MODE) if "nightMode" in data.os_settings else []
+
+    def _entities(keys: set[str]) -> list[Entity]:
+        return [NightModeTime(coordinator, key) for key in NIGHT_MODE if key in keys]
+
+    # UniFi OS settings come from the slow poll: if it failed at startup, the times appear once it succeeds
+    entry.async_on_unload(track_new_items(coordinator, _keys, _entities, async_add_entities))
 
 
 class NightModeTime(UnasEntity, TimeEntity):

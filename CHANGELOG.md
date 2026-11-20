@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Fixed:** If UniFi OS or the Drive file services did not answer yet when Home Assistant started (for example right after the UNAS restarted), the display and status LED lights, the night mode times and the SMB, Time Machine and NFS sensors were missing until the integration was reloaded. They now appear with the next successful status poll (at most 5 minutes later).
+
 ## 26.11.4 – 05.11.2026
 
 - README and project page: new layout, shorter and easier to scan, with one table at the core.
